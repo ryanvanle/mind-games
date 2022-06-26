@@ -1,0 +1,22 @@
+body {
+  background-size: 75px 75px;
+  background-image:
+    linear-gradient(to bottom, black 1px, transparent 2px),
+    linear-gradient(to right, black 1px, white 2px);
+  animation-name: background-animation;
+  animation-duration: 60s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+/** Citation for CSS animations: https://developer.mozilla.org/en-US/docs/Web/CSS/animation */
+
+@keyframes background-animation {
+  from {
+    background-position: 0px 500px;
+  }
+
+  to {
+    background-position: 500px 0px;
+  }
+}
