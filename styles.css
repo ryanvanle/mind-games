@@ -10,7 +10,6 @@ body {
 }
 
 /** Citation for CSS animations: https://developer.mozilla.org/en-US/docs/Web/CSS/animation */
-
 @keyframes background-animation {
   from {
     background-position: 0px 500px;
@@ -19,4 +18,89 @@ body {
   to {
     background-position: 500px 0px;
   }
+}
+
+#title {
+  border: 1px solid #000000;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  width: 1000px;
+  height: 300px;
+  margin: auto;
+  background-color: #FAFAFA;
+  display: flex;
+  justify-content: center;
+
+}
+
+#title h1 {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 375;
+  font-size: 85px;
+  line-height: 103px;
+  text-align: center;
+  margin-top: 100px;
+  margin-bottom: 100px;
+}
+
+#buttons {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  margin: auto;
+}
+
+.button {
+  background-color: #FAFAFA;
+  color: black;
+  width: 350px;
+  height: 75px;
+  margin: 50px 50px 50px 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: transparent;
+}
+
+.button:active {
+  transition: 0s;
+}
+
+#calculation-button {
+  background-color: #F7D2E3;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+#color-matching-button {
+  background-color: #ADF0FF;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+#counting-button {
+  background-color: #FFC2AE;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+#calculation-button:hover {
+  border: 6px solid #EABFE0;
+}
+
+#color-matching-button:hover {
+  border: 6px solid #68DBFF;
+}
+
+#counting-button:hover {
+  border: 6px solid #FFA979;
+}
+
+#calculation-button:active {
+  background-color: #EABFE0;
+}
+
+#color-matching-button:active {
+  background-color: #68DBFF;
+}
+
+#counting-button:active {
+  background-color: #FFA979;
 }
