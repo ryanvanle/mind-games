@@ -8,16 +8,49 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <section>
+  <section id="main-menu">
     <div id="title"><h1>MIND GAMES</h1></div>
     <div id="buttons">
-      <button class="button" id="calculation-button"><h2>Calculations</h2></button>
-      <button class="button" id="color-matching-button"><h2>Color Matching</h2></button>
-      <button class="button" id="counting-button"><h2>Counting</h2></button>
+      <button id="calculation-button"><h2>Calculations</h2></button>
+      <button id="color-matching-button"><h2>Color Matching</h2></button>
+      <button id="counting-button"><h2>Counting</h2></button>
     </div>
   </section>
+  <section id="calculations-menu">
+    <div id="calculations-title">
+      <h1>CALCULATIONS</h1>
+      <h2>Write/type out the arithmetics!</h2>
+    </div>
 
-  <section>
+    <div id="calculations-rules">
+      <h2>Rules Setup</h2>
+      <label for="amount">Amount:</label>
+      <input type="number" id="amount" name="amount" min="0" max="100"><br><br>
+      <div>
+        <h3>Input:</h3>
+        <p>Write</p>
+        <p>Type</p>
+      </div>
+      <div>
+        <h3>Operations</h3>
+        <p>Addition</p>
+        <p>Subtraction</p>
+        <p>Multiplication</p>
+        <p>Division</p>
+      </div>
+      <div>
+        <h3>Maximum Amount of Operations</h3>
+        <p>two</p>
+        <p>three</p>
+        <p>four</p>
+      </div>
+
+    </div>
+    <div id="calculations-buttons">
+      <button><h2>TUTORIAL</h2></button>
+      <button><h2>RULES</h2></button>
+      <button class="start"><h2>START</h2></button>
+    </div>
   </section>
 </body>
 </html>
