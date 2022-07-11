@@ -16,35 +16,38 @@
       <button id="counting-button"><h2>Counting</h2></button>
     </div>
   </section>
-  <section id="calculations-menu">
+  <section id="calculations-menu" class="hidden">
+    <div class="back-button"></div>
     <div id="calculations-title">
       <h1>CALCULATIONS</h1>
       <h2>Write/type out the arithmetics!</h2>
     </div>
 
     <div id="calculations-rules">
+
       <h2>Rules Setup</h2>
-      <label for="amount">Amount:</label>
-      <input type="number" id="amount" name="amount" min="0" max="100"><br><br>
       <div>
+        <label for="amount">Amount:</label>
+        <input type="number" id="amount" name="amount" min="0" max="100"><br><br>
+      </div>
+      <div id="input-type">
         <h3>Input:</h3>
         <p>Write</p>
         <p>Type</p>
       </div>
       <div>
-        <h3>Operations</h3>
+        <h3>Operations:</h3>
         <p>Addition</p>
         <p>Subtraction</p>
         <p>Multiplication</p>
         <p>Division</p>
       </div>
-      <div>
-        <h3>Maximum Amount of Operations</h3>
-        <p>two</p>
-        <p>three</p>
-        <p>four</p>
+      <div id="operations-amount">
+        <h3>Maximum Amount of Operations:</h3>
+        <p>2</p>
+        <p>3</p>
+        <p>4</p>
       </div>
-
     </div>
     <div id="calculations-buttons">
       <button><h2>TUTORIAL</h2></button>

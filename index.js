@@ -14,6 +14,51 @@
   */
   function init() {
     // THIS IS THE CODE THAT WILL BE EXECUTED ONCE THE WEBPAGE LOADS
+
+    id("calculation-button").addEventListener("click", menuToCalculation);
+    qs(".back-button").addEventListener("click", backToMenu);
+
+    let calculationSelectors = qsa("#calculations-rules p");
+
+    for (let i = 0; i < calculationSelectors.length; i++) {
+      calculationSelectors[i].addEventListener("click", calculationRulesSelector);
+    }
+
+    console.log(calculationSelectors);
+  }
+
+  function menuToCalculation() {
+    id("main-menu").classList.add("hidden");
+    id("calculations-menu").classList.remove("hidden");
+  }
+
+  function backToMenu() {
+    id("main-menu").classList.remove("hidden");
+    id("calculations-menu").classList.add("hidden");
+  }
+
+  function calculationRulesSelector() {
+    if (this.parentNode.id === "input-type") {
+      let buttons = qsa("#input-type p");
+      for (let i = 0; i < buttons.length; i++) {
+        if (buttons[i] !== this) {
+          buttons[i].classList.remove("selected");
+        } else {
+          this.classList.toggle("selected");
+        }
+      }
+    } else if (this.parentNode.id === "operations-amount") {
+      let buttons = qsa("#operations-amount p");
+      for (let i = 0; i < buttons.length; i++) {
+        if (buttons[i] !== this) {
+          buttons[i].classList.remove("selected");
+        } else {
+          this.classList.toggle("selected");
+        }
+      }
+     } else {
+      this.classList.toggle("selected");
+     }
   }
 
   /**
