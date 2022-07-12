@@ -81,22 +81,25 @@
       }
     }
 
-
-
-    //check
-    console.log(totalQuestions);
-    console.log(inputType);
-    console.log(operationsType);
-    console.log(operationsAmount);
-
-    if (totalQuestions >= 0 && totalQuestions <= 100) {
-      // call need only this much questions function
-    }
-
     if (totalQuestions === "" || inputType === undefined || inputType === null
     || operationsType.length === 0 || operationsAmount === undefined || operationsAmount === null) {
-      console.log("works");
-      // call error
+      qs("#calculations-buttons .start").removeEventListener("click", calculationRulesToGame);
+      id("calculations-rules").classList.add("hidden");
+      id("missing-error").classList.remove("hidden");
+      setTimeout(() => {
+        id("calculations-rules").classList.remove("hidden");
+        id("missing-error").classList.add("hidden");
+        qs("#calculations-buttons .start").addEventListener("click", calculationRulesToGame);
+      }, 1000);
+    } else if (Number(totalQuestions) < 0 || Number(totalQuestions) > 100) {
+      qs("#calculations-buttons .start").removeEventListener("click", calculationRulesToGame);
+      id("calculations-rules").classList.add("hidden");
+      id("amount-error").classList.remove("hidden");
+      setTimeout(() => {
+        id("calculations-rules").classList.remove("hidden");
+        id("amount-error").classList.add("hidden");
+        qs("#calculations-buttons .start").addEventListener("click", calculationRulesToGame);
+      }, 1000);
     } else {
       id("calculations-menu").classList.add("hidden");
       id("calculations-game").classList.remove("hidden");
