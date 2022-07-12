@@ -1,7 +1,6 @@
 "use strict";
 
 (function() {
-
   // MODULE GLOBAL VARIABLES, CONSTANTS, AND HELPER FUNCTIONS CAN BE PLACED HERE
 
   /**
@@ -144,8 +143,26 @@
     // Maximum amount of Operations
 
 
+    let can = new handwriting.Canvas(id("can"));
 
+    can.setCallBack(function(data, err) {
+      if (err) {
+        throw err;
+      } else {
+        console.log(data);
+      }
+    });
 
+    can.setOptions(
+      {
+        language: "en",
+        numOfReturn: 5
+      }
+    );
+
+    setInterval(() => {
+      can.recognize();
+    }, 500);
   }
 
   /**
