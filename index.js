@@ -17,6 +17,8 @@
 
     id("calculation-button").addEventListener("click", menuToCalculation);
     qs(".back-button").addEventListener("click", backToMenu);
+    qs("#calculations-buttons .start").addEventListener("click", calculationRulesToGame);
+
 
     let calculationSelectors = qsa("#calculations-rules p");
 
@@ -35,6 +37,70 @@
   function backToMenu() {
     id("main-menu").classList.remove("hidden");
     id("calculations-menu").classList.add("hidden");
+  }
+
+  function calculationRulesToGame() {
+
+    // need to check if everything is filled out properly
+
+    let totalQuestions = qs("#amount").value;
+    let inputType;
+    let operationsType = [];
+    let operationsAmount;
+
+    // you could make this into multiple functions of anonymous functions when doing the variable
+    // initialization and return it but i feel like it would be confusing to read personally but
+    // it is subjective.
+
+    // inputType
+    let inputs = qsa("#input-type p");
+    for (let i = 0; i < inputs.length; i++) {
+      if (inputs[i].classList.contains("selected")) {
+        inputType = inputs[i].textContent;
+      } else if (inputType !== undefined && inputs[i].classList.contains("selected")) {
+        console.error("Both inputs selected");
+      }
+    }
+
+    // operationsType
+    let operationsOptions = qsa("#operations-type p");
+    for (let i = 0; i < operationsOptions.length; i++) {
+      if (operationsOptions[i].classList.contains("selected")) {
+        operationsType.push(operationsOptions[i].textContent);
+      }
+    }
+
+    // operationsAmount
+    let operationsAmountSelector = qsa("#operations-amount p");
+    console.log(operationsAmountSelector);
+    for (let i = 0; i < operationsAmountSelector.length; i++) {
+      if (operationsAmountSelector[i].classList.contains("selected")) {
+        operationsAmount = operationsAmountSelector[i].textContent;
+      } else if (operationsAmount !== undefined && operationsAmountSelector[i].classList.contains("selected")) {
+        console.error("Multiple inputs selected");
+      }
+    }
+
+
+
+    //check
+    console.log(totalQuestions);
+    console.log(inputType);
+    console.log(operationsType);
+    console.log(operationsAmount);
+
+    if (totalQuestions >= 0 && totalQuestions <= 100) {
+      // call need only this much questions function
+    }
+
+    if (totalQuestions === "" || inputType === undefined || inputType === null
+    || operationsType.length === 0 || operationsAmount === undefined || operationsAmount === null) {
+      console.log("works");
+      // call error
+    } else {
+      id("calculations-menu").classList.add("hidden");
+      id("calculations-game").classList.remove("hidden");
+    }
   }
 
   function calculationRulesSelector() {
@@ -59,6 +125,20 @@
      } else {
       this.classList.toggle("selected");
      }
+  }
+
+
+  function startCalculations(totalQuestions, inputType, operationsType, operationAmount) {
+
+    // general rules to keep track of
+    // - amount of questions
+    // - input type
+    // - operations
+    // Maximum amount of Operations
+
+
+
+
   }
 
   /**

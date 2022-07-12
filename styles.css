@@ -178,7 +178,9 @@ button:active {
 
 #calculations-rules h2 {
   text-align: center;
-  font-size: 24pt;
+  font-size: 26pt;
+  padding-top: 25px;
+  margin-bottom: 10px;
 }
 
 
@@ -247,3 +249,4 @@ p {
   padding-bottom: 15px;
   margin: -2em;
 }
+
