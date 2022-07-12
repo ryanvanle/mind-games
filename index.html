@@ -5,6 +5,7 @@
   <title>Mind Games</title>
   <link rel="stylesheet" href="styles.css">
   <script src="index.js"></script>
+  <script type="text/javascript" src="handwriting.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -57,8 +58,15 @@
       <button class="start"><h2>START</h2></button>
     </div>
   </section>
-  <section id="calculations-game" class="hidden">
+  <section id="calculations-game" class="flex hidden">
+    <section id="questions">
+    <!-- questions go here-->
 
+    </section>
+    <section id="user-section">
+      <canvas id="can" width="450" height="500" style="border: 2px solid; cursor: crosshair;"></canvas>
+      <button>CLEAR</button>
+    </section>
   </section>
 </body>
 </html>
