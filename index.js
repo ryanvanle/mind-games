@@ -19,6 +19,8 @@
     qs(".back-button").addEventListener("click", backToMenu);
     qs("#calculations-buttons .start").addEventListener("click", calculationRulesToGame);
 
+    // let canvas = new handwriting.Canvas(id("can"));
+
 
     let calculationSelectors = qsa("#calculations-rules p");
 
@@ -103,6 +105,8 @@
     } else {
       id("calculations-menu").classList.add("hidden");
       id("calculations-game").classList.remove("hidden");
+      startCalculations(totalQuestions, inputType, operationsType, operationsAmount);
+
     }
   }
 
