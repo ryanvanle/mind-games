@@ -159,8 +159,8 @@
     // - operations
     // Maximum amount of Operations
 
-    generateQuestions(totalQuestions, operationsType, termAmount);
-
+    let questions = generateQuestions(totalQuestions, operationsType, termAmount);
+    let answers = generateAnswers(questions);
 
     let can = new handwriting.Canvas(id("can"));
 
@@ -186,66 +186,64 @@
     qs("#user-section button").addEventListener("click", () => {
       can.erase();
     });
-
-
-
-
   }
 
   function generateQuestions(totalQuestions, operationsType, termAmount) {
 
 
-    const MAXIMUM_NUMBER = 13;
+    const MAXIMUM_NUMBER = 13; // TODO: need to make this an option for the user to pick
 
     let equations = [];
-    let termOne = [];
-    let termTwo = [];
-    let termThree = [];
-    let termFour = [];
-    let operationOne = [];
-    let operationTwo = [];
-    let operationThree = [];
-
-    for (let i = 0; i < totalQuestions; i++) {
-      termOne.push(getRandomInt(MAXIMUM_NUMBER));
-      termTwo.push(getRandomInt(MAXIMUM_NUMBER));
-      termThree.push(getRandomInt(MAXIMUM_NUMBER));
-      termFour.push(getRandomInt(MAXIMUM_NUMBER));
-      operationOne.push(operationsType[getRandomInt(operationsType.length)]);
-      operationTwo.push(operationsType[getRandomInt(operationsType.length)]);
-      operationThree.push(operationsType[getRandomInt(operationsType.length)]);
-    }
-
-
-    //math.evaluate()
-
-
-    for (let i = 0; i < totalQuestions; i++) {
+    while (equations.length < totalQuestions) {
+      let termOne = getRandomInt(MAXIMUM_NUMBER);
+      let termTwo = getRandomInt(MAXIMUM_NUMBER);
+      let termThree = getRandomInt(MAXIMUM_NUMBER);
+      let termFour = getRandomInt(MAXIMUM_NUMBER);
+      let operationOne = operationsType[getRandomInt(operationsType.length)];
+      let operationTwo = operationsType[getRandomInt(operationsType.length)];
+      let operationThree = operationsType[getRandomInt(operationsType.length)];
 
       let amountOfTerms = getRandomIntBetween(2, Number(termAmount) + 1);
-      console.log(amountOfTerms);
-      let currentEquation = termOne[i] + operationOne[i] + termTwo[i];
+      let currentEquation = termOne + operationOne + termTwo;
 
       if (amountOfTerms === 3) {
-        currentEquation = termOne[i] + operationOne[i] + termTwo[i] + operationTwo[i] + termThree[i];
+        currentEquation = termOne + operationOne + termTwo + operationTwo + termThree;
         if (currentEquation.includes("*") || currentEquation.includes("/")) {
           let zeroOrOne = getRandomInt(2);
           if (zeroOrOne === 0) {
-            currentEquation = "(" + termOne[i] + operationOne[i] + termTwo[i] + ")" + operationTwo[i] + termThree[i];
+            currentEquation = "(" + termOne + operationOne + termTwo + ")" + operationTwo + termThree;
           } else {
-            currentEquation = termOne[i] + operationOne[i] + "(" + termTwo[i] + operationTwo[i] + termThree[i] + ")";
+            currentEquation = termOne + operationOne + "(" + termTwo + operationTwo + termThree + ")";
           }
         }
       }
 
       if (amountOfTerms === 4) {
-        currentEquation = "(" + termOne[i] + operationOne[i] + termTwo[i] + ")"
-        + operationTwo[i] + "(" + termThree[i] + operationThree[i] + termFour[i] + ")";
+        currentEquation = "(" + termOne + operationOne + termTwo + ")"
+        + operationTwo + "(" + termThree + operationThree + termFour + ")";
       }
-      equations.push(currentEquation);
+
+      let result = math.evaluate(currentEquation);
+
+      if (result !== Infinity && result % 1 === 0) {
+        equations.push(currentEquation);
+      }
     }
-    console.log(equations);
+
+
     return equations;
+  }
+
+  function generateAnswers(equations) {
+    let answers = [];
+    for (let i = 0; i < equations.length; i++) {
+      answers.push(math.evaluate(equations[i]));
+    }
+
+    console.log(equations);
+    console.log(answers);
+    return answers;
+
   }
 
   function getRandomInt(max) {
