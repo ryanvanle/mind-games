@@ -47,7 +47,7 @@
     let inputType;
     let operationsType = [];
     let termAmount;
-    const MAXIMUM_QUESTIONS = 100;
+    const MAXIMUM_QUESTIONS = 1000;
 
     // you could make this into multiple functions of anonymous functions when doing the variable
     // initialization and return it but i feel like it would be confusing to read personally but
@@ -196,8 +196,9 @@
   function generateQuestions(totalQuestions, operationsType, termAmount) {
 
 
-    const MAXIMUM_NUMBER = 21;
+    const MAXIMUM_NUMBER = 13;
 
+    let equations = [];
     let termOne = [];
     let termTwo = [];
     let termThree = [];
@@ -216,8 +217,10 @@
       operationThree.push(operationsType[getRandomInt(operationsType.length)]);
     }
 
-    console.log(math.evaluate("2+2"));
 
+
+
+    //math.evaluate()
     // console.log(termOne);
     // console.log(termTwo);
     // console.log(termThree);
@@ -226,24 +229,42 @@
     // console.log(operationTwo);
     // console.log(operationThree);
 
+    for (let i = 0; i < totalQuestions; i++) {
 
+      let amountOfTerms = getRandomIntBetween(2, termAmount + 1);
+      let currentEquation = termOne[i] + operationOne[i] + termTwo[i];
 
+      if (amountOfTerms === 3) {
+        currentEquation = termOne[i] + operationOne[i] + termTwo[i] + operationTwo[i] + termThree[i];
 
+        if (currentEquation.includes("*") || currentEquation.includes("/")) {
+          let zeroOrOne = getRandomInt(2);
+          if (zeroOrOne === 0) {
+            "(" + termOne[i] + operationOne[i] + termTwo[i] + ")" + operationTwo[i] + termThree[i];
+          } else {
+            termOne[i] + operationOne[i] + "(" + termTwo[i] + operationTwo[i] + termThree[i] + ")";
+          }
+        }
 
+      }
 
-    // 5 + 2
-    // 5 + 3
-    // 7 + 12 - 5
-    // 7 / 2 - 2
-    // 8 - 2 * 4
-
-
-
-
+      if (amountOfTerms === 4) {
+        currentEquation = "(" + termOne[i] + operationOne[i] + termTwo[i] + ")"
+        + operationTwo[i] + "(" + termThree[i] + operationThree[i] + termFour[i] + ")";
+      }
+      equations.push(currentEquation);
+    }
+    return equations;
   }
 
   function getRandomInt(max) {
     return Math.floor(Math.random() * max);
+  }
+
+  function getRandomIntBetween(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min) + min);
   }
 
   /**
