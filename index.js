@@ -73,7 +73,6 @@
 
     // termAmount
     let termAmountSelector = qsa("#operations-amount p");
-    console.log(termAmountSelector);
     for (let i = 0; i < termAmountSelector.length; i++) {
       if (termAmountSelector[i].classList.contains("selected")) {
         termAmount = termAmountSelector[i].textContent;
@@ -167,7 +166,7 @@
 
     can.setCallBack(function(data, err) {
       if (err) {
-        console.log("no data available");
+        // console.log("no data available");
       } else {
         console.log(data); // change here for correct answer check
       }
@@ -218,34 +217,25 @@
     }
 
 
-
-
     //math.evaluate()
-    // console.log(termOne);
-    // console.log(termTwo);
-    // console.log(termThree);
-    // console.log(termFour);
-    // console.log(operationOne);
-    // console.log(operationTwo);
-    // console.log(operationThree);
+
 
     for (let i = 0; i < totalQuestions; i++) {
 
-      let amountOfTerms = getRandomIntBetween(2, termAmount + 1);
+      let amountOfTerms = getRandomIntBetween(2, Number(termAmount) + 1);
+      console.log(amountOfTerms);
       let currentEquation = termOne[i] + operationOne[i] + termTwo[i];
 
       if (amountOfTerms === 3) {
         currentEquation = termOne[i] + operationOne[i] + termTwo[i] + operationTwo[i] + termThree[i];
-
         if (currentEquation.includes("*") || currentEquation.includes("/")) {
           let zeroOrOne = getRandomInt(2);
           if (zeroOrOne === 0) {
-            "(" + termOne[i] + operationOne[i] + termTwo[i] + ")" + operationTwo[i] + termThree[i];
+            currentEquation = "(" + termOne[i] + operationOne[i] + termTwo[i] + ")" + operationTwo[i] + termThree[i];
           } else {
-            termOne[i] + operationOne[i] + "(" + termTwo[i] + operationTwo[i] + termThree[i] + ")";
+            currentEquation = termOne[i] + operationOne[i] + "(" + termTwo[i] + operationTwo[i] + termThree[i] + ")";
           }
         }
-
       }
 
       if (amountOfTerms === 4) {
@@ -254,6 +244,7 @@
       }
       equations.push(currentEquation);
     }
+    console.log(equations);
     return equations;
   }
 
