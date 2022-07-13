@@ -27,7 +27,6 @@
       calculationSelectors[i].addEventListener("click", calculationRulesSelector);
     }
 
-    console.log(calculationSelectors);
   }
 
   function menuToCalculation() {
@@ -47,7 +46,8 @@
     let totalQuestions = qs("#amount").value;
     let inputType;
     let operationsType = [];
-    let operationsAmount;
+    let termAmount;
+    const MAXIMUM_QUESTIONS = 100;
 
     // you could make this into multiple functions of anonymous functions when doing the variable
     // initialization and return it but i feel like it would be confusing to read personally but
@@ -71,19 +71,20 @@
       }
     }
 
-    // operationsAmount
-    let operationsAmountSelector = qsa("#operations-amount p");
-    console.log(operationsAmountSelector);
-    for (let i = 0; i < operationsAmountSelector.length; i++) {
-      if (operationsAmountSelector[i].classList.contains("selected")) {
-        operationsAmount = operationsAmountSelector[i].textContent;
-      } else if (operationsAmount !== undefined && operationsAmountSelector[i].classList.contains("selected")) {
+    // termAmount
+    let termAmountSelector = qsa("#operations-amount p");
+    console.log(termAmountSelector);
+    for (let i = 0; i < termAmountSelector.length; i++) {
+      if (termAmountSelector[i].classList.contains("selected")) {
+        termAmount = termAmountSelector[i].textContent;
+      } else if (termAmount !== undefined && termAmountSelector[i].classList.contains("selected")) {
         console.error("Multiple inputs selected");
       }
     }
 
+    // general check to see if all fields are filled out
     if (totalQuestions === "" || inputType === undefined || inputType === null
-    || operationsType.length === 0 || operationsAmount === undefined || operationsAmount === null) {
+    || operationsType.length === 0 || termAmount === undefined || termAmount === null) {
       qs("#calculations-buttons .start").removeEventListener("click", calculationRulesToGame);
       id("calculations-rules").classList.add("hidden");
       id("missing-error").classList.remove("hidden");
@@ -92,7 +93,9 @@
         id("missing-error").classList.add("hidden");
         qs("#calculations-buttons .start").addEventListener("click", calculationRulesToGame);
       }, 1000);
-    } else if (Number(totalQuestions) < 0 || Number(totalQuestions) > 100) {
+
+    // check if the question is within the limit
+    } else if (Number(totalQuestions) < 0 || Number(totalQuestions) > MAXIMUM_QUESTIONS) {
       qs("#calculations-buttons .start").removeEventListener("click", calculationRulesToGame);
       id("calculations-rules").classList.add("hidden");
       id("amount-error").classList.remove("hidden");
@@ -101,14 +104,29 @@
         id("amount-error").classList.add("hidden");
         qs("#calculations-buttons .start").addEventListener("click", calculationRulesToGame);
       }, 1000);
+
+    // start
     } else {
       id("calculations-menu").classList.add("hidden");
       id("calculations-game").classList.remove("hidden");
-      startCalculations(totalQuestions, inputType, operationsType, operationsAmount);
-
+      let converted = convertTextToSymbol(operationsType);
+      startCalculations(totalQuestions, inputType, converted, termAmount);
     }
   }
 
+  function convertTextToSymbol(operationType) {
+    let converted = [];
+
+    for (let i = 0; i < operationType.length; i++) {
+      if (operationType[i] === "Addition") converted.push("+");
+      if (operationType[i] === "Subtraction") converted.push("-");
+      if (operationType[i] === "Multiplication") converted.push("*");
+      if (operationType[i] === "Division") converted.push("/");
+    }
+
+    return converted;
+
+  }
   function calculationRulesSelector() {
     if (this.parentNode.id === "input-type") {
       let buttons = qsa("#input-type p");
@@ -134,7 +152,7 @@
   }
 
 
-  function startCalculations(totalQuestions, inputType, operationsType, operationAmount) {
+  function startCalculations(totalQuestions, inputType, operationsType, termAmount) {
 
     // general rules to keep track of
     // - amount of questions
@@ -142,14 +160,16 @@
     // - operations
     // Maximum amount of Operations
 
+    generateQuestions(totalQuestions, operationsType, termAmount);
+
 
     let can = new handwriting.Canvas(id("can"));
 
     can.setCallBack(function(data, err) {
       if (err) {
-        throw err;
+        console.log("no data available");
       } else {
-        console.log(data);
+        console.log(data); // change here for correct answer check
       }
     });
 
@@ -163,6 +183,67 @@
     setInterval(() => {
       can.recognize();
     }, 500);
+
+    qs("#user-section button").addEventListener("click", () => {
+      can.erase();
+    });
+
+
+
+
+  }
+
+  function generateQuestions(totalQuestions, operationsType, termAmount) {
+
+
+    const MAXIMUM_NUMBER = 21;
+
+    let termOne = [];
+    let termTwo = [];
+    let termThree = [];
+    let termFour = [];
+    let operationOne = [];
+    let operationTwo = [];
+    let operationThree = [];
+
+    for (let i = 0; i < totalQuestions; i++) {
+      termOne.push(getRandomInt(MAXIMUM_NUMBER));
+      termTwo.push(getRandomInt(MAXIMUM_NUMBER));
+      termThree.push(getRandomInt(MAXIMUM_NUMBER));
+      termFour.push(getRandomInt(MAXIMUM_NUMBER));
+      operationOne.push(operationsType[getRandomInt(operationsType.length)]);
+      operationTwo.push(operationsType[getRandomInt(operationsType.length)]);
+      operationThree.push(operationsType[getRandomInt(operationsType.length)]);
+    }
+
+    console.log(math.evaluate("2+2"));
+
+    // console.log(termOne);
+    // console.log(termTwo);
+    // console.log(termThree);
+    // console.log(termFour);
+    // console.log(operationOne);
+    // console.log(operationTwo);
+    // console.log(operationThree);
+
+
+
+
+
+
+    // 5 + 2
+    // 5 + 3
+    // 7 + 12 - 5
+    // 7 / 2 - 2
+    // 8 - 2 * 4
+
+
+
+
+  }
+
+  function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
   }
 
   /**
