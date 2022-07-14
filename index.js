@@ -161,6 +161,9 @@
 
     let questions = generateQuestions(totalQuestions, operationsType, termAmount);
     let answers = generateAnswers(questions);
+    let currentScore = 0;
+
+    displayEquations(questions, currentScore);
 
     let can = new handwriting.Canvas(id("can"));
 
@@ -168,7 +171,7 @@
       if (err) {
         // console.log("no data available");
       } else {
-        console.log(data); // change here for correct answer check
+        checkAnswer(data);
       }
     });
 
@@ -181,11 +184,48 @@
 
     setInterval(() => {
       can.recognize();
-    }, 500);
+    }, 250);
 
     qs("#user-section button").addEventListener("click", () => {
       can.erase();
+      clearCurrentQuestion();
     });
+  }
+
+  function clearCurrentQuestion() {
+    let currentQuestion = qs("#questions div h4");
+    let currentQuestionText = currentQuestion.textContent.match(/^[^=]*/)[0];
+    currentQuestion.textContent = currentQuestionText + "=";
+  }
+
+  function checkAnswer(data) {
+    let parsedData = []; // only numbers
+    let currentQuestion = qs("#questions div h4");
+
+    //Gets rid of the "="
+    let currentQuestionText = currentQuestion.textContent.match(/^[^=]*/)[0];
+    console.log(currentQuestionText);
+    let answer = math.evaluate(currentQuestionText);
+
+    for (let i = 0; i < data.length; i++) {
+      if (!isNaN(data[i])) {
+        parsedData.push(data[i]);
+      }
+    }
+
+    if (Number(parsedData[0]) === Number(answer) && parsedData.length > 0) {
+      console.log("correct");
+      console.log(parsedData[0]);
+
+      currentQuestion.textContent = currentQuestionText + "=" + parsedData[0];
+      nextQuestion();
+    } else if (parsedData.length > 0) {
+      let newText = currentQuestionText + "=" + parsedData[0]
+      currentQuestion.textContent = newText;
+    } else {
+      currentQuestion.textContent = currentQuestionText + "=";
+    }
+
   }
 
   function generateQuestions(totalQuestions, operationsType, termAmount) {
@@ -225,11 +265,11 @@
 
       let result = math.evaluate(currentEquation);
 
+      //forces only whole and actual answers to be in the question pool
       if (result !== Infinity && result % 1 === 0) {
         equations.push(currentEquation);
       }
     }
-
 
     return equations;
   }
@@ -239,11 +279,24 @@
     for (let i = 0; i < equations.length; i++) {
       answers.push(math.evaluate(equations[i]));
     }
-
-    console.log(equations);
-    console.log(answers);
     return answers;
+  }
 
+  function displayEquations(equations, currentScore) {
+    let displayedQuestions = 6;
+    let questionBox = qs("#questions");
+
+    if (equations.length <= displayedQuestions) {
+      displayedQuestions = equations.length;
+    }
+
+    for (let i = currentScore; i < displayedQuestions; i++) {
+      let currentEquation = gen("div");
+      let h4 = gen("h4");
+      currentEquation.appendChild(h4);
+      h4.textContent = equations[i] + "=";
+      questionBox.appendChild(currentEquation);
+    }
   }
 
   function getRandomInt(max) {
