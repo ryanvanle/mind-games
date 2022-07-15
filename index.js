@@ -189,6 +189,7 @@
     qs("#user-section button").addEventListener("click", () => {
       can.erase();
       clearCurrentQuestion();
+      setTimeout(clearCurrentQuestion(), 250);
     });
   }
 
@@ -199,12 +200,16 @@
   }
 
   function checkAnswer(data) {
+
+    if (data == null) { //undefined and null
+      return;
+    }
+
     let parsedData = []; // only numbers
     let currentQuestion = qs("#questions div h4");
 
     //Gets rid of the "="
     let currentQuestionText = currentQuestion.textContent.match(/^[^=]*/)[0];
-    console.log(currentQuestionText);
     let answer = math.evaluate(currentQuestionText);
 
     for (let i = 0; i < data.length; i++) {
@@ -214,18 +219,19 @@
     }
 
     if (Number(parsedData[0]) === Number(answer) && parsedData.length > 0) {
-      console.log("correct");
-      console.log(parsedData[0]);
-
       currentQuestion.textContent = currentQuestionText + "=" + parsedData[0];
       nextQuestion();
     } else if (parsedData.length > 0) {
-      let newText = currentQuestionText + "=" + parsedData[0]
+      let newText = currentQuestionText + "=" + parsedData[0];
       currentQuestion.textContent = newText;
     } else {
       currentQuestion.textContent = currentQuestionText + "=";
     }
+  }
 
+
+  function nextQuestion() {
+    console.log("nextQuestion");
   }
 
   function generateQuestions(totalQuestions, operationsType, termAmount) {

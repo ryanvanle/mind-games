@@ -227,7 +227,9 @@
                           });
                       }
                       if (!!options.numOfReturn) {
-                          results = results.slice(0, options.numOfReturn);
+                          if(results != null) {
+                            results = results.slice(0, options.numOfReturn);
+                          }
                       }
                       callback(results, undefined);
                       break;
