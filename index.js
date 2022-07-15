@@ -18,11 +18,7 @@
     qs(".back-button").addEventListener("click", backToMenu);
     qs("#calculations-buttons .start").addEventListener("click", calculationRulesToGame);
 
-    // let canvas = new handwriting.Canvas(id("can"));
-
-
     let calculationSelectors = qsa("#calculations-rules p");
-
     for (let i = 0; i < calculationSelectors.length; i++) {
       calculationSelectors[i].addEventListener("click", calculationRulesSelector);
     }
@@ -124,8 +120,8 @@
     }
 
     return converted;
-
   }
+
   function calculationRulesSelector() {
     if (this.parentNode.id === "input-type") {
       let buttons = qsa("#input-type p");
@@ -150,7 +146,6 @@
      }
   }
 
-
   function startCalculations(totalQuestions, inputType, operationsType, termAmount) {
 
     // general rules to keep track of
@@ -160,7 +155,6 @@
     // Maximum amount of Operations
 
     let questions = generateQuestions(totalQuestions, operationsType, termAmount);
-    let answers = generateAnswers(questions);
     let currentScore = 0;
 
     displayEquations(questions, currentScore);
@@ -190,6 +184,7 @@
       can.erase();
       clearCurrentQuestion();
       setTimeout(clearCurrentQuestion(), 250);
+      // fixes edge case when the clear button is pressed between when the next check is called.
     });
   }
 
@@ -236,7 +231,6 @@
 
   function generateQuestions(totalQuestions, operationsType, termAmount) {
 
-
     const MAXIMUM_NUMBER = 13; // TODO: need to make this an option for the user to pick
 
     let equations = [];
@@ -280,13 +274,13 @@
     return equations;
   }
 
-  function generateAnswers(equations) {
-    let answers = [];
-    for (let i = 0; i < equations.length; i++) {
-      answers.push(math.evaluate(equations[i]));
-    }
-    return answers;
-  }
+  // function generateAnswers(equations) {
+  //   let answers = [];
+  //   for (let i = 0; i < equations.length; i++) {
+  //     answers.push(math.evaluate(equations[i]));
+  //   }
+  //   return answers;
+  // }
 
   function displayEquations(equations, currentScore) {
     let displayedQuestions = 6;
