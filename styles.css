@@ -307,3 +307,8 @@ p {
   text-align: left;
   letter-spacing: 4px;
 }
+
+#can {
+  border: 2px solid;
+  cursor: url(img/pencil.png) 5 0, crosshair;
+}
