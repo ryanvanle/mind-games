@@ -156,36 +156,72 @@
 
     let questions = generateQuestions(totalQuestions, operationsType, termAmount);
     let currentScore = 0;
+    let parentElement = id("user-section");
 
     displayEquations(questions, currentScore);
 
-    let can = new handwriting.Canvas(id("can"));
+    if (inputType === "Write") {
+      let canvasElement = gen("canvas");
+      canvasElement.id = "can";
+      canvasElement.width = "500";
+      canvasElement.height = "550";
+      parentElement.prepend(canvasElement);
+      let can = new handwriting.Canvas(id("can"));
 
-    can.setCallBack(function(data, err) {
-      if (err) {
-        // console.log("no data available");
-      } else {
-        checkAnswer(data);
-      }
-    });
+      can.setCallBack(function(data, err) {
+        if (err) {
+          // console.log("no data available");
+        } else {
+          checkAnswer(data);
+        }
+      });
 
-    can.setOptions(
-      {
-        language: "en",
-        numOfReturn: 5
-      }
-    );
+      can.setOptions(
+        {
+          language: "en",
+          numOfReturn: 5
+        }
+      );
 
-    setInterval(() => {
-      can.recognize();
-    }, 250);
+      setInterval(() => {
+        can.recognize();
+      }, 250);
 
-    qs("#user-section button").addEventListener("click", () => {
-      can.erase();
-      clearCurrentQuestion();
-      setTimeout(clearCurrentQuestion(), 250);
-      // fixes edge case when the clear button is pressed between when the next check is called.
-    });
+      qs("#user-section button").addEventListener("click", () => {
+        can.erase();
+        clearCurrentQuestion();
+        // need to stop the setinterval, clearQuestion, restart setinterval
+      });
+
+    } else {
+      let inputElement = gen("input");
+      inputElement.type = "number";
+      inputElement.id = "type-input";
+      inputElement.name = "type-input";
+
+      let enterButton = gen("button");
+      enterButton.textContent = "ENTER";
+
+      parentElement.prepend(enterButton);
+      parentElement.prepend(inputElement);
+
+      setInterval(() => {
+        let inputElementData = id("type-input").value;
+        if (inputElementData !== "") {
+          checkAnswer([inputElementData]);
+        } else {
+          clearCurrentQuestion();
+        }
+      }, 250);
+
+      qsa("#user-section button")[1].addEventListener("click", () => {
+        id("type-input").value = "";
+        clearCurrentQuestion();
+
+        // need to stop the setinterval, clearQuestion, restart setinterval
+      });
+    }
+
   }
 
   function clearCurrentQuestion() {
