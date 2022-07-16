@@ -111,7 +111,6 @@
 
   function convertTextToSymbol(operationType) {
     let converted = [];
-
     for (let i = 0; i < operationType.length; i++) {
       if (operationType[i] === "Addition") converted.push("+");
       if (operationType[i] === "Subtraction") converted.push("-");
