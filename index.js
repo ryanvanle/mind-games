@@ -171,7 +171,7 @@
         if (err) {
           // console.log("no data available");
         } else {
-          checkAnswer(data);
+          checkAnswer(data, can);
         }
       });
 
@@ -207,7 +207,7 @@
       setInterval(() => {
         let inputElementData = id("type-input").value;
         if (inputElementData !== "") {
-          checkAnswer([inputElementData]);
+          checkAnswer([inputElementData], null);
         } else {
           clearCurrentQuestion();
         }
@@ -224,19 +224,19 @@
   }
 
   function clearCurrentQuestion() {
-    let currentQuestion = qs("#questions div h4");
+    let currentQuestion = qs("#current-question h4");
     let currentQuestionText = currentQuestion.textContent.match(/^[^=]*/)[0];
     currentQuestion.textContent = currentQuestionText + "=";
   }
 
-  function checkAnswer(data) {
+  function checkAnswer(data, can) {
 
     if (data == null) { //undefined and null
       return;
     }
 
     let parsedData = []; // only numbers
-    let currentQuestion = qs("#questions div h4");
+    let currentQuestion = qs("#current-question h4");
 
     //Gets rid of the "="
     let currentQuestionText = currentQuestion.textContent.match(/^[^=]*/)[0];
@@ -250,7 +250,7 @@
 
     if (Number(parsedData[0]) === Number(answer) && parsedData.length > 0) {
       currentQuestion.textContent = currentQuestionText + "=" + parsedData[0];
-      nextQuestion();
+      nextQuestion(can);
     } else if (parsedData.length > 0) {
       let newText = currentQuestionText + "=" + parsedData[0];
       currentQuestion.textContent = newText;
@@ -260,8 +260,27 @@
   }
 
 
-  function nextQuestion() {
-    console.log("nextQuestion");
+  function nextQuestion(canvas) {
+    let startSpace = qs("#questions div");
+
+    if (startSpace.id === "start-space-0") {
+      qs("#questions div").id = "start-space-1";
+    } else if (startSpace.id === "start-space-1") {
+      qs("#questions div").id = "start-space-2";
+    }
+
+    if (canvas == null) {
+      id("type-input").value = "";
+    } else {
+      canvas.erase();
+    }
+
+    let score = id("score").textContent = Number(id("score").textContent) + 1;
+
+    let newCurrentQuestion = id("current-question").nextElementSibling;
+    id("current-question").id = "";
+    newCurrentQuestion.id = "current-question";
+
   }
 
   function generateQuestions(totalQuestions, operationsType, termAmount) {
@@ -300,6 +319,7 @@
 
       let result = math.evaluate(currentEquation);
 
+
       //forces only whole and actual answers to be in the question pool
       if (result !== Infinity && result % 1 === 0) {
         equations.push(currentEquation);
@@ -318,20 +338,26 @@
   // }
 
   function displayEquations(equations, currentScore) {
-    let displayedQuestions = 6;
+    let displayedQuestions = 10;
     let questionBox = qs("#questions");
 
     if (equations.length <= displayedQuestions) {
       displayedQuestions = equations.length;
     }
 
-    for (let i = currentScore; i < displayedQuestions; i++) {
+    for (let i = currentScore; i < displayedQuestions + currentScore; i++) {
       let currentEquation = gen("div");
       let h4 = gen("h4");
       currentEquation.appendChild(h4);
+
+      if (i === currentScore) {
+        currentEquation.id = "current-question";
+      }
+
       h4.textContent = equations[i] + "=";
       questionBox.appendChild(currentEquation);
     }
+
   }
 
   function getRandomInt(max) {
@@ -407,3 +433,21 @@
   }
 
 })();
+
+
+/* TODO: in order
+- add score on screen above input
+- finish next question
+  - figure out current question and how to go to the next one might need a rework on picking selected or not
+  - core mechanics
+  - css polishing
+  - check mark
+- finish skip
+- end game
+  - add stopwatch timer
+  - clear timers and such
+  - highscore
+- general polishing
+  - css resizing, constants = bad it seems
+  - local storage of settings
+*/
