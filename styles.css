@@ -300,7 +300,7 @@ p {
   /* bottom: 15%; */
 
   font-size: 36pt;
-  transition: 1s 0s;
+  transition: 0.5s;
 }
 
 #questions h4 {
@@ -323,7 +323,7 @@ p {
 }
 
 #start-space-0, #start-space-1, #start-space-2, #start-space-removed-transition {
-  transition: 1s;
+  transition: 0.5s;
 }
 
 #start-space-0 {

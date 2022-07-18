@@ -255,25 +255,41 @@
   }
 
 
-  function nextQuestion() {
-    let startSpace = qs("#questions div");
-    if (startSpace.id === "start-space-0") {
-      qs("#questions div").id = "start-space-1";
-    } else if (startSpace.id === "start-space-1") {
-      qs("#questions div").id = "start-space-2";
-    } else {
-      moveQuestion();
-    }
-
+   function nextQuestion() {
 
     id("score").textContent = Number(id("score").textContent) + 1;
 
-    let newCurrentQuestion = id("current-question").nextElementSibling;
-    id("current-question").id = "";
-    newCurrentQuestion.id = "current-question";
+    let startSpace = qs("#questions div");
+    if (startSpace.id === "start-space-0") {
+      qs("#questions div").id = "start-space-1";
+      let newCurrentQuestion = id("current-question").nextElementSibling;
+      id("current-question").id = "";
+      newCurrentQuestion.id = "current-question";
 
+    } else if (startSpace.id === "start-space-1") {
+      qs("#questions div").id = "start-space-2";
+      let newCurrentQuestion = id("current-question").nextElementSibling;
+      id("current-question").id = "";
+      newCurrentQuestion.id = "current-question";
+    } else {
+      let newCurrentQuestion = id("current-question").nextElementSibling;
+      id("current-question").id = "";
+      newCurrentQuestion.id = "current-question";
 
+      moveQuestion();
 
+      setTimeout(() => {
+
+        let currentQuestion = id("current-question");
+        let questions = currentQuestion.parentNode;
+        let index = Array.prototype.indexOf.call(questions.children ,currentQuestion);
+
+        if (index === 4) {
+          moveQuestion();
+        }
+
+      }, 750);
+    }
   }
 
   function moveQuestion() {
@@ -285,9 +301,8 @@
       transitionElement.style.transition = "0s";
       topQuestion.remove();
       transitionElement.id = "start-space-2";
-    }, 1000);
-
-    transitionElement.style.transition = "1s";
+    }, 500);
+    transitionElement.style.transition = "0.5s";
   }
 
   function generateQuestions(totalQuestions, operationsType, termAmount) {
@@ -345,7 +360,7 @@
   // }
 
   function displayEquations(equations, currentScore) {
-    let displayedQuestions = 13;
+    let displayedQuestions = 500;
     let questionBox = qs("#questions");
 
     if (equations.length <= displayedQuestions) {
@@ -444,7 +459,7 @@
 
 
 /* TODO: in order
-  - css polishing // fix bug
+  - css polishing
   - check mark
 - finish skip
 - end game
