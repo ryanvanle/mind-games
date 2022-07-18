@@ -43,7 +43,7 @@
     let inputType;
     let operationsType = [];
     let termAmount;
-    const MAXIMUM_QUESTIONS = 1000;
+    const MAXIMUM_QUESTIONS = 100;
 
     // you could make this into multiple functions of anonymous functions when doing the variable
     // initialization and return it but i feel like it would be confusing to read personally but
@@ -262,6 +262,8 @@
       qs("#questions div").id = "start-space-1";
     } else if (startSpace.id === "start-space-1") {
       qs("#questions div").id = "start-space-2";
+    } else {
+      moveQuestion();
     }
 
     if (canvas == null) {
@@ -275,6 +277,24 @@
     let newCurrentQuestion = id("current-question").nextElementSibling;
     id("current-question").id = "";
     newCurrentQuestion.id = "current-question";
+
+
+  }
+
+  function moveQuestion() {
+    let questions = qsa("#questions div");
+    let transitionElement = qs("#questions div");
+    transitionElement.id = "start-space-removed-transition";
+
+    let topQuestion = questions[1];
+    setTimeout(() => {
+      transitionElement.style.transition = "0s";
+      topQuestion.remove();
+      transitionElement.id = "start-space-2";
+    }, 1000);
+
+    transitionElement.style.transition = "1s";
+
 
   }
 
@@ -333,7 +353,7 @@
   // }
 
   function displayEquations(equations, currentScore) {
-    let displayedQuestions = 1000;
+    let displayedQuestions = 13;
     let questionBox = qs("#questions");
 
     if (equations.length <= displayedQuestions) {
@@ -344,6 +364,7 @@
       let currentEquation = gen("div");
       let h4 = gen("h4");
       currentEquation.appendChild(h4);
+      currentEquation.classList.add("equation");
 
       if (i === currentScore) {
         currentEquation.id = "current-question";
@@ -431,11 +452,7 @@
 
 
 /* TODO: in order
-- add score on screen above input
-- finish next question
-  - figure out current question and how to go to the next one might need a rework on picking selected or not
-  - core mechanics
-  - css polishing
+  - css polishing // fix bug
   - check mark
 - finish skip
 - end game
