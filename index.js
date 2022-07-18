@@ -167,12 +167,8 @@
       parentElement.prepend(canvasElement);
       let can = new handwriting.Canvas(id("can"));
 
-      can.setCallBack(function(data, err) {
-        if (err) {
-          // console.log("no data available");
-        } else {
-          checkAnswer(data, can);
-        }
+      can.setCallBack(function(data) {
+        checkAnswer(data, can);
       });
 
       can.setOptions(
@@ -182,14 +178,13 @@
         }
       );
 
-      setInterval(() => {
+      id("can").addEventListener("click", () => {
         can.recognize();
-      }, 250);
+      })
 
       qs("#user-section button").addEventListener("click", () => {
         can.erase();
         clearCurrentQuestion();
-        // need to stop the setinterval, clearQuestion, restart setinterval
       });
 
     } else {
@@ -199,23 +194,20 @@
       inputElement.name = "type-input";
       parentElement.prepend(inputElement);
 
-      setInterval(() => {
+      id("type-input").addEventListener("keyup", () => {
         let inputElementData = id("type-input").value;
         if (inputElementData !== "") {
           checkAnswer([inputElementData], null);
         } else {
           clearCurrentQuestion();
         }
-      }, 250);
+      })
 
       qsa("#user-section button")[1].addEventListener("click", () => {
         id("type-input").value = "";
         clearCurrentQuestion();
-
-        // need to stop the setinterval, clearQuestion, restart setinterval
       });
     }
-
   }
 
   function clearCurrentQuestion() {
@@ -245,19 +237,26 @@
 
     if (Number(parsedData[0]) === Number(answer) && parsedData.length > 0) {
       currentQuestion.textContent = currentQuestionText + "=" + parsedData[0];
-      nextQuestion(can);
+
+      if (can != null) {
+        can.erase();
+      } else {
+        id("type-input").value = "";
+      }
+
+      nextQuestion();
     } else if (parsedData.length > 0) {
       let newText = currentQuestionText + "=" + parsedData[0];
       currentQuestion.textContent = newText;
     } else {
       currentQuestion.textContent = currentQuestionText + "=";
     }
+
   }
 
 
-  function nextQuestion(canvas) {
+  function nextQuestion() {
     let startSpace = qs("#questions div");
-
     if (startSpace.id === "start-space-0") {
       qs("#questions div").id = "start-space-1";
     } else if (startSpace.id === "start-space-1") {
@@ -266,17 +265,13 @@
       moveQuestion();
     }
 
-    if (canvas == null) {
-      id("type-input").value = "";
-    } else {
-      canvas.erase();
-    }
 
-    let score = id("score").textContent = Number(id("score").textContent) + 1;
+    id("score").textContent = Number(id("score").textContent) + 1;
 
     let newCurrentQuestion = id("current-question").nextElementSibling;
     id("current-question").id = "";
     newCurrentQuestion.id = "current-question";
+
 
 
   }
@@ -285,7 +280,6 @@
     let questions = qsa("#questions div");
     let transitionElement = qs("#questions div");
     transitionElement.id = "start-space-removed-transition";
-
     let topQuestion = questions[1];
     setTimeout(() => {
       transitionElement.style.transition = "0s";
@@ -294,8 +288,6 @@
     }, 1000);
 
     transitionElement.style.transition = "1s";
-
-
   }
 
   function generateQuestions(totalQuestions, operationsType, termAmount) {
