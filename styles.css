@@ -336,3 +336,7 @@ p {
   transition: 1s;
 }
 
+#current-question {
+  border: solid;
+}
+
