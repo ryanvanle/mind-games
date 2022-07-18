@@ -296,9 +296,11 @@ p {
 }
 
 #questions div {
-  margin-top: 0px;
-  margin-bottom: 0px;
+  position: relative;
+  /* bottom: 15%; */
+
   font-size: 36pt;
+  transition: 1s 0s;
 }
 
 #questions h4 {
@@ -320,23 +322,31 @@ p {
   height: 500px;
 }
 
+#start-space-0, #start-space-1, #start-space-2, #start-space-removed-transition {
+  transition: 1s;
+}
+
 #start-space-0 {
-  padding-bottom: 45%;
+  margin-bottom: 45%;
 }
 
 #start-space-1 {
-  padding-bottom: 25%;
+  margin-bottom: 25%;
 }
 
 #start-space-2 {
-  padding-bottom: 5%;
+  margin-bottom: 5%;
 }
 
-#start-space-0, #start-space-1, #start-space-2 {
-  transition: 1s;
+#start-space-removed-transition {
+  margin-bottom: -14.5%;
 }
 
 #current-question {
   border: solid;
 }
 
+.equation {
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
