@@ -197,11 +197,6 @@
       inputElement.type = "number";
       inputElement.id = "type-input";
       inputElement.name = "type-input";
-
-      let enterButton = gen("button");
-      enterButton.textContent = "ENTER";
-
-      parentElement.prepend(enterButton);
       parentElement.prepend(inputElement);
 
       setInterval(() => {
@@ -338,7 +333,7 @@
   // }
 
   function displayEquations(equations, currentScore) {
-    let displayedQuestions = 10;
+    let displayedQuestions = 1000;
     let questionBox = qs("#questions");
 
     if (equations.length <= displayedQuestions) {
