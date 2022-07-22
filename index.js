@@ -277,19 +277,25 @@
       newCurrentQuestion.id = "current-question";
 
       moveQuestion();
-
       setTimeout(() => {
 
         let currentQuestion = id("current-question");
         let questions = currentQuestion.parentNode;
-        let index = Array.prototype.indexOf.call(questions.children ,currentQuestion);
+        let index = Array.prototype.indexOf.call(questions.children, currentQuestion);
 
-        if (index === 4) {
+        if (index >= 4) {
           moveQuestion();
         }
 
       }, 750);
+      addQuestion();
     }
+
+  }
+
+  function addQuestion() {
+
+    // add it to the end of the display, check the rules to see
   }
 
   function moveQuestion() {
@@ -360,7 +366,7 @@
   // }
 
   function displayEquations(equations, currentScore) {
-    let displayedQuestions = 500;
+    let displayedQuestions = 10;
     let questionBox = qs("#questions");
 
     if (equations.length <= displayedQuestions) {
