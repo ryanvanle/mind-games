@@ -7,6 +7,7 @@
   * Add a function that will be called when the window is loaded.
   */
   window.addEventListener("load", init);
+  let totalQuestionsCounter = 0;
 
   /**
   * CHANGE: Describe what your init function does here.
@@ -153,11 +154,10 @@
     // - operations
     // Maximum amount of Operations
 
-    let questions = generateQuestions(totalQuestions, operationsType, termAmount);
-    let currentScore = 0;
     let parentElement = id("user-section");
+    let displayedQuestionAmount = 10;
 
-    displayEquations(questions, currentScore);
+    displayEquations(operationsType, termAmount, displayedQuestionAmount);
 
     if (inputType === "Write") {
       let canvasElement = gen("canvas");
@@ -238,6 +238,12 @@
     if (Number(parsedData[0]) === Number(answer) && parsedData.length > 0) {
       currentQuestion.textContent = currentQuestionText + "=" + parsedData[0];
 
+      //endgame, checks if the last question
+      if (id("current-question").nextElementSibling == null) {
+        calculationsEndgame();
+        return;
+      }
+
       if (can != null) {
         can.erase();
       } else {
@@ -255,7 +261,9 @@
   }
 
 
-   function nextQuestion() {
+  function nextQuestion() {
+
+    //endgame might be better here. depends if you want to clear the input or not/
 
     id("score").textContent = Number(id("score").textContent) + 1;
 
@@ -288,27 +296,9 @@
         }
 
       }, 750);
-      addQuestion();
+      //displays the next question, if no more questions, endgame happens
+      displayEquations(convertTextToSymbol(calculationsOperationsType()), calculationsTermAmount(), 1);
     }
-
-  }
-
-  function addQuestion() {
-
-    // add it to the end of the display, check the rules to see
-  }
-
-  function moveQuestion() {
-    let questions = qsa("#questions div");
-    let transitionElement = qs("#questions div");
-    transitionElement.id = "start-space-removed-transition";
-    let topQuestion = questions[1];
-    setTimeout(() => {
-      transitionElement.style.transition = "0s";
-      topQuestion.remove();
-      transitionElement.id = "start-space-2";
-    }, 500);
-    transitionElement.style.transition = "0.5s";
   }
 
   function generateQuestions(totalQuestions, operationsType, termAmount) {
@@ -347,7 +337,6 @@
 
       let result = math.evaluate(currentEquation);
 
-
       //forces only whole and actual answers to be in the question pool
       if (result !== Infinity && result % 1 === 0) {
         equations.push(currentEquation);
@@ -355,6 +344,55 @@
     }
 
     return equations;
+  }
+
+  function displayEquations(operationsType, termAmount, questionAmount) {
+    if (totalQuestionsCounter === 0 && qs(".equation") == null) {
+      totalQuestionsCounter = id("amount").value;
+    } else if (totalQuestionsCounter === 0) {
+      return; // stop generating questions
+    }
+
+    let displayedQuestions = questionAmount;
+    if (questionAmount >= totalQuestionsCounter) {
+      displayedQuestions = totalQuestionsCounter;
+    }
+
+    let equations = generateQuestions(displayedQuestions, operationsType, termAmount);
+    let questionBox = qs("#questions");
+    for (let i = 0; i < displayedQuestions; i++) {
+      let currentEquation = gen("div");
+      let h4 = gen("h4");
+      currentEquation.appendChild(h4);
+      currentEquation.classList.add("equation");
+
+      // checks if there is no questions
+      if (i === 0 && qs(".equation") == null) {
+        currentEquation.id = "current-question";
+      }
+
+      h4.textContent = equations[i] + "=";
+      questionBox.appendChild(currentEquation);
+    }
+
+    totalQuestionsCounter = totalQuestionsCounter - displayedQuestions;
+  }
+
+  function calculationsEndgame() {
+    console.log("no more questions");
+  }
+
+  function moveQuestion() {
+    let questions = qsa("#questions div");
+    let transitionElement = qs("#questions div");
+    transitionElement.id = "start-space-removed-transition";
+    let topQuestion = questions[1];
+    setTimeout(() => {
+      transitionElement.style.transition = "0s";
+      topQuestion.remove();
+      transitionElement.id = "start-space-2";
+    }, 500);
+    transitionElement.style.transition = "0.5s";
   }
 
   // function generateAnswers(equations) {
@@ -365,29 +403,6 @@
   //   return answers;
   // }
 
-  function displayEquations(equations, currentScore) {
-    let displayedQuestions = 10;
-    let questionBox = qs("#questions");
-
-    if (equations.length <= displayedQuestions) {
-      displayedQuestions = equations.length;
-    }
-
-    for (let i = currentScore; i < displayedQuestions + currentScore; i++) {
-      let currentEquation = gen("div");
-      let h4 = gen("h4");
-      currentEquation.appendChild(h4);
-      currentEquation.classList.add("equation");
-
-      if (i === currentScore) {
-        currentEquation.id = "current-question";
-      }
-
-      h4.textContent = equations[i] + "=";
-      questionBox.appendChild(currentEquation);
-    }
-
-  }
 
   function getRandomInt(max) {
     return Math.floor(Math.random() * max);
