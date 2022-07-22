@@ -12,8 +12,6 @@
   * CHANGE: Describe what your init function does here.
   */
   function init() {
-    // THIS IS THE CODE THAT WILL BE EXECUTED ONCE THE WEBPAGE LOADS
-
     id("calculation-button").addEventListener("click", menuToCalculation);
     qs(".back-button").addEventListener("click", backToMenu);
     qs("#calculations-buttons .start").addEventListener("click", calculationRulesToGame);
@@ -22,7 +20,6 @@
     for (let i = 0; i < calculationSelectors.length; i++) {
       calculationSelectors[i].addEventListener("click", calculationRulesSelector);
     }
-
   }
 
   function menuToCalculation() {
@@ -36,50 +33,21 @@
   }
 
   function calculationRulesToGame() {
-
-    // need to check if everything is filled out properly
-
     let totalQuestions = qs("#amount").value;
-    let inputType;
-    let operationsType = [];
-    let termAmount;
+    let inputType = calculationsInputCheck();
+    let operationsType = calculationsOperationsType();
+    let termAmount = calculationsTermAmount();
     const MAXIMUM_QUESTIONS = 100;
 
-    // you could make this into multiple functions of anonymous functions when doing the variable
-    // initialization and return it but i feel like it would be confusing to read personally but
-    // it is subjective.
-
-    // inputType
-    let inputs = qsa("#input-type p");
-    for (let i = 0; i < inputs.length; i++) {
-      if (inputs[i].classList.contains("selected")) {
-        inputType = inputs[i].textContent;
-      } else if (inputType !== undefined && inputs[i].classList.contains("selected")) {
-        console.error("Both inputs selected");
-      }
-    }
-
-    // operationsType
-    let operationsOptions = qsa("#operations-type p");
-    for (let i = 0; i < operationsOptions.length; i++) {
-      if (operationsOptions[i].classList.contains("selected")) {
-        operationsType.push(operationsOptions[i].textContent);
-      }
-    }
-
-    // termAmount
-    let termAmountSelector = qsa("#operations-amount p");
-    for (let i = 0; i < termAmountSelector.length; i++) {
-      if (termAmountSelector[i].classList.contains("selected")) {
-        termAmount = termAmountSelector[i].textContent;
-      } else if (termAmount !== undefined && termAmountSelector[i].classList.contains("selected")) {
-        console.error("Multiple inputs selected");
-      }
-    }
-
     // general check to see if all fields are filled out
-    if (totalQuestions === "" || inputType === undefined || inputType === null
-    || operationsType.length === 0 || termAmount === undefined || termAmount === null) {
+    let filledOutCheck = totalQuestions === "" || inputType === undefined || inputType === null
+    || operationsType.length === 0 || termAmount === undefined || termAmount === null;
+
+    // check if the question is within the limit
+    let totalQuestionsCheck = Number(totalQuestions) < 0
+    || Number(totalQuestions) > MAXIMUM_QUESTIONS;
+
+    if (filledOutCheck) {
       qs("#calculations-buttons .start").removeEventListener("click", calculationRulesToGame);
       id("calculations-rules").classList.add("hidden");
       id("missing-error").classList.remove("hidden");
@@ -88,9 +56,7 @@
         id("missing-error").classList.add("hidden");
         qs("#calculations-buttons .start").addEventListener("click", calculationRulesToGame);
       }, 1000);
-
-    // check if the question is within the limit
-    } else if (Number(totalQuestions) < 0 || Number(totalQuestions) > MAXIMUM_QUESTIONS) {
+    } else if (totalQuestionsCheck) {
       qs("#calculations-buttons .start").removeEventListener("click", calculationRulesToGame);
       id("calculations-rules").classList.add("hidden");
       id("amount-error").classList.remove("hidden");
@@ -99,14 +65,49 @@
         id("amount-error").classList.add("hidden");
         qs("#calculations-buttons .start").addEventListener("click", calculationRulesToGame);
       }, 1000);
-
-    // start
     } else {
       id("calculations-menu").classList.add("hidden");
       id("calculations-game").classList.remove("hidden");
       let converted = convertTextToSymbol(operationsType);
       startCalculations(totalQuestions, inputType, converted, termAmount);
     }
+  }
+
+  function calculationsInputCheck() {
+    let inputType;
+    let inputs = qsa("#input-type p");
+    for (let i = 0; i < inputs.length; i++) {
+      if (inputs[i].classList.contains("selected")) {
+        inputType = inputs[i].textContent;
+      } else if (inputType !== undefined && inputs[i].classList.contains("selected")) {
+        console.error("Both inputs selected");
+      }
+    }
+    return inputType;
+  }
+
+  function calculationsOperationsType() {
+    let operationsType = [];
+    let operationsOptions = qsa("#operations-type p");
+    for (let i = 0; i < operationsOptions.length; i++) {
+      if (operationsOptions[i].classList.contains("selected")) {
+        operationsType.push(operationsOptions[i].textContent);
+      }
+    }
+    return operationsType;
+  }
+
+  function calculationsTermAmount() {
+    let termAmount;
+    let termAmountSelector = qsa("#operations-amount p");
+    for (let i = 0; i < termAmountSelector.length; i++) {
+      if (termAmountSelector[i].classList.contains("selected")) {
+        termAmount = termAmountSelector[i].textContent;
+      } else if (termAmount !== undefined && termAmountSelector[i].classList.contains("selected")) {
+        console.error("Multiple inputs selected");
+      }
+    }
+    return termAmount;
   }
 
   function convertTextToSymbol(operationType) {
@@ -117,7 +118,6 @@
       if (operationType[i] === "Multiplication") converted.push("*");
       if (operationType[i] === "Division") converted.push("/");
     }
-
     return converted;
   }
 
