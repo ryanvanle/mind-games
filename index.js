@@ -243,6 +243,8 @@
       //endgame, checks if the last question
       if (id("current-question").nextElementSibling == null) {
         id("score").textContent = Number(id("score").textContent) + 1;
+        appendCheckmark();
+        playCorrectAnswerSound();
         calculationsEndgame();
         return;
       }
@@ -253,6 +255,9 @@
         id("type-input").value = "";
       }
 
+
+      playCorrectAnswerSound();
+      id("score").textContent = Number(id("score").textContent) + 1;
       nextQuestion();
     } else if (parsedData.length > 0) {
       let newText = currentQuestionText + "=" + parsedData[0];
@@ -267,27 +272,16 @@
   function nextQuestion() {
 
     //endgame might be better here. depends if you want to clear the input or not/
-
-    id("score").textContent = Number(id("score").textContent) + 1;
-
     let startSpace = qs("#questions div");
     if (startSpace.id === "start-space-0") {
       qs("#questions div").id = "start-space-1";
-      let newCurrentQuestion = id("current-question").nextElementSibling;
-      id("current-question").id = "";
-      newCurrentQuestion.id = "current-question";
-
+      moveCurrentQuestion();
     } else if (startSpace.id === "start-space-1") {
       qs("#questions div").id = "start-space-2";
-      let newCurrentQuestion = id("current-question").nextElementSibling;
-      id("current-question").id = "";
-      newCurrentQuestion.id = "current-question";
+      moveCurrentQuestion();
     } else {
-      let newCurrentQuestion = id("current-question").nextElementSibling;
-      id("current-question").id = "";
-      newCurrentQuestion.id = "current-question";
-
-      moveQuestion();
+      moveCurrentQuestion();
+      moveQuestionScroll();
       setTimeout(() => {
 
         let currentQuestion = id("current-question");
@@ -295,13 +289,43 @@
         let index = Array.prototype.indexOf.call(questions.children, currentQuestion);
 
         if (index >= 4) {
-          moveQuestion();
+          moveQuestionScroll();
         }
 
       }, 750);
       //displays the next question, if no more questions, endgame happens
       displayEquations(convertTextToSymbol(calculationsOperationsType()), calculationsTermAmount(), 1);
     }
+
+
+  }
+
+  function moveCurrentQuestion() {
+    let oldCurrentQuestion = id("current-question");
+    appendCheckmark();
+    let newCurrentQuestion = oldCurrentQuestion.nextElementSibling;
+    id("current-question").id = "";
+    newCurrentQuestion.id = "current-question";
+  }
+
+  function appendCheckmark() {
+    let oldCurrentQuestion = id("current-question");
+    let image = gen("img");
+    image.src = "img/checkmark.png";
+    image.alt = "green checkmark";
+    image.classList.add("checkmark");
+    oldCurrentQuestion.appendChild(image);
+  }
+
+
+  function playCorrectAnswerSound() {
+    let sound = new Audio("sound/correct.mp3");
+    sound.play();
+  }
+
+  function playSkipSound() {
+    let sound = new Audio("sound/incorrect.mp3");
+    sound.play();
   }
 
   function generateQuestions(totalQuestions, operationsType, termAmount) {
@@ -386,7 +410,7 @@
     stop();
   }
 
-  function moveQuestion() {
+  function moveQuestionScroll() {
     let questions = qsa("#questions div");
     let transitionElement = qs("#questions div");
     transitionElement.id = "start-space-removed-transition";
