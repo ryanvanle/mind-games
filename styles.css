@@ -350,3 +350,13 @@ p {
   margin-bottom: 0px;
   margin-top: 0px;
 }
+
+#user-section div {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+#display-area {
+  margin-right: 10px;
+}
+
