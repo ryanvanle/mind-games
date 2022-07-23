@@ -242,6 +242,7 @@
 
       //endgame, checks if the last question
       if (id("current-question").nextElementSibling == null) {
+        id("score").textContent = Number(id("score").textContent) + 1;
         calculationsEndgame();
         return;
       }
