@@ -347,6 +347,7 @@ p {
 }
 
 .equation {
+  display: flex;
   margin-bottom: 0px;
   margin-top: 0px;
 }
@@ -360,3 +361,16 @@ p {
   margin-right: 10px;
 }
 
+.checkmark {
+  position: absolute;
+  margin-left: 25%;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-right: 0;
+  /* z-index: 1; */
+  padding: 10px 10px 10px 10px;
+  /* margin-right: 50%; */
+  width: 125px;
+  height: auto;
+  opacity: 75%;
+}
