@@ -367,10 +367,38 @@ p {
   margin-top: 0;
   margin-bottom: 0;
   margin-right: 0;
-  /* z-index: 1; */
   padding: 10px 10px 10px 10px;
-  /* margin-right: 50%; */
   width: 125px;
+  height: auto;
+  opacity: 75%;
+}
+
+#user-section div div, #score, #user-section div span {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 375;
+  font-size: 14pt;
+}
+
+#score {
+  padding-left: 5px;
+}
+
+#display-area {
+  letter-spacing: 2.5px;
+  padding-left: 5px;
+  font-weight: 375;
+  font-size: 15pt;
+}
+
+.x-mark {
+  position: absolute;
+  margin-left: 10%;
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-right: 0;
+  padding: 10px 10px 10px 10px;
+  width: 100px;
   height: auto;
   opacity: 75%;
 }

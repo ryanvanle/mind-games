@@ -205,10 +205,14 @@
         }
       })
 
-      qsa("#user-section button")[1].addEventListener("click", () => {
+      qsa("#user-section button")[0].addEventListener("click", () => {
         id("type-input").value = "";
         clearCurrentQuestion();
       });
+
+      qsa("#user-section button")[1].addEventListener("click", skipQuestion);
+
+
     }
   }
 
@@ -258,6 +262,7 @@
 
       playCorrectAnswerSound();
       id("score").textContent = Number(id("score").textContent) + 1;
+      appendCheckmark();
       nextQuestion();
     } else if (parsedData.length > 0) {
       let newText = currentQuestionText + "=" + parsedData[0];
@@ -282,8 +287,8 @@
     } else {
       moveCurrentQuestion();
       moveQuestionScroll();
+      qsa("#user-section button")[1].removeEventListener("click", skipQuestion);
       setTimeout(() => {
-
         let currentQuestion = id("current-question");
         let questions = currentQuestion.parentNode;
         let index = Array.prototype.indexOf.call(questions.children, currentQuestion);
@@ -291,8 +296,8 @@
         if (index >= 4) {
           moveQuestionScroll();
         }
-
-      }, 750);
+        qsa("#user-section button")[1].addEventListener("click", skipQuestion);
+      }, 500);
       //displays the next question, if no more questions, endgame happens
       displayEquations(convertTextToSymbol(calculationsOperationsType()), calculationsTermAmount(), 1);
     }
@@ -302,7 +307,6 @@
 
   function moveCurrentQuestion() {
     let oldCurrentQuestion = id("current-question");
-    appendCheckmark();
     let newCurrentQuestion = oldCurrentQuestion.nextElementSibling;
     id("current-question").id = "";
     newCurrentQuestion.id = "current-question";
@@ -420,7 +424,7 @@
       topQuestion.remove();
       transitionElement.id = "start-space-2";
     }, 500);
-    transitionElement.style.transition = "0.5s";
+    transitionElement.style.transition = "0.25s";
   }
 
   // function generateAnswers(equations) {
@@ -440,6 +444,21 @@
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min) + min);
+  }
+
+  function skipQuestion() {
+    appendX();
+    nextQuestion();
+    playSkipSound();
+  }
+
+  function appendX() {
+    let oldCurrentQuestion = id("current-question");
+    let image = gen("img");
+    image.src = "img/x-mark.png";
+    image.alt = "red letter X";
+    image.classList.add("x-mark");
+    oldCurrentQuestion.appendChild(image);
   }
 
   /**
@@ -556,11 +575,8 @@
 
 /* TODO: in order
   - css polishing
-  - check mark
 - finish skip
 - end game
-  - add stopwatch timer
-  - clear timers and such
   - highscore
 - general polishing
   - css resizing, constants = bad it seems
