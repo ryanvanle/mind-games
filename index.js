@@ -410,7 +410,10 @@
   }
 
   function calculationsEndgame() {
-    console.log("no more questions");
+
+    updateStats();
+    // clearCalculationState();
+    transitionToResults();
     stop();
   }
 
@@ -427,14 +430,34 @@
     transitionElement.style.transition = "0.25s";
   }
 
-  // function generateAnswers(equations) {
-  //   let answers = [];
-  //   for (let i = 0; i < equations.length; i++) {
-  //     answers.push(math.evaluate(equations[i]));
-  //   }
-  //   return answers;
-  // }
+  function updateStats() {
+    let questionAmount = id("amount").value;
+    let inputType = calculationsInputCheck();
+    let operationsType = calculationsOperationsType();
+    let endingTime = id("display-area").textContent;
+    let score = id("score").textContent;
+    let skips = Number(questionAmount) - Number(score);
+    let rulesElement = qsa("#results div")[0];
+    let statsElements = qsa("#stats div");
 
+    console.log(statsElements);
+    let scoreElement = statsElements[0];
+    let timeElement = statsElements[1];
+    let skipsElement = statsElements[2];
+
+
+
+
+
+    scoreElement.children[1].textContent = score;
+    timeElement.children[1].textContent = endingTime;
+    skipsElement.children[1].textContent = skips;
+  }
+
+  function transitionToResults() {
+    id("calculations-game").classList.add("hidden");
+    id("results").classList.remove("hidden");
+  }
 
   function getRandomInt(max) {
     return Math.floor(Math.random() * max);
