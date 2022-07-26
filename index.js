@@ -8,6 +8,7 @@
   */
   window.addEventListener("load", init);
   let totalQuestionsCounter = 0;
+  let can;
 
   /**
   * CHANGE: Describe what your init function does here.
@@ -16,6 +17,7 @@
     id("calculation-button").addEventListener("click", menuToCalculation);
     qs(".back-button").addEventListener("click", backToMenu);
     qs("#calculations-buttons .start").addEventListener("click", calculationRulesToGame);
+    qs("#results button").addEventListener("click", calculationsResultsToMenu);
 
     let calculationSelectors = qsa("#calculations-rules p");
     for (let i = 0; i < calculationSelectors.length; i++) {
@@ -167,7 +169,7 @@
       canvasElement.width = "500";
       canvasElement.height = "550";
       parentElement.prepend(canvasElement);
-      let can = new handwriting.Canvas(id("can"));
+      can = new handwriting.Canvas(id("can"));
 
       can.setCallBack(function(data) {
         checkAnswer(data, can);
@@ -188,6 +190,12 @@
         can.erase();
         clearCurrentQuestion();
       });
+
+      qsa("#user-section button")[1].addEventListener("click", () =>  {
+        can.erase();
+        skipQuestion();
+      });
+
 
     } else {
       let inputElement = gen("input");
@@ -210,10 +218,19 @@
         clearCurrentQuestion();
       });
 
-      qsa("#user-section button")[1].addEventListener("click", skipQuestion);
+      qsa("#user-section button")[1].addEventListener("click", () => {
+        id("type-input").value = "";
+        skipQuestion();
+      });
 
 
     }
+  }
+
+  function clearAllEventListeners(element) {
+    let oldElement = element
+    let newElement = oldElement.cloneNode(true);
+    oldElement.parentNode.replaceChild(newElement, oldElement);
   }
 
   function clearCurrentQuestion() {
@@ -287,7 +304,7 @@
     } else {
       moveCurrentQuestion();
       moveQuestionScroll();
-      qsa("#user-section button")[1].removeEventListener("click", skipQuestion);
+      clearAllEventListeners(qsa("#user-section button")[1])
       setTimeout(() => {
         let currentQuestion = id("current-question");
         let questions = currentQuestion.parentNode;
@@ -296,7 +313,21 @@
         if (index >= 4) {
           moveQuestionScroll();
         }
-        qsa("#user-section button")[1].addEventListener("click", skipQuestion);
+
+        let input = getInputType();
+
+        if (input.id === "can") {
+          qsa("#user-section button")[1].addEventListener("click", () => {
+            can.erase();
+            skipQuestion();
+          });
+        } else if (input.id === "type-input") {
+          qsa("#user-section button")[1].addEventListener("click", () => {
+            id("type-input").value = "";
+            skipQuestion();
+          });
+        }
+
       }, 500);
       //displays the next question, if no more questions, endgame happens
       displayEquations(convertTextToSymbol(calculationsOperationsType()), calculationsTermAmount(), 1);
@@ -412,7 +443,7 @@
   function calculationsEndgame() {
 
     updateStats();
-    // clearCalculationState();
+    clearCalculationState();
     transitionToResults();
     stop();
   }
@@ -480,6 +511,17 @@
     playSkipSound();
   }
 
+  // function clearInput() {
+  //   let input = getInputType();
+
+  //   if (input.id === "can") {
+  //     let can = new handwriting.Canvas(id("can"));
+  //     can.erase();
+  //   } else {
+  //     input.value = "";
+  //   }
+  // }
+
   function appendX() {
     let oldCurrentQuestion = id("current-question");
     let image = gen("img");
@@ -487,6 +529,43 @@
     image.alt = "red letter X";
     image.classList.add("x-mark");
     oldCurrentQuestion.appendChild(image);
+  }
+
+  function calculationsResultsToMenu() {
+    id("results").classList.add("hidden");
+    id("main-menu").classList.remove("hidden");
+  }
+
+  function clearCalculationState() {
+    reset();
+    id("questions").innerHTML = "";
+
+    let spacingElement = gen("div");
+    spacingElement.id = "start-space-0";
+
+    id("questions").appendChild(spacingElement);
+    id("score").textContent = 0;
+
+    let inputType = getInputType();
+    inputType.remove();
+
+
+    let userButtons = qsa("#user-section button");
+
+    for (let i = 0; i < userButtons.length; i++) {
+      clearAllEventListeners(userButtons[i]);
+    }
+
+    can = undefined;
+  }
+
+  function getInputType() {
+    let inputType;
+
+    if(id("can") != null) inputType = id("can");
+    if(id("type-input") != null) inputType = id("type-input");
+
+    return inputType;
   }
 
   /**
