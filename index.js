@@ -549,7 +549,6 @@
     let inputType = getInputType();
     inputType.remove();
 
-
     let userButtons = qsa("#user-section button");
 
     for (let i = 0; i < userButtons.length; i++) {
