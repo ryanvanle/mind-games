@@ -434,20 +434,25 @@
     let questionAmount = id("amount").value;
     let inputType = calculationsInputCheck();
     let operationsType = calculationsOperationsType();
+    let termAmount = calculationsTermAmount();
+
     let endingTime = id("display-area").textContent;
     let score = id("score").textContent;
     let skips = Number(questionAmount) - Number(score);
-    let rulesElement = qsa("#results div")[0];
-    let statsElements = qsa("#stats div");
+    let rulesElements = qsa("#results div div span");
+    let operationsString = operationsType.join(" ");
 
-    console.log(statsElements);
+
+    rulesElements[0].textContent = questionAmount;
+    rulesElements[1].textContent = inputType;
+    rulesElements[2].textContent = operationsString;
+    rulesElements[3].textContent = termAmount;
+
+
+    let statsElements = qsa("#stats div");
     let scoreElement = statsElements[0];
     let timeElement = statsElements[1];
     let skipsElement = statsElements[2];
-
-
-
-
 
     scoreElement.children[1].textContent = score;
     timeElement.children[1].textContent = endingTime;

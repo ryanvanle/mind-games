@@ -412,12 +412,39 @@ p {
 
 #stats {
   display: flex;
+  text-align: center;
 }
 
 #stats div {
-  padding: 150px;
+  padding: 50px 100px 100px 100px;
 }
 
 .hidden {
   display: none;
+}
+
+#results div span {
+  padding: 10px;
+}
+
+#results h3 {
+  text-align: center;
+  font-size: 38pt;
+}
+
+#results-rules {
+  display: flex;
+  flex-direction: row;
+}
+
+#stats span {
+  display: table;
+  margin: 0 auto;
+}
+
+#results-rules div {
+  border-style: solid;
+  padding: 10px;
+  text-align: center;
+  font-size: 22pt;
 }
