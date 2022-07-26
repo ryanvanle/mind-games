@@ -37,18 +37,23 @@
 
   function calculationRulesToGame() {
     let totalQuestions = qs("#amount").value;
+    let maxNumber = qs("#max-number").value;
     let inputType = calculationsInputCheck();
     let operationsType = calculationsOperationsType();
     let termAmount = calculationsTermAmount();
     const MAXIMUM_QUESTIONS = 100;
+    const MAXIMUM_NUMBER = 1000;
 
     // general check to see if all fields are filled out
-    let filledOutCheck = totalQuestions === "" || inputType === undefined || inputType === null
-    || operationsType.length === 0 || termAmount === undefined || termAmount === null;
+    let filledOutCheck = totalQuestions === "" || inputType == null
+    || operationsType.length === 0 || termAmount == null || maxNumber === "";
 
     // check if the question is within the limit
     let totalQuestionsCheck = Number(totalQuestions) < 0
     || Number(totalQuestions) > MAXIMUM_QUESTIONS;
+
+    let maxNumberCheck = Number(maxNumber) < 0
+    || Number(maxNumber) > MAXIMUM_NUMBER;
 
     if (filledOutCheck) {
       qs("#calculations-buttons .start").removeEventListener("click", calculationRulesToGame);
@@ -68,11 +73,20 @@
         id("amount-error").classList.add("hidden");
         qs("#calculations-buttons .start").addEventListener("click", calculationRulesToGame);
       }, 1000);
+    } else if (maxNumberCheck) {
+      qs("#calculations-buttons .start").removeEventListener("click", calculationRulesToGame);
+      id("calculations-rules").classList.add("hidden");
+      id("max-number-error").classList.remove("hidden");
+      setTimeout(() => {
+        id("calculations-rules").classList.remove("hidden");
+        id("max-number-error").classList.add("hidden");
+        qs("#calculations-buttons .start").addEventListener("click", calculationRulesToGame);
+      }, 1000);
     } else {
       id("calculations-menu").classList.add("hidden");
       id("calculations-game").classList.remove("hidden");
       let converted = convertTextToSymbol(operationsType);
-      startCalculations(totalQuestions, inputType, converted, termAmount);
+      startCalculations(totalQuestions, inputType, converted, termAmount, maxNumber);
     }
   }
 
@@ -148,7 +162,7 @@
      }
   }
 
-  function startCalculations(totalQuestions, inputType, operationsType, termAmount) {
+  function startCalculations(totalQuestions, inputType, operationsType, termAmount, maxNumber) {
 
     // general rules to keep track of
     // - amount of questions
@@ -161,7 +175,7 @@
     let parentElement = id("user-section");
     let displayedQuestionAmount = 10;
 
-    displayEquations(operationsType, termAmount, displayedQuestionAmount);
+    displayEquations(operationsType, termAmount, displayedQuestionAmount, maxNumber);
 
     if (inputType === "Write") {
       let canvasElement = gen("canvas");
@@ -195,8 +209,6 @@
         can.erase();
         skipQuestion();
       });
-
-
     } else {
       let inputElement = gen("input");
       inputElement.type = "number";
@@ -330,7 +342,7 @@
 
       }, 500);
       //displays the next question, if no more questions, endgame happens
-      displayEquations(convertTextToSymbol(calculationsOperationsType()), calculationsTermAmount(), 1);
+      displayEquations(convertTextToSymbol(calculationsOperationsType()), calculationsTermAmount(), 1, maxNumber);
     }
 
 
@@ -363,16 +375,17 @@
     sound.play();
   }
 
-  function generateQuestions(totalQuestions, operationsType, termAmount) {
+  function generateQuestions(totalQuestions, operationsType, termAmount, maxNumber) {
 
-    const MAXIMUM_NUMBER = 13; // TODO: need to make this an option for the user to pick
+
+
 
     let equations = [];
     while (equations.length < totalQuestions) {
-      let termOne = getRandomInt(MAXIMUM_NUMBER);
-      let termTwo = getRandomInt(MAXIMUM_NUMBER);
-      let termThree = getRandomInt(MAXIMUM_NUMBER);
-      let termFour = getRandomInt(MAXIMUM_NUMBER);
+      let termOne = getRandomInt(maxNumber);
+      let termTwo = getRandomInt(maxNumber);
+      let termThree = getRandomInt(maxNumber);
+      let termFour = getRandomInt(maxNumber);
       let operationOne = operationsType[getRandomInt(operationsType.length)];
       let operationTwo = operationsType[getRandomInt(operationsType.length)];
       let operationThree = operationsType[getRandomInt(operationsType.length)];
@@ -408,7 +421,7 @@
     return equations;
   }
 
-  function displayEquations(operationsType, termAmount, questionAmount) {
+  function displayEquations(operationsType, termAmount, questionAmount, maxNumber) {
     if (totalQuestionsCounter === 0 && qs(".equation") == null) {
       totalQuestionsCounter = id("amount").value;
     } else if (totalQuestionsCounter === 0) {
@@ -420,7 +433,7 @@
       displayedQuestions = totalQuestionsCounter;
     }
 
-    let equations = generateQuestions(displayedQuestions, operationsType, termAmount);
+    let equations = generateQuestions(displayedQuestions, operationsType, termAmount, maxNumber);
     let questionBox = qs("#questions");
     for (let i = 0; i < displayedQuestions; i++) {
       let currentEquation = gen("div");
@@ -442,10 +455,10 @@
 
   function calculationsEndgame() {
 
+    stop();
     updateStats();
     clearCalculationState();
     transitionToResults();
-    stop();
   }
 
   function moveQuestionScroll() {
@@ -466,6 +479,7 @@
     let inputType = calculationsInputCheck();
     let operationsType = calculationsOperationsType();
     let termAmount = calculationsTermAmount();
+    let maxNumber = id("max-number").value;
 
     let endingTime = id("display-area").textContent;
     let score = id("score").textContent;
@@ -478,7 +492,7 @@
     rulesElements[1].textContent = inputType;
     rulesElements[2].textContent = operationsString;
     rulesElements[3].textContent = termAmount;
-
+    rulesElements[4].textContent = maxNumber;
 
     let statsElements = qsa("#stats div");
     let scoreElement = statsElements[0];
@@ -496,7 +510,7 @@
   }
 
   function getRandomInt(max) {
-    return Math.floor(Math.random() * max);
+    return Math.floor(Math.random() * (Number(max) + 1));
   }
 
   function getRandomIntBetween(min, max) {
@@ -537,6 +551,7 @@
   }
 
   function clearCalculationState() {
+    stop();
     reset();
     id("questions").innerHTML = "";
 
@@ -556,6 +571,7 @@
     }
 
     can = undefined;
+
   }
 
   function getInputType() {
