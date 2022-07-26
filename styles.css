@@ -448,3 +448,7 @@ p {
   text-align: center;
   font-size: 22pt;
 }
+
+#results {
+  padding-bottom: 75px;
+}
