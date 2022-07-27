@@ -14,6 +14,12 @@
   * CHANGE: Describe what your init function does here.
   */
   function init() {
+
+    // window.localStorage.clear();
+
+    if (window.localStorage.getItem("calculationsRules") != null) previousCalculationsRulesSetup();
+
+
     id("calculation-button").addEventListener("click", menuToCalculation);
     qs(".back-button").addEventListener("click", backToMenu);
     qs("#calculations-buttons .start").addEventListener("click", calculationRulesToGame);
@@ -86,6 +92,8 @@
       id("calculations-menu").classList.add("hidden");
       id("calculations-game").classList.remove("hidden");
       let converted = convertTextToSymbol(operationsType);
+
+      setCalculationsRulesLocalStorage(totalQuestions, inputType, operationsType, termAmount, maxNumber);
       startCalculations(totalQuestions, inputType, converted, termAmount, maxNumber);
     }
   }
@@ -160,6 +168,50 @@
      } else {
       this.classList.toggle("selected");
      }
+  }
+
+  function setCalculationsRulesLocalStorage(totalQuestions, inputType, operationsType, termAmount, maxNumber) {
+    let rules = {
+      "totalQuestions": totalQuestions,
+      "inputType": inputType,
+      "operationsType": operationsType,
+      "termAmount": termAmount,
+      "maxNumber": maxNumber
+    }
+
+    window.localStorage.setItem("calculationsRules", JSON.stringify(rules));
+  }
+
+  function previousCalculationsRulesSetup() {
+    let rules = JSON.parse(window.localStorage.getItem("calculationsRules"));
+    id("amount").value = rules["totalQuestions"];
+    id("max-number").value = rules["maxNumber"];
+
+    let inputsElement = qsa("#input-type p");
+    for (let i = 0; i < inputsElement.length; i++) {
+      if (inputsElement[i].textContent === rules["inputType"]) {
+        inputsElement[i].classList.add("selected");
+      }
+    }
+
+    let termAmountsElement = qsa("#operations-amount p");
+    for (let i = 0; i < termAmountsElement.length; i++) {
+      if (termAmountsElement[i].textContent === rules["termAmount"]) {
+        termAmountsElement[i].classList.add("selected");
+      }
+    }
+
+    let set = new Set();
+    let operationsType = rules["operationsType"]
+    let operationsTypeElements = qsa("#operations-type p");
+
+    for (let i = 0; i < operationsType.length; i++) {
+      set.add(operationsType[i]);
+    }
+
+    for (let i = 0; i < operationsTypeElements.length; i++) {
+      if (set.has(operationsTypeElements[i].textContent)) operationsTypeElements[i].classList.add("selected");
+    }
   }
 
   function startCalculations(totalQuestions, inputType, operationsType, termAmount, maxNumber) {
@@ -383,18 +435,15 @@
 
   function generateQuestions(totalQuestions, operationsType, termAmount, maxNumber) {
 
-
-
-
     let equations = [];
     while (equations.length < totalQuestions) {
       let termOne = getRandomInt(maxNumber);
       let termTwo = getRandomInt(maxNumber);
       let termThree = getRandomInt(maxNumber);
       let termFour = getRandomInt(maxNumber);
-      let operationOne = operationsType[getRandomInt(operationsType.length)];
-      let operationTwo = operationsType[getRandomInt(operationsType.length)];
-      let operationThree = operationsType[getRandomInt(operationsType.length)];
+      let operationOne = operationsType[getRandomInt(operationsType.length-1)];
+      let operationTwo = operationsType[getRandomInt(operationsType.length-1)];
+      let operationThree = operationsType[getRandomInt(operationsType.length-1)];
 
       let amountOfTerms = getRandomIntBetween(2, Number(termAmount) + 1);
       let currentEquation = termOne + operationOne + termTwo;
