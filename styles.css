@@ -231,10 +231,6 @@ button:active {
   font-size: 16pt;
 }
 
-.hidden {
-  display: none;
-}
-
 .back-button {
   position: absolute;
   width: 0;
@@ -419,10 +415,6 @@ p {
   padding: 50px 100px 100px 100px;
 }
 
-.hidden {
-  display: none;
-}
-
 #results div span {
   padding: 10px;
 }
@@ -451,4 +443,8 @@ p {
 
 #results {
   padding-bottom: 75px;
+}
+
+.hidden {
+  display: none;
 }

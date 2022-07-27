@@ -375,6 +375,12 @@
     sound.play();
   }
 
+  function playWinSound() {
+    let sound = new Audio("sound/win-sound.mp3");
+    sound.play();
+  }
+
+
   function generateQuestions(totalQuestions, operationsType, termAmount, maxNumber) {
 
 
@@ -454,7 +460,7 @@
   }
 
   function calculationsEndgame() {
-
+    playWinSound();
     stop();
     updateStats();
     clearCalculationState();
