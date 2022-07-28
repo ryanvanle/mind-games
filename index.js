@@ -394,10 +394,14 @@
 
       }, 500);
       //displays the next question, if no more questions, endgame happens
-      displayEquations(convertTextToSymbol(calculationsOperationsType()), calculationsTermAmount(), 1, maxNumber);
+      displayEquations(convertTextToSymbol(calculationsOperationsType()), calculationsTermAmount(), 1, calculationsMaxNumber());
     }
 
 
+  }
+
+  function calculationsMaxNumber () {
+    return id("max-number").value;
   }
 
   function moveCurrentQuestion() {
