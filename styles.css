@@ -261,7 +261,7 @@ p {
   padding-bottom: 8px;
 }
 
-#questions, #user-section, #user-section-matching, #questions-matching{
+#questions, #user-section, #user-section-counting, #questions-counting{
   width: 700px;
   height: 900px;
   background-color: white;
@@ -269,7 +269,7 @@ p {
   border-color: #000000;
 }
 
-#user-section, #user-section-matching {
+#user-section, #user-section-counting {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -472,4 +472,9 @@ p {
 @keyframes grow {
   from {transform: scale(1);}
   to {transform: scale(1.5);}
+}
+
+.move {
+  position: relative;
+  font-size: 26pt;
 }

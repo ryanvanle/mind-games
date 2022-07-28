@@ -19,7 +19,6 @@
 
     if (window.localStorage.getItem("calculationsRules") != null) previousCalculationsRulesSetup();
 
-
     id("calculation-button").addEventListener("click", menuToCalculation);
     qs(".back-button").addEventListener("click", backToMenu);
     qs("#calculations-buttons .start").addEventListener("click", calculationRulesToGame);
@@ -29,6 +28,8 @@
     for (let i = 0; i < calculationSelectors.length; i++) {
       calculationSelectors[i].addEventListener("click", calculationRulesSelector);
     }
+
+    movingDiv(qs(".move"));
   }
 
   function menuToCalculation() {
@@ -642,6 +643,39 @@
     return inputType;
   }
 
+
+  function movingDiv(element) {
+    const FPS = 60;
+    let area = id("questions-counting");
+
+    // area.style.height = area.style.height + "px";
+    // area.style.width = area.style.width + "px";
+
+    let xPosition = 10;
+    let yPosition = 10;
+    let xSpeed = 2;
+    let ySpeed = 2;
+
+    console.log(area.clientWidth)
+
+    setInterval(() => {
+
+      if (xPosition + element.clientWidth >= area.clientWidth || xPosition <= 0) xSpeed = -xSpeed;
+      if (yPosition + element.clientHeight >= area.clientHeight - 50 || yPosition <= 0) ySpeed = -ySpeed;
+
+      xPosition += xSpeed;
+      yPosition += ySpeed;
+      updatePosition(element, xPosition, yPosition);
+    }, 1000/FPS);
+
+  }
+
+  function updatePosition(element, xPosition, yPosition) {
+    // console.log(element)
+    element.style.left = xPosition + "px";
+    element.style.top = yPosition + "px";
+  }
+
   /**
   * Make sure to always add a descriptive comment above
   * every function detailing what it's purpose is
@@ -754,9 +788,10 @@
 })();
 
 
+
+
 /* TODO: in order
   - css polishing
-- finish skip
 - end game
   - highscore
 - general polishing
