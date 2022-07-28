@@ -474,7 +474,11 @@ p {
   to {transform: scale(1.5);}
 }
 
-.move {
+#questions-counting {
   position: relative;
+}
+
+.move {
+  position: absolute;
   font-size: 26pt;
 }
