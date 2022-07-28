@@ -94,12 +94,45 @@
     </div>
     <button>MENU</button>
   </section>
-  <section id="counting-game" class="flex">
+
+  <section id="counting-menu" class="hidden">
+
+    <div class="back-button"></div>
+    <div id="counting-title">
+      <h1>COUNTING</h1>
+      <h2>Count out the amount matching the prompt!</h2>
+    </div>
+
+
+    <div id="counting-rules">
+      <h2>Rules Setup</h2>
+      <div>
+        <label for="rounds">Round Amount:</label>
+        <input type="number" id="rounds" name="rounds"><br><br>
+      </div>
+      <div id="counting-input-type">
+        <h3>Input:</h3>
+        <p>Write</p>
+        <p>Type</p>
+      </div>
+      <div id="counting-animations-check">
+        <h3>Animations:</h3>
+        <p>Enabled</p>
+        <p>Disabled</p>
+      </div>
+    </div>
+
+    <div id="counting-buttons">
+      <button><h2>TUTORIAL</h2></button>
+      <button><h2>RULES</h2></button>
+      <button class="start"><h2>START</h2></button>
+    </div>
+
+  </section>
+
+  <section id="counting-game" class="flex hidden">
     <section id="question-prompt"></section>
     <section id="questions-counting">
-      <div><p class="move">yellow</p></div>
-      <div><p class="move">red</p></div>
-
     </section>
     <section id="user-section-counting">
       <div>

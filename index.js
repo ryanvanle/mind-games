@@ -29,9 +29,13 @@
       calculationSelectors[i].addEventListener("click", calculationRulesSelector);
     }
 
-    movingDiv(qsa(".move")[0]);
-    movingDiv(qsa(".move")[1]);
+    id("counting-button").addEventListener("click", menuToCounting);
 
+  }
+
+  function menuToCounting() {
+    id("main-menu").classList.add("hidden");
+    id("counting-menu").classList.remove("hidden");
   }
 
   function menuToCalculation() {
