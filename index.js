@@ -29,7 +29,9 @@
       calculationSelectors[i].addEventListener("click", calculationRulesSelector);
     }
 
-    movingDiv(qs(".move"));
+    movingDiv(qsa(".move")[0]);
+    movingDiv(qsa(".move")[1]);
+
   }
 
   function menuToCalculation() {
@@ -645,11 +647,8 @@
 
 
   function movingDiv(element) {
-    const FPS = 60;
+    const FPS = 75;
     let area = id("questions-counting");
-
-    // area.style.height = area.style.height + "px";
-    // area.style.width = area.style.width + "px";
 
     let xPosition = 10;
     let yPosition = 10;
