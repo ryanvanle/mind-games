@@ -85,41 +85,53 @@
     || Number(maxNumber) > MAXIMUM_NUMBER;
 
     if (filledOutCheck) {
-      qs("#calculations-buttons .start").removeEventListener("click", calculationRulesToGame);
-      id("calculations-rules").classList.add("hidden");
-      id("missing-error").classList.remove("hidden");
-      setTimeout(() => {
-        id("calculations-rules").classList.remove("hidden");
-        id("missing-error").classList.add("hidden");
-        qs("#calculations-buttons .start").addEventListener("click", calculationRulesToGame);
-      }, 1000);
+      calculationsDisplayBlankValuesError();
     } else if (totalQuestionsCheck) {
-      qs("#calculations-buttons .start").removeEventListener("click", calculationRulesToGame);
-      id("calculations-rules").classList.add("hidden");
-      id("amount-error").classList.remove("hidden");
-      setTimeout(() => {
-        id("calculations-rules").classList.remove("hidden");
-        id("amount-error").classList.add("hidden");
-        qs("#calculations-buttons .start").addEventListener("click", calculationRulesToGame);
-      }, 1000);
+      calculationsDisplayQuestionAmountError();
     } else if (maxNumberCheck) {
-      qs("#calculations-buttons .start").removeEventListener("click", calculationRulesToGame);
-      id("calculations-rules").classList.add("hidden");
-      id("max-number-error").classList.remove("hidden");
-      setTimeout(() => {
-        id("calculations-rules").classList.remove("hidden");
-        id("max-number-error").classList.add("hidden");
-        qs("#calculations-buttons .start").addEventListener("click", calculationRulesToGame);
-      }, 1000);
+      calculationsMaxNumberError();
     } else {
       id("calculations-menu").classList.add("hidden");
       id("calculations-game").classList.remove("hidden");
       let converted = convertTextToSymbol(operationsType);
-
       setCalculationsRulesLocalStorage(totalQuestions, inputType, operationsType, termAmount, maxNumber);
       startCalculations(totalQuestions, inputType, converted, termAmount, maxNumber);
     }
   }
+
+  function calculationsDisplayBlankValuesError() {
+    qs("#calculations-buttons .start").removeEventListener("click", calculationRulesToGame);
+    id("calculations-rules").classList.add("hidden");
+    id("missing-error").classList.remove("hidden");
+    setTimeout(() => {
+      id("calculations-rules").classList.remove("hidden");
+      id("missing-error").classList.add("hidden");
+      qs("#calculations-buttons .start").addEventListener("click", calculationRulesToGame);
+    }, 1000);
+  }
+
+  function calculationsDisplayQuestionAmountError() {
+    qs("#calculations-buttons .start").removeEventListener("click", calculationRulesToGame);
+    id("calculations-rules").classList.add("hidden");
+    id("amount-error").classList.remove("hidden");
+    setTimeout(() => {
+      id("calculations-rules").classList.remove("hidden");
+      id("amount-error").classList.add("hidden");
+      qs("#calculations-buttons .start").addEventListener("click", calculationRulesToGame);
+    }, 1000);
+  }
+
+  function calculationsMaxNumberError() {
+    qs("#calculations-buttons .start").removeEventListener("click", calculationRulesToGame);
+    id("calculations-rules").classList.add("hidden");
+    id("max-number-error").classList.remove("hidden");
+    setTimeout(() => {
+      id("calculations-rules").classList.remove("hidden");
+      id("max-number-error").classList.add("hidden");
+      qs("#calculations-buttons .start").addEventListener("click", calculationRulesToGame);
+    }, 1000);
+  }
+
 
   function calculationsInputCheck() {
     let inputType;
