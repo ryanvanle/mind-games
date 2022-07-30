@@ -18,6 +18,7 @@
     // window.localStorage.clear();
 
     if (window.localStorage.getItem("calculationsRules") != null) previousCalculationsRulesSetup();
+    if (window.localStorage.getItem("countingRules") != null) previousCountingRulesSetup();
 
     id("calculation-button").addEventListener("click", menuToCalculation);
     qs(".back-button").addEventListener("click", backToMenu);
@@ -45,7 +46,6 @@
     id("counting-button").addEventListener("click", menuToCounting);
 
     // movingDiv(qs(".move"))
-
   }
 
   function menuToCounting() {
@@ -131,7 +131,6 @@
       qs("#calculations-buttons .start").addEventListener("click", calculationRulesToGame);
     }, 1000);
   }
-
 
   function calculationsInputCheck() {
     let inputType;
@@ -383,7 +382,6 @@
 
   }
 
-
   function nextQuestion() {
 
     //endgame might be better here. depends if you want to clear the input or not/
@@ -449,7 +447,6 @@
     oldCurrentQuestion.appendChild(image);
   }
 
-
   function playCorrectAnswerSound() {
     let sound = new Audio("sound/correct.mp3");
     sound.play();
@@ -464,7 +461,6 @@
     let sound = new Audio("sound/win-sound.mp3");
     sound.play();
   }
-
 
   function generateQuestions(totalQuestions, operationsType, termAmount, maxNumber) {
 
@@ -597,16 +593,6 @@
     id("results").classList.remove("hidden");
   }
 
-  function getRandomInt(max) {
-    return Math.floor(Math.random() * (Number(max) + 1));
-  }
-
-  function getRandomIntBetween(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min) + min);
-  }
-
   function skipQuestion() {
     appendX();
     nextQuestion();
@@ -671,7 +657,6 @@
     return inputType;
   }
 
-
   function movingDiv(element) {
     const FPS = 75;
     let area = id("questions-counting");
@@ -724,25 +709,58 @@
     }
   }
 
-
   function countingRulesToGame() {
-
     let roundAmount = id("rounds").value;
     let inputType = countingInputType();
     let animationCheck = countingAnimationsValueCheck();
     let filledOutCheck = roundAmount === "" || inputType == null || animationCheck == null;
     let roundAmountCheck = Number(roundAmount) <= 0;
 
-
     if (filledOutCheck) {
       countingDisplayBlankValuesError();
     } else if (roundAmountCheck) {
       countingDisplayRoundError();
     } else {
-
-
-      //start game
+      id("counting-menu").classList.add("hidden");
+      id("counting-game").classList.remove("hidden");
+      setCountingRulesLocalStorage(roundAmount, inputType, animationCheck);
+      startCounting(roundAmount, inputType, animationCheck);
     }
+  }
+
+  function setCountingRulesLocalStorage(roundAmount, inputType, animationCheck) {
+    let rules = {
+      "roundAmount": roundAmount,
+      "inputType": inputType,
+      "animationCheck": animationCheck
+    }
+
+    window.localStorage.setItem("countingRules", JSON.stringify(rules));
+  }
+
+  function previousCountingRulesSetup() {
+    let rules = JSON.parse(window.localStorage.getItem("countingRules"));
+    id("rounds").value = rules["roundAmount"];
+
+    let inputsElement = qsa("#counting-input-type p");
+    for (let i = 0; i < inputsElement.length; i++) {
+      if (inputsElement[i].textContent === rules["inputType"]) {
+        inputsElement[i].classList.add("selected");
+      }
+    }
+
+    let animationElement = qsa("#counting-animations-check p");
+    for (let i = 0; i < animationElement.length; i++) {
+      if (animationElement[i].textContent === rules["animationCheck"]) {
+        animationElement[i].classList.add("selected");
+      }
+    }
+
+
+  }
+
+  function startCounting(roundAmount, inputType, animationCheck) {
+
   }
 
   function countingInputType() {
@@ -792,7 +810,6 @@
       qs("#counting-buttons .start").addEventListener("click", countingRulesToGame);
     }, 1000);
   }
-
 
   /**
   * Make sure to always add a descriptive comment above
@@ -907,6 +924,16 @@
     let oldElement = element
     let newElement = oldElement.cloneNode(true);
     oldElement.parentNode.replaceChild(newElement, oldElement);
+  }
+
+  function getRandomInt(max) {
+    return Math.floor(Math.random() * (Number(max) + 1));
+  }
+
+  function getRandomIntBetween(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min) + min);
   }
 
 
