@@ -23,13 +23,28 @@
     qs(".back-button").addEventListener("click", backToMenu);
     qs("#calculations-buttons .start").addEventListener("click", calculationRulesToGame);
     qs("#results button").addEventListener("click", calculationsResultsToMenu);
+    qs("#counting-buttons .start").addEventListener("click", countingRulesToGame);
+
+    let backButtons = qsa(".back-button");
+    for (let i = 0; i < backButtons.length; i++) {
+      backButtons[i].addEventListener("click", backToMenu);
+    }
 
     let calculationSelectors = qsa("#calculations-rules p");
     for (let i = 0; i < calculationSelectors.length; i++) {
       calculationSelectors[i].addEventListener("click", calculationRulesSelector);
     }
 
+
+    let countingSelectors = qsa("#counting-rules p");
+    for (let i = 0; i < countingSelectors.length; i++) {
+      countingSelectors[i].addEventListener("click", countingRulesSelector);
+    }
+
+
     id("counting-button").addEventListener("click", menuToCounting);
+
+    // movingDiv(qs(".move"))
 
   }
 
@@ -46,6 +61,7 @@
   function backToMenu() {
     id("main-menu").classList.remove("hidden");
     id("calculations-menu").classList.add("hidden");
+    id("counting-menu").classList.add("hidden");
   }
 
   function calculationRulesToGame() {
@@ -296,12 +312,6 @@
 
 
     }
-  }
-
-  function clearAllEventListeners(element) {
-    let oldElement = element
-    let newElement = oldElement.cloneNode(true);
-    oldElement.parentNode.replaceChild(newElement, oldElement);
   }
 
   function clearCurrentQuestion() {
@@ -659,8 +669,6 @@
     let xSpeed = 2;
     let ySpeed = 2;
 
-    console.log(area.clientWidth)
-
     setInterval(() => {
 
       if (xPosition + element.clientWidth >= area.clientWidth || xPosition <= 0) xSpeed = -xSpeed;
@@ -677,6 +685,37 @@
     // console.log(element)
     element.style.left = xPosition + "px";
     element.style.top = yPosition + "px";
+  }
+
+  function countingRulesSelector() {
+
+    // need to redo later, works but is sloppy. i.e need to make a universal function for all rule
+    // pages to work with one function but would require a full rewrite (?).
+
+    let buttons;
+
+    if (this.parentNode.id ===  "counting-input-type") {
+      buttons = qsa("#counting-input-type p");
+    } else if (this.parentNode.id === "counting-animations-check") {
+      buttons = qsa("#counting-animations-check p");
+    } else {
+      this.classList.toggle("selected");
+      return;
+    }
+
+    for (let i = 0; i < buttons.length; i++) {
+      if (buttons[i] !== this) {
+        buttons[i].classList.remove("selected");
+      } else {
+        this.classList.toggle("selected");
+      }
+    }
+  }
+
+
+  function countingRulesToGame() {
+
+
   }
 
   /**
@@ -787,6 +826,13 @@
   function gen(tagName) {
     return document.createElement(tagName);
   }
+
+  function clearAllEventListeners(element) {
+    let oldElement = element
+    let newElement = oldElement.cloneNode(true);
+    oldElement.parentNode.replaceChild(newElement, oldElement);
+  }
+
 
 })();
 
