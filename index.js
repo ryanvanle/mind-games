@@ -702,7 +702,7 @@
   function countingRulesSelector() {
 
     // need to redo later, works but is sloppy. i.e need to make a universal function for all rule
-    // pages to work with one function but would require a full rewrite (?).
+    // pages to work with one function but would require a full rewrite of the function (?).
 
     let buttons;
 
@@ -727,8 +727,72 @@
 
   function countingRulesToGame() {
 
+    let roundAmount = id("rounds").value;
+    let inputType = countingInputType();
+    let animationCheck = countingAnimationsValueCheck();
+    let filledOutCheck = roundAmount === "" || inputType == null || animationCheck == null;
+    let roundAmountCheck = Number(roundAmount) <= 0;
 
+
+    if (filledOutCheck) {
+      countingDisplayBlankValuesError();
+    } else if (roundAmountCheck) {
+      countingDisplayRoundError();
+    } else {
+
+
+      //start game
+    }
   }
+
+  function countingInputType() {
+    let inputType;
+    let inputs = qsa("#counting-input-type p");
+    for (let i = 0; i < inputs.length; i++) {
+      if (inputs[i].classList.contains("selected")) {
+        inputType = inputs[i].textContent;
+      } else if (inputType !== undefined && inputs[i].classList.contains("selected")) {
+        console.error("Both inputs selected");
+      }
+    }
+    return inputType;
+  }
+
+  function countingAnimationsValueCheck() {
+    let animationCheck;
+    let inputs = qsa("#counting-animations-check p");
+    for (let i = 0; i < inputs.length; i++) {
+      if (inputs[i].classList.contains("selected")) {
+        animationCheck = inputs[i].textContent;
+      } else if (animationCheck !== undefined && inputs[i].classList.contains("selected")) {
+        console.error("Both inputs selected");
+      }
+    }
+    return animationCheck;
+  }
+
+  function countingDisplayBlankValuesError() {
+    qs("#counting-buttons .start").removeEventListener("click", countingRulesToGame);
+    id("counting-rules").classList.add("hidden");
+    id("counting-missing-error").classList.remove("hidden");
+    setTimeout(() => {
+      id("counting-rules").classList.remove("hidden");
+      id("counting-missing-error").classList.add("hidden");
+      qs("#counting-buttons .start").addEventListener("click", countingRulesToGame);
+    }, 1000);
+  }
+
+  function countingDisplayRoundError() {
+    qs("#counting-buttons .start").removeEventListener("click", countingRulesToGame);
+    id("counting-rules").classList.add("hidden");
+    id("round-number-error").classList.remove("hidden");
+    setTimeout(() => {
+      id("counting-rules").classList.remove("hidden");
+      id("round-number-error").classList.add("hidden");
+      qs("#counting-buttons .start").addEventListener("click", countingRulesToGame);
+    }, 1000);
+  }
+
 
   /**
   * Make sure to always add a descriptive comment above
