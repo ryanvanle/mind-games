@@ -175,7 +175,7 @@ button:active {
   flex-wrap: wrap;
 }
 
-#calculations-rules, #amount-error, #missing-error, #results, #max-number-error, #counting-rules {
+#calculations-rules, #amount-error, #missing-error, #results, #max-number-error, #counting-rules, #round-number-error, #counting-missing-error {
   background-color: white;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   margin-left: 5%;
@@ -185,7 +185,7 @@ button:active {
   font-style: normal;
 }
 
-#amount-error, #missing-error, #max-number-error {
+#amount-error, #missing-error, #max-number-error, #round-number-error, #counting-missing-error {
   align-items: center;
   justify-content: center;
   font-size: 26pt;
