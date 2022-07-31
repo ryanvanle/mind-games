@@ -282,9 +282,15 @@
         }
       );
 
-      id("can").addEventListener("click", () => {
-        can.recognize();
-      })
+      // id("can").addEventListener("click", () => {
+      //   can.recognize();
+      // });
+
+      ["click", "touchmove"].forEach(function(e) {
+        id("can").addEventListener(e,() => {
+          can.recognize();
+        });
+      });
 
       qs("#user-section button").addEventListener("click", () => {
         can.erase();
@@ -599,17 +605,6 @@
     playSkipSound();
   }
 
-  // function clearInput() {
-  //   let input = getInputType();
-
-  //   if (input.id === "can") {
-  //     let can = new handwriting.Canvas(id("can"));
-  //     can.erase();
-  //   } else {
-  //     input.value = "";
-  //   }
-  // }
-
   function appendX() {
     let oldCurrentQuestion = id("current-question");
     let image = gen("img");
@@ -761,7 +756,74 @@
 
   function startCounting(roundAmount, inputType, animationCheck) {
 
+    let animations = false;
+    if (animationCheck === "Enabled") {
+      animations = true;
+    }
+
+    if (inputType === "Write") {
+      let canvasElement = gen("canvas");
+      canvasElement.id = "can";
+      canvasElement.width = "500";
+      canvasElement.height = "550";
+      parentElement.prepend(canvasElement);
+      can = new handwriting.Canvas(id("can"));
+
+      can.setCallBack(function(data) {
+        checkAnswer(data, can);
+      });
+
+      can.setOptions(
+        {
+          language: "en",
+          numOfReturn: 5
+        }
+      );
+
+      ["click", "touchmove"].forEach(function(e) {
+        id("can").addEventListener(e,() => {
+          can.recognize();
+        });
+      });
+
+      qs("#user-section button").addEventListener("click", () => {
+        can.erase();
+        // clearCurrentQuestion();
+      });
+
+      qsa("#user-section button")[1].addEventListener("click", () =>  {
+        can.erase();
+        // skipQuestion();
+      });
+    } else {
+      let inputElement = gen("input");
+      inputElement.type = "number";
+      inputElement.id = "type-input";
+      inputElement.name = "type-input";
+      parentElement.prepend(inputElement);
+
+      id("type-input").addEventListener("keyup", () => {
+        let inputElementData = id("type-input").value;
+        if (inputElementData !== "") {
+          checkAnswer([inputElementData], null);
+        } else {
+          clearCurrentQuestion();
+        }
+      })
+
+      qsa("#user-section button")[0].addEventListener("click", () => {
+        id("type-input").value = "";
+        clearCurrentQuestion();
+      });
+
+      qsa("#user-section button")[1].addEventListener("click", () => {
+        id("type-input").value = "";
+        skipQuestion();
+      });
+
+    }
   }
+
 
   function countingInputType() {
     let inputType;
