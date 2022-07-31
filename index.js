@@ -9,6 +9,7 @@
   window.addEventListener("load", init);
   let totalQuestionsCounter = 0;
   let can;
+  let setIntervalTimerIDs = [];
 
   /**
   * CHANGE: Describe what your init function does here.
@@ -45,7 +46,6 @@
 
     id("counting-button").addEventListener("click", menuToCounting);
 
-    // movingDiv(qs(".move"))
   }
 
   function menuToCounting() {
@@ -816,7 +816,13 @@
 
     for (let i = 0; i < divs.length; i++) {
       let currentDiv = divs[i];
+      let pElement = currentDiv.children[0];
+
       id("questions-counting").appendChild(currentDiv);
+
+      if (pElement.classList.contains("move")) {
+        movingDiv(pElement, pElement.style.left, pElement.style.top);
+      }
     }
 
 
@@ -865,45 +871,42 @@
       }
 
       let yPosition = getRandomIntBetween(1, area.clientHeight);
-      while (yPosition + element.clientHeight + 100 >= area.clientHeight ) {
+      while (yPosition + element.clientHeight + 100 >= area.clientHeight) {
         yPosition = getRandomIntBetween(1, area.clientWidth);
       }
 
-      console.log(xPosition);
-      console.log(yPosition);
-
       element.style.left = xPosition + "px";
       element.style.top = yPosition + "px";
-      console.log(element);
     }
-
 
     return countingDivs;
   }
 
-  function movingDiv(element) {
+  function movingDiv(element, xPositionElement, yPositionElement) {
     const FPS = 75;
     let area = id("questions-counting");
 
-    let xPosition = 10;
-    let yPosition = 10;
-    let xSpeed = 2;
-    let ySpeed = 2;
+    let xPosition = Number(xPositionElement.match(/^[0-9]+/)[0]);
+    let yPosition = Number(yPositionElement.match(/^[0-9]+/)[0]);
+    let xSpeed = getRandomIntBetween(1,4);
+    let ySpeed = getRandomIntBetween(1,4);
 
-    setInterval(() => {
+    let timerID = setInterval(() => {
+      element.id = timerID;
+      if (xPosition + element.clientWidth >= area.clientWidth || xPosition < 0) xSpeed = -xSpeed;
+      if (yPosition + element.clientHeight >= area.clientHeight - 50|| yPosition < 0) ySpeed = -ySpeed;
 
-      if (xPosition + element.clientWidth >= area.clientWidth || xPosition <= 0) xSpeed = -xSpeed;
-      if (yPosition + element.clientHeight >= area.clientHeight - 50 || yPosition <= 0) ySpeed = -ySpeed;
+      xPosition = xPosition + xSpeed;
+      yPosition = yPosition + ySpeed;
 
-      xPosition += xSpeed;
-      yPosition += ySpeed;
       updatePosition(element, xPosition, yPosition);
     }, 1000/FPS);
 
+    setIntervalTimerIDs.push(timerID);
+    console.log(setIntervalTimerIDs.length)
   }
 
   function updatePosition(element, xPosition, yPosition) {
-    // console.log(element)
     element.style.left = xPosition + "px";
     element.style.top = yPosition + "px";
   }
@@ -1102,6 +1105,12 @@
     return Math.floor(Math.random()*array.length);
   }
 
+  function clearAllSetIntervals () {
+    for (let i = 0; i < setIntervalTimerIDs.length; i++) {
+      let timerID = setIntervalTimerIDs[i];
+      clearInterval(timerID);
+    }
+  }
 
 })();
 
