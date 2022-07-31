@@ -888,13 +888,16 @@
 
     let xPosition = Number(xPositionElement.match(/^[0-9]+/)[0]);
     let yPosition = Number(yPositionElement.match(/^[0-9]+/)[0]);
-    let xSpeed = getRandomIntBetween(1,4);
-    let ySpeed = getRandomIntBetween(1,4);
+    let xSpeed = getRandomIntBetween(1,5);
+    let ySpeed = getRandomIntBetween(1,5);
+
+    if (Math.random() < 0.5) xSpeed = -xSpeed;
+    if (Math.random() < 0.5) ySpeed = -ySpeed;
 
     let timerID = setInterval(() => {
       element.id = timerID;
-      if (xPosition + element.clientWidth >= area.clientWidth || xPosition < 0) xSpeed = -xSpeed;
-      if (yPosition + element.clientHeight >= area.clientHeight - 50|| yPosition < 0) ySpeed = -ySpeed;
+      if (xPosition + element.clientWidth > area.clientWidth - 10 || xPosition < 0) xSpeed = -xSpeed;
+      if (yPosition + element.clientHeight > area.clientHeight - 50 || yPosition < 0) ySpeed = -ySpeed;
 
       xPosition = xPosition + xSpeed;
       yPosition = yPosition + ySpeed;
