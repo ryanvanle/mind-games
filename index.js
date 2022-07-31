@@ -770,7 +770,7 @@
       can = new handwriting.Canvas(id("can"));
 
       can.setCallBack(function(data) {
-        checkAnswer(data, can);
+        checkAnswerCounting(data, can);
       });
 
       can.setOptions(
@@ -780,7 +780,7 @@
         }
       );
 
-      ["click", "touchmove"].forEach(function(e) {
+      ["click", "touch"].forEach(function(e) {
         id("can").addEventListener(e,() => {
           can.recognize();
         });
@@ -805,23 +805,34 @@
       id("type-input").addEventListener("keyup", () => {
         let inputElementData = id("type-input").value;
         if (inputElementData !== "") {
-          checkAnswer([inputElementData], null);
+          checkAnswerCounting([inputElementData], null);
         } else {
-          clearCurrentQuestion();
+          clearCurrentQuestionCounting();
         }
       })
 
       qsa("#user-section button")[0].addEventListener("click", () => {
         id("type-input").value = "";
-        clearCurrentQuestion();
+        clearCurrentQuestionCounting();
       });
 
       qsa("#user-section button")[1].addEventListener("click", () => {
         id("type-input").value = "";
-        skipQuestion();
+        skipQuestionCounting();
       });
-
     }
+  }
+
+  function checkAnswerCounting(data, can) {
+
+  }
+
+  function clearCurrentQuestionCounting() {
+
+  }
+
+  function skipQuestionCounting() {
+
   }
 
 
