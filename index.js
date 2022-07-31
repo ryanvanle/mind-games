@@ -286,7 +286,9 @@
       //   can.recognize();
       // });
 
-      ["click", "touchmove"].forEach(function(e) {
+
+
+      ["click", "touchend"].forEach(function(e) {
         id("can").addEventListener(e,() => {
           can.recognize();
         });
@@ -780,7 +782,7 @@
         }
       );
 
-      ["click", "touch"].forEach(function(e) {
+      ["click", "touchend"].forEach(function(e) {
         id("can").addEventListener(e,() => {
           can.recognize();
         });
