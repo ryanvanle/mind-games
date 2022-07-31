@@ -485,5 +485,9 @@ p {
 
 .move {
   position: absolute;
+}
+
+#questions-counting p {
+  position: absolute;
   font-size: 26pt;
 }

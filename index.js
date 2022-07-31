@@ -654,33 +654,6 @@
     return inputType;
   }
 
-  function movingDiv(element) {
-    const FPS = 75;
-    let area = id("questions-counting");
-
-    let xPosition = 10;
-    let yPosition = 10;
-    let xSpeed = 2;
-    let ySpeed = 2;
-
-    setInterval(() => {
-
-      if (xPosition + element.clientWidth >= area.clientWidth || xPosition <= 0) xSpeed = -xSpeed;
-      if (yPosition + element.clientHeight >= area.clientHeight - 50 || yPosition <= 0) ySpeed = -ySpeed;
-
-      xPosition += xSpeed;
-      yPosition += ySpeed;
-      updatePosition(element, xPosition, yPosition);
-    }, 1000/FPS);
-
-  }
-
-  function updatePosition(element, xPosition, yPosition) {
-    // console.log(element)
-    element.style.left = xPosition + "px";
-    element.style.top = yPosition + "px";
-  }
-
   function countingRulesSelector() {
 
     // need to redo later, works but is sloppy. i.e need to make a universal function for all rule
@@ -758,10 +731,14 @@
 
   function startCounting(roundAmount, inputType, animationCheck) {
 
+
+    let parentElement = id("user-section-counting");
     let animations = false;
     if (animationCheck === "Enabled") {
       animations = true;
     }
+
+    displayRoundCounting(roundAmount, animations);
 
     if (inputType === "Write") {
       let canvasElement = gen("canvas");
@@ -790,12 +767,12 @@
 
       qs("#user-section button").addEventListener("click", () => {
         can.erase();
-        // clearCurrentQuestion();
+        clearCurrentQuestionCounting();
       });
 
       qsa("#user-section button")[1].addEventListener("click", () =>  {
         can.erase();
-        // skipQuestion();
+        skipQuestionCounting();
       });
     } else {
       let inputElement = gen("input");
@@ -824,6 +801,117 @@
       });
     }
   }
+
+  function displayRoundCounting(roundAmount, animations) {
+
+    if (Number(roundAmount) === 0) {
+      countingEndgame();
+    }
+
+    const MINIMUM_NUMBER = 5;
+    const MAXIMUM_NUMBER = 20;
+
+    let divAmount = getRandomIntBetween(MINIMUM_NUMBER, MAXIMUM_NUMBER);
+    let divs = generateCountingDivs(divAmount, animations);
+
+    for (let i = 0; i < divs.length; i++) {
+      let currentDiv = divs[i];
+      id("questions-counting").appendChild(currentDiv);
+    }
+
+
+  }
+
+  function generateCountingDivs(divAmount, animations) {
+
+    const COLORS = ["red", "blue", "green", "black", "purple", "pink", "orange"];
+    const ANIMATIONS = ["grow", "spin", "move"];
+
+
+    let randomInt = getRandomIntBetween(3, divAmount);
+
+    let basisDivs = [];
+    for (let i = 0; i < randomInt; i++) {
+      let currentDiv = gen("div");
+      let currentP = gen("p");
+
+      currentDiv.appendChild(currentP);
+      currentP.textContent = COLORS[getRandomIndex(COLORS)];
+      currentP.style.color = COLORS[getRandomIndex(COLORS)];
+
+      if (animations && Math.random() < 0.5) {
+        currentP.classList.add(ANIMATIONS[getRandomIndex(ANIMATIONS)]);
+      }
+
+      basisDivs.push(currentDiv);
+    }
+
+    let countingDivs = [];
+    for (let i = 0; i < divAmount; i++) {
+      let randomDiv = basisDivs[getRandomIndex(basisDivs)];
+      let cloneDiv = randomDiv.cloneNode(true);
+      countingDivs.push(cloneDiv);
+    }
+
+    let area = id("questions-counting");
+
+    //positioning
+    for (let i = 0; i < countingDivs.length; i++) {
+      let element = countingDivs[i].children[0];
+      let xPosition = getRandomIntBetween(1, area.clientWidth);
+
+      while (xPosition + element.clientWidth + 100 >= area.clientWidth) {
+        xPosition = getRandomIntBetween(1, area.clientWidth);
+      }
+
+      let yPosition = getRandomIntBetween(1, area.clientHeight);
+      while (yPosition + element.clientHeight + 100 >= area.clientHeight ) {
+        yPosition = getRandomIntBetween(1, area.clientWidth);
+      }
+
+      console.log(xPosition);
+      console.log(yPosition);
+
+      element.style.left = xPosition + "px";
+      element.style.top = yPosition + "px";
+      console.log(element);
+    }
+
+
+    return countingDivs;
+  }
+
+  function movingDiv(element) {
+    const FPS = 75;
+    let area = id("questions-counting");
+
+    let xPosition = 10;
+    let yPosition = 10;
+    let xSpeed = 2;
+    let ySpeed = 2;
+
+    setInterval(() => {
+
+      if (xPosition + element.clientWidth >= area.clientWidth || xPosition <= 0) xSpeed = -xSpeed;
+      if (yPosition + element.clientHeight >= area.clientHeight - 50 || yPosition <= 0) ySpeed = -ySpeed;
+
+      xPosition += xSpeed;
+      yPosition += ySpeed;
+      updatePosition(element, xPosition, yPosition);
+    }, 1000/FPS);
+
+  }
+
+  function updatePosition(element, xPosition, yPosition) {
+    // console.log(element)
+    element.style.left = xPosition + "px";
+    element.style.top = yPosition + "px";
+  }
+
+  function countingEndgame() {
+
+  }
+
 
   function checkAnswerCounting(data, can) {
 
@@ -920,7 +1008,6 @@
       if (timeStopped !== null) {
           stoppedDuration += (new Date() - timeStopped);
       }
-      console.log(stoppedDuration);
 
       started = setInterval(clockRunning, 10);
   }
@@ -1009,6 +1096,10 @@
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min) + min);
+  }
+
+  function getRandomIndex(array) {
+    return Math.floor(Math.random()*array.length);
   }
 
 
