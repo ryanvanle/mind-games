@@ -852,6 +852,11 @@
       if (answerElement.classList.contains(ANIMATIONS[i])) answerAnimation = ANIMATIONS[i];
     }
 
+    console.log(answerElement);
+    console.log(answerTextContent);
+    console.log(answerFontColor);
+    console.log(answerAnimation)
+
     let words = qsa("#questions-counting div p");
     let counter = 0;
     for (let i = 0; i < words.length; i++) {
@@ -859,7 +864,14 @@
       let equals;
 
       if (answerAnimation == null) {
+
+        let hasAnimationCheck = false;
+        for (let i = 0; i < ANIMATIONS.length; i++) {
+          if (currentWord.classList.contains(ANIMATIONS[i])) hasAnimationCheck = true;
+        }
+
         equals = currentWord.textContent === answerTextContent &&
+        !hasAnimationCheck &&
         currentWord.style.color === answerFontColor;
       } else {
         equals = currentWord.textContent === answerTextContent &&
@@ -869,6 +881,8 @@
 
       if (equals) counter++;
     }
+
+    console.log(counter);
     countingAnswer = counter;
   }
 
