@@ -10,6 +10,10 @@
   let totalQuestionsCounter = 0;
   let can;
   let setIntervalTimerIDs = [];
+  let countingAnswerDiv;
+  let countingAnswer;
+  const COLORS = ["red", "blue", "green", "black", "purple", "pink", "orange"];
+  const ANIMATIONS = ["growing", "spinning", "moving"];
 
   /**
   * CHANGE: Describe what your init function does here.
@@ -824,12 +828,45 @@
       }
     }
 
+    getAnswerToQuestionPrompt();
+  }
+
+  function getAnswerToQuestionPrompt() {
+
+    countingAnswer = null;
+
+    let answerElement = countingAnswerDiv.cloneNode(true);
+    let answerTextContent = answerElement.textContent;
+    let answerFontColor = answerElement.style.color;
+
+    let answerAnimation;
+    for (let i = 0; i < ANIMATIONS.length; i++) {
+      if (answerElement.classList.contains(ANIMATIONS[i])) answerAnimation = ANIMATIONS[i];
+    }
+
+    let words = qsa("#questions-counting div p");
+    let counter = 0;
+    for (let i = 0; i < words.length; i++) {
+      let currentWord = words[i];
+      let equals;
+
+      if (answerAnimation == null) {
+        equals = currentWord.textContent === answerTextContent &&
+        currentWord.style.color === answerFontColor;
+      } else {
+        equals = currentWord.textContent === answerTextContent &&
+        currentWord.classList.contains(answerAnimation) &&
+        currentWord.style.color === answerFontColor;
+      }
+
+      if (equals) counter++;
+    }
+    countingAnswer = counter;
+    console.log(countingAnswer);
   }
 
   function generateCountingDivs(divAmount, animations) {
 
-    const COLORS = ["red", "blue", "green", "black", "purple", "pink", "orange"];
-    const ANIMATIONS = ["growing", "spinning", "moving"];
 
     let randomInt = getRandomIntBetween(3, divAmount);
     let basisDivs = [];
@@ -857,8 +894,6 @@
 
     let area = id("questions-counting");
 
-
-
     //positioning
     for (let i = 0; i < countingDivs.length; i++) {
       let element = countingDivs[i].children[0];
@@ -881,26 +916,31 @@
     return countingDivs;
   }
 
-  function generateQuestionPromptCounting(basisDivs, animations, colors) {
+  function generateQuestionPromptCounting(basisDivs, animations) {
     let randomDiv = basisDivs[getRandomIndex(basisDivs)].cloneNode(true).children[0];
     let spanPrompts = qsa("#question-prompt span");
     let animationSpan = spanPrompts[0];
     let matchingSpan = spanPrompts[1];
 
+    countingAnswerDiv = randomDiv.cloneNode(true);
+
     let randomDivAnimation;
-    console.log(animations);
     for (let i = 0; i < animations.length; i++) {
-      console.log(animations[i]);
       if (randomDiv.classList.contains(animations[i])) {
         randomDivAnimation = animations[i];
         randomDiv.classList.remove(animations[i]);
       }
     }
 
-    if (randomDivAnimation != null) { animationSpan.textContent = randomDivAnimation; }
+    if (randomDivAnimation != null) {
+      animationSpan.textContent = randomDivAnimation;
+    } else {
+      animationSpan.textContent = "motionless"; // could use static but static kinda a complex word
+    }
 
     matchingSpan.appendChild(randomDiv);
   }
+
 
   function movingDiv(element, xPositionElement, yPositionElement) {
     const FPS = 75;
@@ -1136,15 +1176,3 @@
   }
 
 })();
-
-
-
-
-/* TODO: in order
-  - css polishing
-- end game
-  - highscore
-- general polishing
-  - css resizing, constants = bad it seems
-  - local storage of settings
-*/
