@@ -454,7 +454,7 @@ p {
   display: none;
 }
 
-.spin {
+.spinning {
   animation-name: spin;
   animation-duration: 5s;
   animation-iteration-count: infinite;
@@ -466,7 +466,7 @@ p {
     to {transform:rotate(360deg);}
 }
 
-.grow {
+.growing {
   animation-name: grow;
   animation-duration: 1s;
   animation-iteration-count: infinite;
@@ -483,11 +483,19 @@ p {
   position: relative;
 }
 
-.move {
+.moving {
   position: absolute;
 }
 
 #questions-counting p {
   position: absolute;
   font-size: 26pt;
+}
+
+#question-prompt span p {
+  position: relative;
+}
+
+#question-prompt {
+
 }

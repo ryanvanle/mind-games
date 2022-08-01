@@ -820,18 +820,17 @@
 
       id("questions-counting").appendChild(currentDiv);
 
-      if (pElement.classList.contains("move")) {
+      if (pElement.classList.contains("moving")) {
         movingDiv(pElement, pElement.style.left, pElement.style.top);
       }
     }
-
 
   }
 
   function generateCountingDivs(divAmount, animations) {
 
     const COLORS = ["red", "blue", "green", "black", "purple", "pink", "orange"];
-    const ANIMATIONS = ["grow", "spin", "move"];
+    const ANIMATIONS = ["growing", "spinning", "moving"];
 
 
     let randomInt = getRandomIntBetween(3, divAmount);
@@ -871,7 +870,7 @@
       }
 
       let yPosition = getRandomIntBetween(1, area.clientHeight);
-      while (yPosition + element.clientHeight + 100 >= area.clientHeight) {
+      while (yPosition + element.clientHeight + id("question-prompt").clientHeight + 100 >= area.clientHeight) {
         yPosition = getRandomIntBetween(1, area.clientWidth);
       }
 
@@ -879,7 +878,29 @@
       element.style.top = yPosition + "px";
     }
 
+    generateQuestionPromptCounting(basisDivs, ANIMATIONS);
     return countingDivs;
+  }
+
+  function generateQuestionPromptCounting(basisDivs, animations, colors) {
+    let randomDiv = basisDivs[getRandomIndex(basisDivs)].cloneNode(true).children[0];
+    let spanPrompts = qsa("#question-prompt span");
+    let animationSpan = spanPrompts[0];
+    let matchingSpan = spanPrompts[1];
+
+    let randomDivAnimation;
+    console.log(animations);
+    for (let i = 0; i < animations.length; i++) {
+      console.log(animations[i]);
+      if (randomDiv.classList.contains(animations[i])) {
+        randomDivAnimation = animations[i];
+        randomDiv.classList.remove(animations[i]);
+      }
+    }
+
+    if (randomDivAnimation != null) { animationSpan.textContent = randomDivAnimation; }
+
+    matchingSpan.appendChild(randomDiv);
   }
 
   function movingDiv(element, xPositionElement, yPositionElement) {
@@ -897,7 +918,7 @@
     let timerID = setInterval(() => {
       element.id = timerID;
       if (xPosition + element.clientWidth > area.clientWidth - 10 || xPosition < 0) xSpeed = -xSpeed;
-      if (yPosition + element.clientHeight > area.clientHeight - 50 || yPosition < 0) ySpeed = -ySpeed;
+      if (yPosition + element.clientHeight > area.clientHeight - 50 || yPosition < id("question-prompt").clientHeight) ySpeed = -ySpeed;
 
       xPosition = xPosition + xSpeed;
       yPosition = yPosition + ySpeed;
