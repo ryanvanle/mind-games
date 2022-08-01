@@ -1059,7 +1059,8 @@
   }
 
   function skipQuestionCounting() {
-
+    playSkipSound();
+    nextRound();
   }
 
   function countingInputType() {
@@ -1269,4 +1270,4 @@
 })();
 
 
-// need to fix: skipping last question, last round
+// need to fix: skipping last question
