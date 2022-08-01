@@ -497,5 +497,12 @@ p {
 }
 
 #question-prompt {
+  text-align: center;
+  border-bottom: solid black;
+  width: auto;
+  height: auto;
+}
 
+#question-prompt h2, #question-prompt p {
+  font-size: 24pt;
 }

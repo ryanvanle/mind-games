@@ -45,7 +45,6 @@
 
 
     id("counting-button").addEventListener("click", menuToCounting);
-
   }
 
   function menuToCounting() {
@@ -832,9 +831,7 @@
     const COLORS = ["red", "blue", "green", "black", "purple", "pink", "orange"];
     const ANIMATIONS = ["growing", "spinning", "moving"];
 
-
     let randomInt = getRandomIntBetween(3, divAmount);
-
     let basisDivs = [];
     for (let i = 0; i < randomInt; i++) {
       let currentDiv = gen("div");
@@ -860,6 +857,8 @@
 
     let area = id("questions-counting");
 
+
+
     //positioning
     for (let i = 0; i < countingDivs.length; i++) {
       let element = countingDivs[i].children[0];
@@ -870,8 +869,8 @@
       }
 
       let yPosition = getRandomIntBetween(1, area.clientHeight);
-      while (yPosition + element.clientHeight + id("question-prompt").clientHeight + 100 >= area.clientHeight) {
-        yPosition = getRandomIntBetween(1, area.clientWidth);
+      while (yPosition + element.clientHeight + 100 >= area.clientHeight || yPosition <= id("question-prompt").offsetHeight + 75) {
+        yPosition = getRandomIntBetween(id("question-prompt").offsetHeight,area.clientHeight);
       }
 
       element.style.left = xPosition + "px";
