@@ -742,6 +742,8 @@
 
   function startCounting(roundAmount, inputType, animationCheck) {
 
+    start();
+
 
     totalRoundCounter = Number(roundAmount);
     let parentElement = id("user-section-counting");
@@ -1038,7 +1040,10 @@
   function countingEndgame() {
 
     clearCountingDivs();
-    console.log("endgame");
+    playWinSound();
+    id("counting-game").classList.add("hidden");
+    id("counting-results").classList.remove("hidden");
+
   }
 
   function clearCurrentQuestionCounting() {
@@ -1153,6 +1158,8 @@
       timeBegan = null;
       timeStopped = null;
       document.getElementById("display-area").innerHTML = "00:00:00.000";
+      document.getElementById("counting-display-area").innerHTML = "00:00:00.000";
+
   }
 
   function clockRunning(){
@@ -1163,11 +1170,23 @@
           , sec = timeElapsed.getUTCSeconds()
           , ms = timeElapsed.getUTCMilliseconds();
 
-      document.getElementById("display-area").innerHTML =
+      if (document.getElementById("display-area")) {
+        document.getElementById("display-area").innerHTML =
           (hour > 9 ? hour : "0" + hour) + ":" +
           (min > 9 ? min : "0" + min) + ":" +
           (sec > 9 ? sec : "0" + sec) + "." +
           (ms > 99 ? ms : ms > 9 ? "0" + ms : "00" + ms);
+      }
+
+
+      if (document.getElementById("counting-display-area")) {
+        document.getElementById("counting-display-area").innerHTML =
+          (hour > 9 ? hour : "0" + hour) + ":" +
+          (min > 9 ? min : "0" + min) + ":" +
+          (sec > 9 ? sec : "0" + sec) + "." +
+          (ms > 99 ? ms : ms > 9 ? "0" + ms : "00" + ms);
+      }
+
   };
 
   /** ------------------------------ Helper Functions  ------------------------------ */
