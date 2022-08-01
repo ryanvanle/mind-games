@@ -10,7 +10,6 @@
   let totalQuestionsCounter = 0;
   let can;
 
-
   let setIntervalTimerIDs = [];
   let totalRoundCounter;
   let countingAnswerDiv;
@@ -715,6 +714,7 @@
   }
 
   function previousCountingRulesSetup() {
+
     let rules = JSON.parse(window.localStorage.getItem("countingRules"));
     id("rounds").value = rules["roundAmount"];
 
@@ -725,9 +725,14 @@
       }
     }
 
+    let animationText = "Disabled";
+    if (rules["animationCheck"]) {
+      animationText = "Enabled";
+    }
+
     let animationElement = qsa("#counting-animations-check p");
     for (let i = 0; i < animationElement.length; i++) {
-      if (animationElement[i].textContent === rules["animationCheck"]) {
+      if (animationElement[i].textContent === animationText) {
         animationElement[i].classList.add("selected");
       }
     }
@@ -740,10 +745,9 @@
 
     totalRoundCounter = Number(roundAmount);
     let parentElement = id("user-section-counting");
-    let animations = false;
-    if (animationCheck === "Enabled") { animations = true; }
 
-    displayRoundCounting(roundAmount, animations);
+
+    displayRoundCounting(roundAmount, animationCheck);
 
     if (inputType === "Write") {
       let canvasElement = gen("canvas");
@@ -869,6 +873,7 @@
   function generateCountingDivs(divAmount, animations) {
 
 
+    console.log(animations);
     let randomInt = getRandomIntBetween(3, divAmount);
     let basisDivs = [];
 
@@ -1014,6 +1019,7 @@
 
     if (totalRoundCounter === 0) {
       countingEndgame();
+      return;
     }
 
     clearCountingDivs();
@@ -1022,17 +1028,17 @@
 
 
   function clearCountingDivs() {
-
     clearAllSetIntervals();
+    qs("#question-prompt span").textContent = "";
     qs("#question-prompt span p").remove();
     let countingDivs = qsa("#questions-counting div");
     for (let i = 0; i < countingDivs.length; i++) { countingDivs[i].remove(); }
-
-
   }
 
   function countingEndgame() {
 
+    clearCountingDivs();
+    console.log("endgame");
   }
 
   function clearCurrentQuestionCounting() {
@@ -1072,7 +1078,7 @@
       boolean = true;
     }
 
-    console.log(boolean);
+    console.log(boolean)
     return boolean;
   }
 
