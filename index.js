@@ -28,9 +28,9 @@
     if (window.localStorage.getItem("countingRules") != null) previousCountingRulesSetup();
 
     id("calculation-button").addEventListener("click", menuToCalculation);
-    qs(".back-button").addEventListener("click", backToMenu);
     qs("#calculations-buttons .start").addEventListener("click", calculationRulesToGame);
     qs("#results button").addEventListener("click", calculationsResultsToMenu);
+    qs("#counting-results button").addEventListener("click", countingResultsToMenu)
     qs("#counting-buttons .start").addEventListener("click", countingRulesToGame);
 
     let backButtons = qsa(".back-button");
@@ -736,8 +736,6 @@
         animationElement[i].classList.add("selected");
       }
     }
-
-
   }
 
   function startCounting(roundAmount, inputType, animationCheck) {
@@ -801,12 +799,12 @@
         }
       })
 
-      qsa("#user-section button")[0].addEventListener("click", () => {
+      qsa("#user-section-counting button")[0].addEventListener("click", () => {
         id("type-input").value = "";
         clearCurrentQuestionCounting();
       });
 
-      qsa("#user-section button")[1].addEventListener("click", () => {
+      qsa("#user-section-counting button")[1].addEventListener("click", () => {
         id("type-input").value = "";
         skipQuestionCounting();
       });
@@ -881,9 +879,6 @@
   }
 
   function generateCountingDivs(divAmount, animations) {
-
-
-    console.log(animations);
     let randomInt = getRandomIntBetween(3, divAmount);
     let basisDivs = [];
 
@@ -989,10 +984,6 @@
     element.style.top = yPosition + "px";
   }
 
-  function countingEndgame() {
-
-  }
-
   function checkAnswerCounting(data, can) {
 
     if (data == null) { //undefined and null
@@ -1011,7 +1002,7 @@
       if (can != null) {
         can.erase();
       } else {
-        id("counting-type-input").value = "";
+        id("type-input").value = "";
       }
 
       playCorrectAnswerSound();
@@ -1047,19 +1038,71 @@
 
   function countingEndgame() {
 
-    clearCountingDivs();
+    console.log()
+    countingUpdateStats();
+    clearCountingState();
     playWinSound();
     id("counting-game").classList.add("hidden");
     id("counting-results").classList.remove("hidden");
 
   }
 
+  function clearCountingState() {
+    clearCountingDivs();
+    stop();
+    reset();
+
+    let inputType = getInputType();
+    inputType.remove();
+
+    let userButtons = qsa("#counting-user-section button");
+    for (let i = 0; i < userButtons.length; i++) {
+      clearAllEventListeners(userButtons[i]);
+    }
+
+    id("counting-score").textContent = "0";
+
+    can = undefined;
+  }
+
+  function countingUpdateStats() {
+
+    let roundAmount = id("rounds").value;
+    let inputType = countingInputType();
+
+    let animationCheck = countingAnimationsValueCheck();
+    let animationText = "Disabled";
+    if (animationCheck) { animationText = "Enabled"; }
+
+    let endingTime = id("counting-display-area").textContent;
+    let score = id("counting-score").textContent;
+    let skips = Number(roundAmount) - Number(score);
+    let rulesElements = qsa("#counting-results div div span");
+
+    rulesElements[0].textContent = roundAmount;
+    rulesElements[1].textContent = inputType;
+    rulesElements[2].textContent = animationText;
+
+    let statsElements = qsa("#counting-stats div");
+    let scoreElement = statsElements[0];
+    let timeElement = statsElements[1];
+    let skipsElement = statsElements[2];
+
+    scoreElement.children[1].textContent = score;
+    timeElement.children[1].textContent = endingTime;
+    skipsElement.children[1].textContent = skips;
+  }
+
   function clearCurrentQuestionCounting() {
     id("user-answer").textContent = "";
+    if (can) can.erase();
+    if (id("type-input")) id("type-input").value = "";
+
   }
 
   function skipQuestionCounting() {
     playSkipSound();
+    clearCurrentQuestionCounting();
     nextRound();
   }
 
@@ -1116,6 +1159,11 @@
       id("round-number-error").classList.add("hidden");
       qs("#counting-buttons .start").addEventListener("click", countingRulesToGame);
     }, 1000);
+  }
+
+  function countingResultsToMenu() {
+    id("counting-results").classList.add("hidden");
+    id("main-menu").classList.remove("hidden");
   }
 
   /**
