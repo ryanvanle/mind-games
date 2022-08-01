@@ -9,7 +9,10 @@
   window.addEventListener("load", init);
   let totalQuestionsCounter = 0;
   let can;
+
+
   let setIntervalTimerIDs = [];
+  let totalRoundCounter;
   let countingAnswerDiv;
   let countingAnswer;
   const COLORS = ["red", "blue", "green", "black", "purple", "pink", "orange"];
@@ -735,11 +738,10 @@
   function startCounting(roundAmount, inputType, animationCheck) {
 
 
+    totalRoundCounter = Number(roundAmount);
     let parentElement = id("user-section-counting");
     let animations = false;
-    if (animationCheck === "Enabled") {
-      animations = true;
-    }
+    if (animationCheck === "Enabled") { animations = true; }
 
     displayRoundCounting(roundAmount, animations);
 
@@ -768,12 +770,12 @@
         });
       });
 
-      qs("#user-section button").addEventListener("click", () => {
+      qs("#user-section-counting button").addEventListener("click", () => {
         can.erase();
         clearCurrentQuestionCounting();
       });
 
-      qsa("#user-section button")[1].addEventListener("click", () =>  {
+      qsa("#user-section-counting button")[1].addEventListener("click", () =>  {
         can.erase();
         skipQuestionCounting();
       });
@@ -862,7 +864,6 @@
       if (equals) counter++;
     }
     countingAnswer = counter;
-    console.log(countingAnswer);
   }
 
   function generateCountingDivs(divAmount, animations) {
@@ -941,7 +942,6 @@
     matchingSpan.appendChild(randomDiv);
   }
 
-
   function movingDiv(element, xPositionElement, yPositionElement) {
     const FPS = 75;
     let area = id("questions-counting");
@@ -966,7 +966,6 @@
     }, 1000/FPS);
 
     setIntervalTimerIDs.push(timerID);
-    console.log(setIntervalTimerIDs.length)
   }
 
   function updatePosition(element, xPosition, yPosition) {
@@ -978,19 +977,58 @@
 
   }
 
-
   function checkAnswerCounting(data, can) {
+
+    if (data == null) { //undefined and null
+      return;
+    }
+
+    let parsedData = []; // only numbers
+    for (let i = 0; i < data.length; i++) {
+      if (!isNaN(data[i])) {
+        parsedData.push(data[i]);
+      }
+    }
+
+    if (Number(parsedData[0]) === Number(countingAnswer) && parsedData.length > 0) {
+
+      if (totalRoundCounter - 1 === 0) {
+        countingEndgame();
+      }
+
+
+      if (can != null) {
+        can.erase();
+      } else {
+        id("counting-type-input").value = "";
+      }
+
+
+      playCorrectAnswerSound();
+      id("counting-score").textContent = Number(id("counting-score").textContent) + 1;
+      nextRound();
+    } else if (parsedData.length > 0) {
+      id("user-answer").textContent = parsedData[0];
+    } else {
+      id("user-answer").textContent = "";
+    }
+  }
+
+  function nextRound() {
+
+  }
+
+  function countingEndgame() {
 
   }
 
   function clearCurrentQuestionCounting() {
-
+    id("user-answer").textContent = "";
   }
 
   function skipQuestionCounting() {
 
   }
-
 
   function countingInputType() {
     let inputType;
