@@ -852,11 +852,6 @@
       if (answerElement.classList.contains(ANIMATIONS[i])) answerAnimation = ANIMATIONS[i];
     }
 
-    console.log(answerElement);
-    console.log(answerTextContent);
-    console.log(answerFontColor);
-    console.log(answerAnimation)
-
     let words = qsa("#questions-counting div p");
     let counter = 0;
     for (let i = 0; i < words.length; i++) {
@@ -882,7 +877,6 @@
       if (equals) counter++;
     }
 
-    console.log(counter);
     countingAnswer = counter;
   }
 
