@@ -809,9 +809,9 @@
 
   function displayRoundCounting(roundAmount, animations) {
 
-    if (Number(roundAmount) === 0) {
-      countingEndgame();
-    }
+    // if (Number(roundAmount) === 0) {
+    //   countingEndgame();
+    // }
 
     const MINIMUM_NUMBER = 5;
     const MAXIMUM_NUMBER = 20;
@@ -871,6 +871,7 @@
 
     let randomInt = getRandomIntBetween(3, divAmount);
     let basisDivs = [];
+
     for (let i = 0; i < randomInt; i++) {
       let currentDiv = gen("div");
       let currentP = gen("p");
@@ -992,17 +993,11 @@
 
     if (Number(parsedData[0]) === Number(countingAnswer) && parsedData.length > 0) {
 
-      if (totalRoundCounter - 1 === 0) {
-        countingEndgame();
-      }
-
-
       if (can != null) {
         can.erase();
       } else {
         id("counting-type-input").value = "";
       }
-
 
       playCorrectAnswerSound();
       id("counting-score").textContent = Number(id("counting-score").textContent) + 1;
@@ -1015,6 +1010,24 @@
   }
 
   function nextRound() {
+    totalRoundCounter = totalRoundCounter - 1;
+
+    if (totalRoundCounter === 0) {
+      countingEndgame();
+    }
+
+    clearCountingDivs();
+    displayRoundCounting(totalRoundCounter, countingAnimationsValueCheck());
+  }
+
+
+  function clearCountingDivs() {
+
+    clearAllSetIntervals();
+    qs("#question-prompt span p").remove();
+    let countingDivs = qsa("#questions-counting div");
+    for (let i = 0; i < countingDivs.length; i++) { countingDivs[i].remove(); }
+
 
   }
 
@@ -1045,6 +1058,7 @@
 
   function countingAnimationsValueCheck() {
     let animationCheck;
+    let boolean = false;
     let inputs = qsa("#counting-animations-check p");
     for (let i = 0; i < inputs.length; i++) {
       if (inputs[i].classList.contains("selected")) {
@@ -1053,7 +1067,13 @@
         console.error("Both inputs selected");
       }
     }
-    return animationCheck;
+
+    if (animationCheck === "Enabled") {
+      boolean = true;
+    }
+
+    console.log(boolean);
+    return boolean;
   }
 
   function countingDisplayBlankValuesError() {
@@ -1214,3 +1234,6 @@
   }
 
 })();
+
+
+// need to fix: skipping last question, last round
