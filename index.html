@@ -131,7 +131,7 @@
 
   <section id="counting-game" class="flex hidden">
     <section id="questions-counting">
-      <section id="question-prompt"><h2>How many <span></span> <span></span> are there?</h2><span id="user-answer"></span></section>
+      <section id="question-prompt"><h2>How many <span></span> <span></span> are there?  <span id="user-answer"></span></h2></section>
     </section>
     <section id="user-section-counting">
       <div>
@@ -155,6 +155,23 @@
       <div><h2>Skips:</h2> <span></span></div>
     </div>
     <button>MENU</button>
+  </section>
+
+  <section id="housing-game" class="flex">
+    <section id="questions-housing">
+      <section id="question-prompt-housing"><h2> How many people are there in the house? <span id="user-answer"></span></h2></section>
+      <img class="person" src="img/person.png" alt="person">
+      <img class="house" src="img/house.png" alt="house">
+    </section>
+    <section id="user-section-housing">
+      <div>
+        <span>Timer:</span><output id="housing-display-area">00:00:00.000</output>
+        <div>Score: <span id="housing-score"> 0</span></div>
+      </div>
+      <button>CLEAR</button>
+      <button>SKIP</button>
+    </section>
+  </section>
   </section>
 </body>
 </html>
