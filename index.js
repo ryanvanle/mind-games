@@ -30,6 +30,7 @@
 
     if (window.localStorage.getItem("calculationsRules") != null) previousCalculationsRulesSetup();
     if (window.localStorage.getItem("countingRules") != null) previousCountingRulesSetup();
+    if (window.localStorage.getItem("housingRules") != null) previousHousingRulesSetup();
 
     id("counting-button").addEventListener("click", menuToCounting);
     id("housing-button").addEventListener("click", menuToHousing);
@@ -60,9 +61,6 @@
     for (let i = 0; i < housingSelectors.length; i++) {
       housingSelectors[i].addEventListener("click", housingRulesSelector);
     }
-
-
-
 
     // setTimeout(() => {generatePeople()}, 5000);
   }
@@ -753,7 +751,6 @@
   }
 
   function previousCountingRulesSetup() {
-
     let rules = JSON.parse(window.localStorage.getItem("countingRules"));
     id("rounds").value = rules["roundAmount"];
 
@@ -1220,9 +1217,6 @@
     let filledOutCheck = roundAmount === "" || inputType == null;
     let roundAmountCheck = Number(roundAmount) <= 0;
 
-    console.log(roundAmount);
-    console.log(inputType);
-
     if (roundAmountCheck) {
       housingDisplayRoundError();
     } else if (filledOutCheck) {
@@ -1259,8 +1253,27 @@
   }
 
   function setHousingRulesLocalStorage(roundAmount, inputType) {
+    let rules = {
+      "roundAmount": roundAmount,
+      "inputType": inputType,
+    }
 
+    window.localStorage.setItem("housingRules", JSON.stringify(rules));
   }
+
+  function previousHousingRulesSetup() {
+    let rules = JSON.parse(window.localStorage.getItem("housingRules"));
+    id("rounds-housing").value = rules["roundAmount"];
+
+    let inputsElement = qsa("#housing-input-type p");
+    for (let i = 0; i < inputsElement.length; i++) {
+      if (inputsElement[i].textContent === rules["inputType"]) {
+        inputsElement[i].classList.add("selected");
+      }
+    }
+  }
+
+
 
   function startHousing() {
 
