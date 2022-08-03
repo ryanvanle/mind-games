@@ -544,7 +544,7 @@ p {
 }
 
 .top-to-down {
-  animation: down-to-top;
+  animation: top-to-down;
   animation-duration: 2s;
   animation-timing-function: linear;
   animation-iteration-count: 1;
@@ -657,3 +657,37 @@ p {
     left: 32%;
   }
 }
+
+.results-house {
+  /* position: absolute; */
+  display: flex;
+  justify-content: center;
+  margin-left: 35%;
+  margin-right: 35%;
+  margin-top: 58%;
+  margin-bottom: 50%;
+
+  width: 40%;
+  align-items: center;
+  text-align: center;
+  flex-wrap: wrap;
+  margin:55% auto;
+
+
+
+
+}
+
+.results-house img {
+  max-width: 50%;
+}
+
+/* .house {
+  position: absolute;
+  top: 20%;
+  left: 0%;
+  width: 100%;
+  height: auto;
+  z-index: 1;
+  opacity: 10%;
+} */

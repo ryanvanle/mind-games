@@ -18,7 +18,6 @@
   const ANIMATIONS = ["growing", "spinning", "moving"];
 
   let peopleInHouse = 0;
-  let totalIterations;
   let totalRoundCounterHousing;
 
   /**
@@ -1346,9 +1345,57 @@
 
   }
 
+  function clearCurrentQuestionHousing() {
+    id("user-answer-housing").textContent = "";
+  }
+
+  function updateUserInput(data, can) {
+
+    console.log(data);
+    if (data == null) { //undefined and null
+      return;
+    }
+
+    let parsedData = []; // only numbers
+    for (let i = 0; i < data.length; i++) {
+      if (!isNaN(data[i])) {
+        parsedData.push(data[i]);
+      }
+    }
+
+    if (parsedData.length > 0) {
+      id("user-answer-housing").textContent = parsedData[0];
+    } else {
+      id("user-answer-housing").textContent = "";
+    }
+
+
+  }
+
   function startRound() {
     let sequence = splitHouseToUpSequence(generateSequence());
+    calculateResult(sequence);
+    console.log(peopleInHouse);
     displayRoundAnimations(sequence);
+  }
+
+  function calculateResult(sequence) {
+    peopleInHouse = 0;
+
+    let total = 0;
+    for (let i = 0; i < sequence.length; i++) {
+      let peopleAnimation = sequence[i];
+      let peopleAmount = peopleAnimation["peopleAmount"];
+
+      total += peopleAmount;
+
+      if (total < 0) {
+        console.error("invalid results");
+      }
+
+    }
+
+    peopleInHouse = total;
   }
 
   function splitHouseToUpSequence(originalSequence) {
@@ -1373,11 +1420,67 @@
       }
     }
 
-    console.log(originalSequence);
-    console.log(newSequence);
     return newSequence;
   }
 
+
+  function checkAnswerHousing() {
+
+    stop();
+
+    let actualAnswer = peopleInHouse;
+
+    let finalAnswer = Number(id("user-answer-housing").textContent);
+    let peopleDiv = generatePeople(peopleInHouse);
+    peopleDiv.classList.remove("people");
+    peopleDiv.classList.add("results-house");
+
+
+    id("questions-housing").appendChild(peopleDiv);
+
+    qs(".house").classList.add("down-to-top");
+
+    qs(".house").addEventListener("animationend", () => {
+      console.log(finalAnswer);
+      console.log(peopleInHouse);
+      console.log(actualAnswer);
+
+      if (finalAnswer === actualAnswer) {
+        playCorrectAnswerSound();
+        id("housing-score").textContent = Number(id("housing-score").textContent) + 1;
+      } else {
+        playSkipSound();
+      }
+
+      qs(".house").remove();
+      qs("#questions-housing").lastChild.remove();
+
+
+      setTimeout(nextRoundHousing(), 500);
+    });
+  }
+
+
+  function nextRoundHousing() {
+
+    qsa("#user-section-housing button")[1].disabled = true;
+    clearCurrentQuestionHousing();
+
+    totalRoundCounterHousing -= 1;
+
+    let house = gen("img");
+    house.src = "img/house.png";
+    house.alt = "house";
+    house.classList.add("house");
+    house.classList.add("top-to-down");
+
+    id("questions-housing").appendChild(house);
+
+    house.addEventListener("animationend", () => {
+      house.classList.remove("top-to-down");
+      setTimeout(startRound(), 500);
+    });
+  }
     /*
     peopleAnimation = {
       "peopleAmount": people,
@@ -1409,6 +1512,8 @@
 
     // base case
     if (index === sequence.length) {
+      start();
+      activateSubmitButton();
       return;
     }
 
@@ -1425,6 +1530,10 @@
       peopleElement.remove();
     });
 
+  }
+
+  function activateSubmitButton() {
+    qsa("#user-section-housing button")[1].disabled = false;
   }
 
   function generateSequence() {
@@ -1581,6 +1690,7 @@
       timeStopped = null;
       document.getElementById("display-area").innerHTML = "00:00:00.000";
       document.getElementById("counting-display-area").innerHTML = "00:00:00.000";
+      document.getElementById("housing-display-area").innerHTML = "00:00:00.000";
 
   }
 
@@ -1603,6 +1713,14 @@
 
       if (document.getElementById("counting-display-area")) {
         document.getElementById("counting-display-area").innerHTML =
+          (hour > 9 ? hour : "0" + hour) + ":" +
+          (min > 9 ? min : "0" + min) + ":" +
+          (sec > 9 ? sec : "0" + sec) + "." +
+          (ms > 99 ? ms : ms > 9 ? "0" + ms : "00" + ms);
+      }
+
+      if (document.getElementById("housing-display-area")) {
+        document.getElementById("housing-display-area").innerHTML =
           (hour > 9 ? hour : "0" + hour) + ":" +
           (min > 9 ? min : "0" + min) + ":" +
           (sec > 9 ? sec : "0" + sec) + "." +
