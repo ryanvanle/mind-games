@@ -17,6 +17,11 @@
   const COLORS = ["red", "blue", "green", "black", "purple", "pink", "orange"];
   const ANIMATIONS = ["growing", "spinning", "moving"];
 
+
+  let peopleInHouse = 0;
+  let totalIterations;
+  let totalRoundCounterHousing;
+
   /**
   * CHANGE: Describe what your init function does here.
   */
@@ -43,7 +48,6 @@
       calculationSelectors[i].addEventListener("click", calculationRulesSelector);
     }
 
-
     let countingSelectors = qsa("#counting-rules p");
     for (let i = 0; i < countingSelectors.length; i++) {
       countingSelectors[i].addEventListener("click", countingRulesSelector);
@@ -51,11 +55,20 @@
 
 
     id("counting-button").addEventListener("click", menuToCounting);
+
+    id("housing-button").addEventListener("click", menuToHousing);
+
+    // setTimeout(() => {generatePeople()}, 5000);
   }
 
   function menuToCounting() {
     id("main-menu").classList.add("hidden");
     id("counting-menu").classList.remove("hidden");
+  }
+
+  function menuToHousing() {
+    id("main-menu").classList.add("hidden");
+    id("housing-menu").classList.remove("hidden");
   }
 
   function menuToCalculation() {
@@ -67,6 +80,7 @@
     id("main-menu").classList.remove("hidden");
     id("calculations-menu").classList.add("hidden");
     id("counting-menu").classList.add("hidden");
+    id("housing-menu").classList.add("hidden");
   }
 
   function calculationRulesToGame() {
@@ -1037,14 +1051,11 @@
   }
 
   function countingEndgame() {
-
-    console.log()
     countingUpdateStats();
     clearCountingState();
     playWinSound();
     id("counting-game").classList.add("hidden");
     id("counting-results").classList.remove("hidden");
-
   }
 
   function clearCountingState() {
@@ -1135,7 +1146,6 @@
       boolean = true;
     }
 
-    console.log(boolean)
     return boolean;
   }
 
@@ -1166,6 +1176,30 @@
     id("main-menu").classList.remove("hidden");
   }
 
+
+  function generatePeople() {
+
+    let randomAmountPeople = getRandomIntBetween(1,4);
+    let people = gen("div");
+    people.classList.add("people");
+
+    for (let i = 0; i < randomAmountPeople; i++) {
+      let person = generatePerson();
+      people.appendChild(person);
+    }
+
+    id("questions-housing").appendChild(people);
+
+  }
+
+
+  function generatePerson() {
+    let img = gen("img");
+    img.src = "img/person.png";
+    img.alt = "person";
+    img.classList.add("person");
+    return img;
+  }
   /**
   * Make sure to always add a descriptive comment above
   * every function detailing what it's purpose is

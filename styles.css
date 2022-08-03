@@ -83,7 +83,7 @@ button:active {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
-#color-matching-button {
+#housing-button {
   background-color: #ADF0FF;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
@@ -97,7 +97,7 @@ button:active {
   border: 6px solid #EABFE0;
 }
 
-#color-matching-button:hover {
+#housing-button:hover {
   border: 6px solid #68DBFF;
 }
 
@@ -109,7 +109,7 @@ button:active {
   background-color: #EABFE0;
 }
 
-#color-matching-button:active {
+#housing-button:active {
   background-color: #68DBFF;
 }
 
@@ -156,6 +156,12 @@ button:active {
   border: 8px solid #FFA979;
 }
 
+#housing-title {
+  background: #ADF0FF;
+  border: 8px solid #68DBFF;
+
+}
+
 .start {
   background-color: #10FF36;
 }
@@ -175,7 +181,9 @@ button:active {
   flex-wrap: wrap;
 }
 
-#calculations-rules, #amount-error, #missing-error, #results, #max-number-error, #counting-rules, #round-number-error, #counting-missing-error, #counting-results {
+#calculations-rules, #amount-error, #missing-error, #results, #max-number-error,
+#counting-rules, #round-number-error, #counting-missing-error, #counting-results,
+#housing-rules, #housing-results {
   background-color: white;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   margin-left: 5%;
@@ -197,14 +205,14 @@ button:active {
   padding-bottom: 7.8%;
 }
 
-#calculations-rules h2, #counting-rules h2 {
+#calculations-rules h2, #counting-rules h2, #housing-rules h2 {
   text-align: center;
   font-size: 26pt;
   padding-top: 25px;
   margin-bottom: 10px;
 }
 
-#calculations-rules div, #counting-rules div {
+#calculations-rules div, #counting-rules div, #housing-rules div {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -213,14 +221,13 @@ button:active {
 
 }
 
-#calculations-rules p, #counting-rules div {
+#calculations-rules p, #counting-rules div, #housing-rules div {
   margin-left: 15px;
   margin-right: 15px;
   cursor: pointer;
-
 }
 
-#calculations-rules label, #counting-rules label {
+#calculations-rules label, #counting-rules label, #housing-rules label {
   display: block;
   font-size: 1.17em;
   margin-block-start: 1em;
@@ -525,8 +532,8 @@ p {
 }
 
 .house {
-  animation: top-to-down;
-  animation-duration: 3s;
+  /* animation: down-to-top; */
+  animation-duration: 2s;
   animation-timing-function: linear;
   animation-iteration-count: 1;
   position: absolute;
@@ -535,22 +542,32 @@ p {
   width: 100%;
   height: auto;
   z-index: 1;
-  opacity: 100%;
+  opacity: 10%;
 }
 
-@keyframes down-to-top {
+/* house */
+@keyframes top-to-down {
   0% {top: -100%;}
   100% {top: 20%}
 }
 
-@keyframes left-to-house {
-  0% {left: -100%;}
-  100% {left: 50%;}
+@keyframes down-to-top {
+  0% {top: 20%;}
+  100% {top: -100%}
 }
 
+@keyframes left-to-house {
+  0% {left: -100%;}
+  100% {left: 35%;}
+}
+
+/* people */
 @keyframes house-to-right {
   0% {left: 50%;}
-  100% {left: 150%;}
+  100% {
+    left: 150%;
+    width: 0%;
+  }
 }
 
 @keyframes house-to-top {
@@ -564,18 +581,26 @@ p {
   }
 }
 
-@keyframes top-to-down {
-  0% {top: 20%;}
-  100% {top: -100%}
+
+.people {
+  position: absolute;
+  top: 57%;
+  left: 35%;
+  width: 100%;
+  animation: left-to-house;
+  animation-duration: 5s;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
 }
 
 .person {
-  animation: house-to-top;
-  animation-duration: 3s;
+  /* animation: house-to-right;
+  animation-duration: 5s;
   animation-timing-function: linear;
-  animation-iteration-count: 1;
-  position: absolute;
-  top: 57%;
-  left: 50%; /*32% chimmy*/
+  animation-iteration-count: 1; */
+  /* position: relative; */
+  /* top: 57%;
+  left: 50%; 32% chimmy */
   width: 10%;
+  margin-right: 5px;
 }

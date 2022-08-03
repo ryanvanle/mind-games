@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <title>Mind Games</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="img/x-icon" href="img/favicon.ico">
+
   <script type="text/javascript" src="./handwriting.canvas.js"></script>
   <script src="https://unpkg.com/mathjs@10.6.4/lib/browser/math.js"></script>
   <script src="index.js"></script>
@@ -16,7 +18,7 @@
     <div id="buttons">
       <button id="calculation-button"><h2>CALCULATIONS</h2></button>
       <button id="counting-button"><h2>COUNTING</h2></button>
-      <button id="color-matching-button"><h2>HOUSING</h2></button>
+      <button id="housing-button"><h2>HOUSING</h2></button>
     </div>
   </section>
   <section id="calculations-menu" class="hidden">
@@ -157,11 +159,45 @@
     <button>MENU</button>
   </section>
 
-  <section id="housing-game" class="flex">
+
+  <section id="housing-menu" class="hidden">
+
+    <div class="back-button"></div>
+    <div id="housing-title">
+      <h1>HOUSING</h1>
+      <h2>Count the amount of people in the house!</h2>
+    </div>
+
+    <div id="housing-rules">
+      <h2>Rules Setup</h2>
+      <div>
+        <label for="rounds-housing">Round Amount:</label>
+        <input type="number" id="rounds-housing" name="rounds-housing"><br><br>
+      </div>
+      <div id="housing-input-type">
+        <h3>Input:</h3>
+        <p>Write</p>
+        <p>Type</p>
+      </div>
+    </div>
+    <div id="counting-missing-error" class="hidden"><h3>One or more rules are missing!</h3></div>
+    <div id="round-number-error" class="hidden"><h3>Rounds must be one or greater!</h3></div>
+    <div id="housing-buttons">
+      <button><h2>TUTORIAL</h2></button>
+      <button><h2>RULES</h2></button>
+      <button class="start"><h2>START</h2></button>
+    </div>
+  </section>
+
+  <section id="housing-game" class="flex hidden">
     <section id="questions-housing">
       <section id="question-prompt-housing"><h2> How many people are there in the house? <span id="user-answer"></span></h2></section>
-      <img class="person" src="img/person.png" alt="person">
       <img class="house" src="img/house.png" alt="house">
+      <div class="people">
+        <img class="person" src="img/person.png" alt="person">
+        <img class="person" src="img/person.png" alt="person">
+        <img class="person" src="img/person.png" alt="person">
+      </div>
     </section>
     <section id="user-section-housing">
       <div>
