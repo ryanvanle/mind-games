@@ -777,11 +777,8 @@
   function startCounting(roundAmount, inputType, animationCheck) {
 
     start();
-
-
     totalRoundCounter = Number(roundAmount);
     let parentElement = id("user-section-counting");
-
 
     displayRoundCounting(roundAmount, animationCheck);
 
@@ -1257,7 +1254,6 @@
       "roundAmount": roundAmount,
       "inputType": inputType,
     }
-
     window.localStorage.setItem("housingRules", JSON.stringify(rules));
   }
 
@@ -1275,11 +1271,149 @@
 
 
 
-  function startHousing() {
+  function startHousing(roundAmount, inputType) {
+
+    if (totalRoundCounterHousing - 1 === 0) {
+      housingEndgame();
+    }
+
+    totalRoundCounter = Number(roundAmount);
+
+    let parentElement = id("user-section-housing");
+
+    startRound();
+
+    qsa("#user-section-housing button")[1].disabled = true;
+
+    if (inputType === "Write") {
+      let canvasElement = gen("canvas");
+      canvasElement.id = "can";
+      canvasElement.width = "500";
+      canvasElement.height = "550";
+      parentElement.prepend(canvasElement);
+      can = new handwriting.Canvas(id("can"));
+
+      can.setCallBack(function(data) {
+        updateUserInput(data, can);
+      });
+
+      can.setOptions(
+        {
+          language: "en",
+          numOfReturn: 5
+        }
+      );
+
+      ["click", "touchend"].forEach(function(e) {
+        id("can").addEventListener(e,() => {
+          can.recognize();
+        });
+      });
+
+      qs("#user-section-housing button").addEventListener("click", () => {
+        can.erase();
+        clearCurrentQuestionHousing();
+      });
+
+      qsa("#user-section-housing button")[1].addEventListener("click", () =>  {
+        can.erase();
+        checkAnswerHousing();
+      });
+
+
+    } else {
+      let inputElement = gen("input");
+      inputElement.type = "number";
+      inputElement.id = "type-input";
+      inputElement.name = "type-input";
+      parentElement.prepend(inputElement);
+
+      id("type-input").addEventListener("keyup", () => {
+        let inputElementData = id("type-input").value;
+        if (inputElementData !== "") {
+          updateUserInput([inputElementData], null);
+        } else {
+          clearCurrentQuestionHousing();
+        }
+      })
+
+      qsa("#user-section-housing button")[0].addEventListener("click", () => {
+        id("type-input").value = "";
+        clearCurrentQuestionHousing();
+      });
+
+      qsa("#user-section-housing button")[1].addEventListener("click", () => {
+        id("type-input").value = "";
+        checkAnswerHousing();
+      });
+    }
 
   }
 
-  function generatePeople() {
+  function startRound() {
+    // let sequence = generateSequence();
+  }
+
+  function generateSequence() {
+    // a valid sequence is when there is never less than 0 people in the house at any state
+    // 0 total people [2 people enter, 1 person leaves, 1 person enters] total people 3, valid sequence.
+    // 0 total people [2 people leave, 1 person joins, 5 people join] total people 4, invalid sequence
+    // since there was -2 people at one point.
+
+    let validSequence = false;
+    let sequence = [];
+    const MAXIMUM_PEOPLE_PER_STATE = 3;
+
+    while (validSequence === false) {
+      let sequenceLength = getRandomIntBetween(2, 1000 + 1);
+      let numberOfPeople = 0;
+
+      for (let i = 0; i < sequenceLength; i++) {
+        let people = Number(getRandomIntBetween(1, MAXIMUM_PEOPLE_PER_STATE + 1));
+
+        if (Math.random() < 0.5 && numberOfPeople > 0) {
+          people = -people;
+        }
+
+        numberOfPeople += people;
+        sequence.push(people);
+
+        if (numberOfPeople < 0) {
+          sequence = [];
+          break;
+        }
+      }
+
+      if (numberOfPeople >= 0 && sequence.length > 0) {
+        validSequence = true;
+      }
+    }
+
+    // debugCheckSequence(sequence);
+    return sequence;
+  }
+
+  function debugCheckSequence(sequence) {
+
+    let total = 0;
+
+    for (let i = 0; i < sequence.length; i++) {
+      total += sequence[i];
+      if (total < 0) {
+        console.log(sequence);
+        alert("sequence is negative" + sequence);
+        break;
+      }
+    }
+
+    console.log("valid");
+  }
+
+  function housingEndgame() {
+
+  }
+
+  function generatePeople(peopleAmount) {
 
     let randomAmountPeople = getRandomIntBetween(1,4);
     let people = gen("div");
