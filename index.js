@@ -602,7 +602,6 @@
     let rulesElements = qsa("#results div div span");
     let operationsString = operationsType.join(" ");
 
-
     rulesElements[0].textContent = questionAmount;
     rulesElements[1].textContent = inputType;
     rulesElements[2].textContent = operationsString;
@@ -1226,7 +1225,6 @@
     }
   }
 
-
   function housingDisplayBlankValuesError() {
     qs("#housing-buttons .start").removeEventListener("click", housingRulesToGame);
     id("housing-rules").classList.add("hidden");
@@ -1268,8 +1266,6 @@
       }
     }
   }
-
-
 
   function startHousing(roundAmount, inputType) {
 
@@ -1351,21 +1347,27 @@
   }
 
   function startRound() {
-    // let sequence = generateSequence();
+    let sequence = generateSequence();
+    console.log(sequence);
   }
 
   function generateSequence() {
-    // a valid sequence is when there is never less than 0 people in the house at any state
+    // a valid sequence is when there is never less than 0 people in the house at any state.
     // 0 total people [2 people enter, 1 person leaves, 1 person enters] total people 3, valid sequence.
     // 0 total people [2 people leave, 1 person joins, 5 people join] total people 4, invalid sequence
     // since there was -2 people at one point.
 
     let validSequence = false;
-    let sequence = [];
+    let finalSequence = [];
+    let numberSequence = [];
+
+    const LEAVING_ANIMATIONS = ["house-to-top", "house-to-left", "house-to-right"];
+    const ENTERING_ANIMATIONS = ["left-to-house", "right-to-house"];
+
     const MAXIMUM_PEOPLE_PER_STATE = 3;
 
     while (validSequence === false) {
-      let sequenceLength = getRandomIntBetween(2, 1000 + 1);
+      let sequenceLength = getRandomIntBetween(2, 8 + 1);
       let numberOfPeople = 0;
 
       for (let i = 0; i < sequenceLength; i++) {
@@ -1376,21 +1378,40 @@
         }
 
         numberOfPeople += people;
-        sequence.push(people);
+        numberSequence.push(people);
 
         if (numberOfPeople < 0) {
-          sequence = [];
+          numberSequence = [];
           break;
         }
       }
 
-      if (numberOfPeople >= 0 && sequence.length > 0) {
+      if (numberOfPeople >= 0 && numberSequence.length > 0) {
         validSequence = true;
       }
     }
 
-    // debugCheckSequence(sequence);
-    return sequence;
+    for (let i = 0; i < numberSequence.length; i++) {
+      let currentAmountOfPeople = numberSequence[i];
+      let peopleAnimation;
+      if (currentAmountOfPeople > 0) {
+        let randomEnteringAnimation = ENTERING_ANIMATIONS[getRandomIndex(ENTERING_ANIMATIONS)];
+        peopleAnimation = {
+          "peopleAmount": currentAmountOfPeople,
+          "animation": randomEnteringAnimation
+        };
+      } else {
+        let randomLeavingAnimation = LEAVING_ANIMATIONS[getRandomIndex(LEAVING_ANIMATIONS)];
+        peopleAnimation = {
+          "peopleAmount": currentAmountOfPeople,
+          "animation": randomLeavingAnimation
+        }
+      }
+
+      finalSequence.push(peopleAnimation);
+    }
+
+    return finalSequence;
   }
 
   function debugCheckSequence(sequence) {
