@@ -532,6 +532,7 @@ p {
   margin-left: 1%;
 }
 
+/* house */
 .house {
   position: absolute;
   top: 20%;
@@ -556,62 +557,18 @@ p {
   animation-iteration-count: 1;
 }
 
-.left-to-house {
-  animation: left-to-house;
-  animation-duration: 5s;
-  animation-timing-function: linear;
-  animation-iteration-count: 1;
-}
 
-.house-to-right {
-  animation: left-to-house;
-  animation-duration: 5s;
-  animation-timing-function: linear;
-  animation-iteration-count: 1;
-}
-
-.house-to-top {
-  animation: left-to-house;
-  animation-duration: 5s;
-  animation-timing-function: linear;
-  animation-iteration-count: 1;
-}
-
-/* house */
 @keyframes top-to-down {
   0% {top: -100%;}
-  100% {top: 20%}
+  100% {top: 20%;}
 }
 
 @keyframes down-to-top {
   0% {top: 20%;}
-  100% {top: -100%}
-}
-
-@keyframes left-to-house {
-  0% {left: -100%;}
-  100% {left: 35%;}
+  100% {top: -100%;}
 }
 
 /* people */
-@keyframes house-to-right {
-  0% {left: 50%;}
-  100% {
-    left: 150%;
-    width: 0%;
-  }
-}
-
-@keyframes house-to-top {
-  0% {
-    top: 57%;
-    left: 32%;
-  }
-  100% {
-    top: -100%;
-    left: 32%;
-  }
-}
 
 .people {
   position: absolute;
@@ -630,4 +587,73 @@ p {
   left: 50%; 32% chimmy */
   width: 10%;
   margin-right: 5px;
+}
+
+/* entering animations */
+.left-to-house {
+  animation: left-to-house;
+  animation-duration: 2s;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+}
+
+@keyframes left-to-house {
+  0% {left: -100%;}
+  100% {left: 35%;}
+}
+
+.right-to-house {
+  animation: right-to-house;
+  animation-duration: 2s;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+}
+
+@keyframes right-to-house {
+  0% {left: 100%;}
+  100% {left: 35%;}
+}
+
+/* leaving animations */
+
+.house-to-right {
+  animation: house-to-right;
+  animation-duration: 2s;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+}
+
+@keyframes house-to-right {
+  0% {left: 50%; }
+  100% { left: 100%; }
+}
+
+.house-to-left {
+  animation: house-to-left;
+  animation-duration: 2s;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+}
+
+@keyframes house-to-left {
+  0% {left: 50%; }
+  100% { left: -100%; }
+}
+
+.house-to-top {
+  animation: house-to-top;
+  animation-duration: 2s;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+}
+
+@keyframes house-to-top {
+  0% {
+    top: 57%;
+    left: 32%;
+  }
+  100% {
+    top: -100%;
+    left: 32%;
+  }
 }

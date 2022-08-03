@@ -1347,8 +1347,84 @@
   }
 
   function startRound() {
-    let sequence = generateSequence();
-    console.log(sequence);
+    let sequence = splitHouseToUpSequence(generateSequence());
+    displayRoundAnimations(sequence);
+  }
+
+  function splitHouseToUpSequence(originalSequence) {
+
+    let newSequence = [];
+
+    for (let i = 0; i < originalSequence.length; i++) {
+      let currentPeopleAnimation = originalSequence[i];
+      let peopleAmount = currentPeopleAnimation["peopleAmount"];
+      let animation = currentPeopleAnimation["animation"];
+
+      if (animation === "house-to-top") {
+        for (let j = 0; j < Math.abs(peopleAmount); j++) {
+          let newPeopleAnimation = {
+            "peopleAmount": -1,
+            "animation": animation
+          }
+          newSequence.push(newPeopleAnimation)
+        }
+      } else {
+        newSequence.push(currentPeopleAnimation);
+      }
+    }
+
+    console.log(originalSequence);
+    console.log(newSequence);
+    return newSequence;
+  }
+
+    /*
+    peopleAnimation = {
+      "peopleAmount": people,
+      "animation": animation
+    };
+  */
+
+  function displayRoundAnimations(sequence) {
+
+    let sequenceIndex = 0;
+    let firstPeople = sequence[sequenceIndex];
+
+    let firstPeopleAmount = firstPeople["peopleAmount"];
+    let firstPeopleAnimation = firstPeople["animation"];
+
+    let peopleElement = generatePeople(firstPeopleAmount);
+    peopleElement.classList.add(firstPeopleAnimation);
+
+    id("questions-housing").appendChild(peopleElement);
+
+    peopleElement.addEventListener("animationend", function () {
+      setTimeout(displayRoundAnimationsHelper(sequence, sequenceIndex + 1), 1000);
+      peopleElement.remove();
+    });
+
+  }
+
+  function displayRoundAnimationsHelper(sequence, index) {
+
+    // base case
+    if (index === sequence.length) {
+      return;
+    }
+
+    let people = sequence[index];
+    let peopleAmount = people["peopleAmount"];
+    let peopleAnimation = people["animation"];
+
+    let peopleElement = generatePeople(peopleAmount);
+    peopleElement.classList.add(peopleAnimation);
+    id("questions-housing").appendChild(peopleElement);
+
+    peopleElement.addEventListener("animationend", function () {
+      setTimeout(displayRoundAnimationsHelper(sequence, index + 1), 1000);
+      peopleElement.remove();
+    });
+
   }
 
   function generateSequence() {
@@ -1436,17 +1512,15 @@
 
   function generatePeople(peopleAmount) {
 
-    let randomAmountPeople = getRandomIntBetween(1,4);
     let people = gen("div");
     people.classList.add("people");
 
-    for (let i = 0; i < randomAmountPeople; i++) {
+    for (let i = 0; i < Math.abs(peopleAmount); i++) {
       let person = generatePerson();
       people.appendChild(person);
     }
 
-    id("questions-housing").appendChild(people);
-
+    return people;
   }
 
   function generatePerson() {
