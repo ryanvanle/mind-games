@@ -17,7 +17,6 @@
   const COLORS = ["red", "blue", "green", "black", "purple", "pink", "orange"];
   const ANIMATIONS = ["growing", "spinning", "moving"];
 
-
   let peopleInHouse = 0;
   let totalIterations;
   let totalRoundCounterHousing;
@@ -32,12 +31,16 @@
     if (window.localStorage.getItem("calculationsRules") != null) previousCalculationsRulesSetup();
     if (window.localStorage.getItem("countingRules") != null) previousCountingRulesSetup();
 
+    id("counting-button").addEventListener("click", menuToCounting);
+    id("housing-button").addEventListener("click", menuToHousing);
     id("calculation-button").addEventListener("click", menuToCalculation);
-    qs("#calculations-buttons .start").addEventListener("click", calculationRulesToGame);
-    qs("#results button").addEventListener("click", calculationsResultsToMenu);
-    qs("#counting-results button").addEventListener("click", countingResultsToMenu)
-    qs("#counting-buttons .start").addEventListener("click", countingRulesToGame);
 
+    qs("#calculations-buttons .start").addEventListener("click", calculationRulesToGame);
+    qs("#counting-buttons .start").addEventListener("click", countingRulesToGame);
+    qs("#housing-buttons .start").addEventListener("click", housingRulesToGame);
+
+    qs("#results button").addEventListener("click", calculationsResultsToMenu);
+    qs("#counting-results button").addEventListener("click", countingResultsToMenu);
     let backButtons = qsa(".back-button");
     for (let i = 0; i < backButtons.length; i++) {
       backButtons[i].addEventListener("click", backToMenu);
@@ -53,10 +56,13 @@
       countingSelectors[i].addEventListener("click", countingRulesSelector);
     }
 
+    let housingSelectors = qsa("#housing-rules p");
+    for (let i = 0; i < housingSelectors.length; i++) {
+      housingSelectors[i].addEventListener("click", housingRulesSelector);
+    }
 
-    id("counting-button").addEventListener("click", menuToCounting);
 
-    id("housing-button").addEventListener("click", menuToHousing);
+
 
     // setTimeout(() => {generatePeople()}, 5000);
   }
@@ -673,6 +679,25 @@
     return inputType;
   }
 
+
+  function housingRulesSelector() {
+    let buttons;
+    if (this.parentNode.id ===  "housing-input-type") {
+      buttons = qsa("#housing-input-type p");
+    } else {
+      this.classList.toggle("selected");
+      return;
+    }
+
+    for (let i = 0; i < buttons.length; i++) {
+      if (buttons[i] !== this) {
+        buttons[i].classList.remove("selected");
+      } else {
+        this.classList.toggle("selected");
+      }
+    }
+  }
+
   function countingRulesSelector() {
 
     // need to redo later, works but is sloppy. i.e need to make a universal function for all rule
@@ -705,10 +730,10 @@
     let filledOutCheck = roundAmount === "" || inputType == null || animationCheck == null;
     let roundAmountCheck = Number(roundAmount) <= 0;
 
-    if (filledOutCheck) {
-      countingDisplayBlankValuesError();
-    } else if (roundAmountCheck) {
+    if (roundAmountCheck) {
       countingDisplayRoundError();
+    } else if (filledOutCheck) {
+      countingDisplayBlankValuesError();
     } else {
       id("counting-menu").classList.add("hidden");
       id("counting-game").classList.remove("hidden");
@@ -1041,7 +1066,6 @@
     displayRoundCounting(totalRoundCounter, countingAnimationsValueCheck());
   }
 
-
   function clearCountingDivs() {
     clearAllSetIntervals();
     qs("#question-prompt span").textContent = "";
@@ -1176,6 +1200,71 @@
     id("main-menu").classList.remove("hidden");
   }
 
+  function housingInputCheck() {
+    let inputType;
+    let inputs = qsa("#housing-input-type p");
+    for (let i = 0; i < inputs.length; i++) {
+      if (inputs[i].classList.contains("selected")) {
+        inputType = inputs[i].textContent;
+      } else if (inputType !== undefined && inputs[i].classList.contains("selected")) {
+        console.error("Both inputs selected");
+      }
+    }
+    return inputType;
+  }
+
+  function housingRulesToGame() {
+    let roundAmount = id("rounds-housing").value;
+    let inputType = housingInputCheck();
+
+    let filledOutCheck = roundAmount === "" || inputType == null;
+    let roundAmountCheck = Number(roundAmount) <= 0;
+
+    console.log(roundAmount);
+    console.log(inputType);
+
+    if (roundAmountCheck) {
+      housingDisplayRoundError();
+    } else if (filledOutCheck) {
+      housingDisplayBlankValuesError();
+    } else {
+      id("housing-menu").classList.add("hidden");
+      id("housing-game").classList.remove("hidden");
+      setHousingRulesLocalStorage(roundAmount, inputType);
+      startHousing(roundAmount, inputType);
+    }
+  }
+
+
+  function housingDisplayBlankValuesError() {
+    qs("#housing-buttons .start").removeEventListener("click", housingRulesToGame);
+    id("housing-rules").classList.add("hidden");
+    id("housing-missing-error").classList.remove("hidden");
+    setTimeout(() => {
+      id("housing-rules").classList.remove("hidden");
+      id("housing-missing-error").classList.add("hidden");
+      qs("#housing-buttons .start").addEventListener("click", housingRulesToGame);
+    }, 1000);
+  }
+
+  function housingDisplayRoundError() {
+    qs("#housing-buttons .start").removeEventListener("click", housingRulesToGame);
+    id("housing-rules").classList.add("hidden");
+    id("housing-round-number-error").classList.remove("hidden");
+    setTimeout(() => {
+      id("housing-rules").classList.remove("hidden");
+      id("housing-round-number-error").classList.add("hidden");
+      qs("#housing-buttons .start").addEventListener("click", housingRulesToGame);
+    }, 1000);
+  }
+
+  function setHousingRulesLocalStorage(roundAmount, inputType) {
+
+  }
+
+  function startHousing() {
+
+  }
 
   function generatePeople() {
 
@@ -1192,7 +1281,6 @@
 
   }
 
-
   function generatePerson() {
     let img = gen("img");
     img.src = "img/person.png";
@@ -1200,6 +1288,7 @@
     img.classList.add("person");
     return img;
   }
+
   /**
   * Make sure to always add a descriptive comment above
   * every function detailing what it's purpose is
