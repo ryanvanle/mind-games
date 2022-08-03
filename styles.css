@@ -533,10 +533,6 @@ p {
 }
 
 .house {
-  /* animation: down-to-top; */
-  animation-duration: 2s;
-  animation-timing-function: linear;
-  animation-iteration-count: 1;
   position: absolute;
   top: 20%;
   left: 0%;
@@ -544,6 +540,41 @@ p {
   height: auto;
   z-index: 1;
   opacity: 10%;
+}
+
+.top-to-down {
+  animation: down-to-top;
+  animation-duration: 2s;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+}
+
+.down-to-top {
+  animation: down-to-top;
+  animation-duration: 2s;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+}
+
+.left-to-house {
+  animation: left-to-house;
+  animation-duration: 5s;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+}
+
+.house-to-right {
+  animation: left-to-house;
+  animation-duration: 5s;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+}
+
+.house-to-top {
+  animation: left-to-house;
+  animation-duration: 5s;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
 }
 
 /* house */
@@ -582,16 +613,11 @@ p {
   }
 }
 
-
 .people {
   position: absolute;
   top: 57%;
   left: 35%;
   width: 100%;
-  animation: left-to-house;
-  animation-duration: 5s;
-  animation-timing-function: linear;
-  animation-iteration-count: 1;
 }
 
 .person {
