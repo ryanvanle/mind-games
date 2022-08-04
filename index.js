@@ -1268,15 +1268,24 @@
 
   function startHousing(roundAmount, inputType) {
 
-    if (totalRoundCounterHousing - 1 === 0) {
-      housingEndgame();
-    }
-
     totalRoundCounter = Number(roundAmount);
 
     let parentElement = id("user-section-housing");
 
-    startRound();
+    let house = gen("img");
+    house.src = "img/house.png";
+    house.alt = "house";
+    house.classList.add("house");
+    house.classList.add("top-to-down");
+
+    house.addEventListener("animationend", () => {
+      house.classList.remove("top-to-down");
+      clearAllEventListeners(house);
+      startRound();
+    });
+
+    id("questions-housing").appendChild(house);
+
 
     qsa("#user-section-housing button")[1].disabled = true;
 
@@ -1448,6 +1457,10 @@
 
 
   function nextRoundHousing() {
+
+    if (totalRoundCounterHousing - 1 === 0) {
+      housingEndgame();
+    }
 
     qs(".house").remove();
     qs(".results-house").remove();

@@ -625,7 +625,7 @@ p {
 }
 
 @keyframes house-to-right {
-  0% {left: 50%; }
+  0% {left: 35%; }
   100% { left: 100%; }
 }
 
@@ -637,7 +637,7 @@ p {
 }
 
 @keyframes house-to-left {
-  0% {left: 50%; }
+  0% {left: 35%; }
   100% { left: -100%; }
 }
 
@@ -651,11 +651,11 @@ p {
 @keyframes house-to-top {
   0% {
     top: 57%;
-    left: 32%;
+    left: 30%;
   }
   100% {
     top: -100%;
-    left: 32%;
+    left: 30%;
   }
 }
 
