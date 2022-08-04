@@ -1351,7 +1351,6 @@
 
   function updateUserInput(data, can) {
 
-    console.log(data);
     if (data == null) { //undefined and null
       return;
     }
@@ -1369,19 +1368,16 @@
       id("user-answer-housing").textContent = "";
     }
 
-
   }
 
   function startRound() {
+    peopleInHouse = 0;
     let sequence = splitHouseToUpSequence(generateSequence());
     calculateResult(sequence);
-    console.log(peopleInHouse);
     displayRoundAnimations(sequence);
   }
 
   function calculateResult(sequence) {
-    peopleInHouse = 0;
-
     let total = 0;
     for (let i = 0; i < sequence.length; i++) {
       let peopleAnimation = sequence[i];
@@ -1429,21 +1425,15 @@
     stop();
 
     let actualAnswer = peopleInHouse;
-
     let finalAnswer = Number(id("user-answer-housing").textContent);
     let peopleDiv = generatePeople(peopleInHouse);
     peopleDiv.classList.remove("people");
     peopleDiv.classList.add("results-house");
 
-
     id("questions-housing").appendChild(peopleDiv);
 
     qs(".house").classList.add("down-to-top");
-
     qs(".house").addEventListener("animationend", () => {
-      console.log(finalAnswer);
-      console.log(peopleInHouse);
-      console.log(actualAnswer);
 
       if (finalAnswer === actualAnswer) {
         playCorrectAnswerSound();
@@ -1452,16 +1442,15 @@
         playSkipSound();
       }
 
-      qs(".house").remove();
-      qs("#questions-housing").lastChild.remove();
-
-
-      setTimeout(nextRoundHousing(), 500);
+      nextRoundHousing();
     });
   }
 
 
   function nextRoundHousing() {
+
+    qs(".house").remove();
+    qs(".results-house").remove();
 
     qsa("#user-section-housing button")[1].disabled = true;
     clearCurrentQuestionHousing();
@@ -1474,12 +1463,14 @@
     house.classList.add("house");
     house.classList.add("top-to-down");
 
-    id("questions-housing").appendChild(house);
-
     house.addEventListener("animationend", () => {
       house.classList.remove("top-to-down");
-      setTimeout(startRound(), 500);
+      clearAllEventListeners(house);
+      startRound();
     });
+
+    id("questions-housing").appendChild(house);
+
   }
     /*
     peopleAnimation = {
@@ -1489,10 +1480,8 @@
   */
 
   function displayRoundAnimations(sequence) {
-
     let sequenceIndex = 0;
     let firstPeople = sequence[sequenceIndex];
-
     let firstPeopleAmount = firstPeople["peopleAmount"];
     let firstPeopleAnimation = firstPeople["animation"];
 
@@ -1502,7 +1491,7 @@
     id("questions-housing").appendChild(peopleElement);
 
     peopleElement.addEventListener("animationend", function () {
-      setTimeout(displayRoundAnimationsHelper(sequence, sequenceIndex + 1), 1000);
+      displayRoundAnimationsHelper(sequence, sequenceIndex + 1);
       peopleElement.remove();
     });
 
@@ -1526,7 +1515,7 @@
     id("questions-housing").appendChild(peopleElement);
 
     peopleElement.addEventListener("animationend", function () {
-      setTimeout(displayRoundAnimationsHelper(sequence, index + 1), 1000);
+      displayRoundAnimationsHelper(sequence, index + 1);
       peopleElement.remove();
     });
 
