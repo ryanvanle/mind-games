@@ -1,8 +1,6 @@
 "use strict";
 
 (function() {
-  // MODULE GLOBAL VARIABLES, CONSTANTS, AND HELPER FUNCTIONS CAN BE PLACED HERE
-
   /**
   * Add a function that will be called when the window is loaded.
   */
@@ -21,7 +19,7 @@
   let totalRoundCounterHousing;
 
   /**
-  * CHANGE: Describe what your init function does here.
+  * Adds all the clickable buttons throughout the application excluding the user's input for games.
   */
   function init() {
 
@@ -63,26 +61,41 @@
 
   }
 
+  /**
+   * Switches main menu to Counting game menu.
+   */
   function menuToCounting() {
     id("main-menu").classList.add("hidden");
     id("counting-menu").classList.remove("hidden");
   }
 
+  /**
+   * Switches main menu to Housing game menu.
+   */
   function menuToHousing() {
     id("main-menu").classList.add("hidden");
     id("housing-menu").classList.remove("hidden");
   }
 
+  /**
+   * Switches from main menu to Calculation game menu.
+   */
   function menuToCalculation() {
     id("main-menu").classList.add("hidden");
     id("calculations-menu").classList.remove("hidden");
   }
 
+  /**
+   * Switches from Housing results to main menu.
+   */
   function housingResultsToMenu() {
     id("housing-results").classList.add("hidden");
     id("main-menu").classList.remove("hidden");
   }
 
+  /**
+   * Switches from rules menu to main menu.
+   */
   function backToMenu() {
     id("main-menu").classList.remove("hidden");
     id("calculations-menu").classList.add("hidden");
@@ -90,6 +103,10 @@
     id("housing-menu").classList.add("hidden");
   }
 
+  /**
+   * Checks the calculations rules are filled out properly, if not throw error screen, else
+   * switch to the game and starts calculations.
+   */
   function calculationRulesToGame() {
     let totalQuestions = qs("#amount").value;
     let maxNumber = qs("#max-number").value;
@@ -125,6 +142,9 @@
     }
   }
 
+  /**
+   * Displays that a rule is missing error to the user.
+   */
   function calculationsDisplayBlankValuesError() {
     qs("#calculations-buttons .start").removeEventListener("click", calculationRulesToGame);
     id("calculations-rules").classList.add("hidden");
@@ -136,6 +156,9 @@
     }, 1000);
   }
 
+  /**
+   * Display that the question amount is not filled out or an invalid value like -1.
+   */
   function calculationsDisplayQuestionAmountError() {
     qs("#calculations-buttons .start").removeEventListener("click", calculationRulesToGame);
     id("calculations-rules").classList.add("hidden");
@@ -147,6 +170,9 @@
     }, 1000);
   }
 
+  /**
+   * Displays that the max number field is an invalid value, negative numbers.
+   */
   function calculationsMaxNumberError() {
     qs("#calculations-buttons .start").removeEventListener("click", calculationRulesToGame);
     id("calculations-rules").classList.add("hidden");
@@ -158,6 +184,10 @@
     }, 1000);
   }
 
+  /**
+   * Gets the input rule value for calculations.
+   * @returns {String} Calculations current input type (Write or Type)
+   */
   function calculationsInputCheck() {
     let inputType;
     let inputs = qsa("#input-type p");
@@ -171,6 +201,11 @@
     return inputType;
   }
 
+  /**
+   * Gets the operations rule value for calculations.
+   * @returns {String[]} Calculations' selected operation types
+   * (Addition, Subtraction, Division, Multiplication).
+   */
   function calculationsOperationsType() {
     let operationsType = [];
     let operationsOptions = qsa("#operations-type p");
@@ -182,6 +217,10 @@
     return operationsType;
   }
 
+  /**
+   * Gets the term amount rule value for calculations.
+   * @returns {String} Number of maximum operations terms that a question has.
+   */
   function calculationsTermAmount() {
     let termAmount;
     let termAmountSelector = qsa("#operations-amount p");
@@ -195,6 +234,11 @@
     return termAmount;
   }
 
+  /**
+   * Converts user's operations types from its English form to Symbol form.
+   * @param {String[]} operationType - Word versions of the operation type selected by the user.
+   * @returns {String[]} - Symbol version of the operation type selected by the user.
+   */
   function convertTextToSymbol(operationType) {
     let converted = [];
     for (let i = 0; i < operationType.length; i++) {
@@ -206,6 +250,10 @@
     return converted;
   }
 
+  /**
+   * Checks for the calculation's input rule and term amount rule that only one of the options is selected
+   * and deselects the previous option.
+   */
   function calculationRulesSelector() {
     if (this.parentNode.id === "input-type") {
       let buttons = qsa("#input-type p");
@@ -230,7 +278,17 @@
      }
   }
 
+  /**
+   * Sets the local storage of the calculations rules as an object so it can be updated on refresh
+   * through previousCalculationsRulesSetup.
+   * @param {String} totalQuestions - user's selected question amount.
+   * @param {String} inputType - user's input method.
+   * @param {String[]} operationsType - type of operations for the equations.
+   * @param {String} termAmount - max amount of operations terms for the equations.
+   * @param {String} maxNumber - max possible number each number in the equation can be.
+   */
   function setCalculationsRulesLocalStorage(totalQuestions, inputType, operationsType, termAmount, maxNumber) {
+
     let rules = {
       "totalQuestions": totalQuestions,
       "inputType": inputType,
@@ -242,6 +300,9 @@
     window.localStorage.setItem("calculationsRules", JSON.stringify(rules));
   }
 
+  /**
+   * Updates the calculations rules to its previous state through local storage.
+   */
   function previousCalculationsRulesSetup() {
     let rules = JSON.parse(window.localStorage.getItem("calculationsRules"));
     id("amount").value = rules["totalQuestions"];
@@ -274,6 +335,16 @@
     }
   }
 
+
+  /**
+   * Transitions from rules to game and sets up the game by activating the timer, user input, and
+   * then display questions.
+   * @param {String} totalQuestions - user's selected question amount.
+   * @param {String} inputType - user's input method.
+   * @param {String[]} operationsType - type of operations for the equations.
+   * @param {String} termAmount - max amount of operations terms for the equations.
+   * @param {String} maxNumber - max possible number each number in the equation can be.
+   */
   function startCalculations(totalQuestions, inputType, operationsType, termAmount, maxNumber) {
 
     // general rules to keep track of
@@ -311,8 +382,6 @@
       // id("can").addEventListener("click", () => {
       //   can.recognize();
       // });
-
-
 
       ["click", "touchend"].forEach(function(e) {
         id("can").addEventListener(e,() => {
@@ -355,16 +424,23 @@
         skipQuestion();
       });
 
-
     }
   }
 
+  /**
+   * When the clear button is pressed, this updates the calculations text box to be blank.
+   */
   function clearCurrentQuestion() {
     let currentQuestion = qs("#current-question h4");
     let currentQuestionText = currentQuestion.textContent.match(/^[^=]*/)[0];
     currentQuestion.textContent = currentQuestionText + "=";
   }
 
+  /**
+   * When the user updates their calculations user-input, this handles if the input is correct or not and updates accordingly.
+   * @param {String[]} data - User's input, String[] is used due to the handwriting making a prediction of what the input means.
+   * @param {Object} can - Canvas object where the user writes their input.
+   */
   function checkAnswer(data, can) {
 
     if (data == null) { //undefined and null
@@ -387,15 +463,11 @@
     if (Number(parsedData[0]) === Number(answer) && parsedData.length > 0) {
       currentQuestion.textContent = currentQuestionText + "=" + parsedData[0];
 
-      //endgame, checks if the last question
-
-
       if (can != null) {
         can.erase();
       } else {
         id("type-input").value = "";
       }
-
 
       playCorrectAnswerSound();
       id("score").textContent = Number(id("score").textContent) + 1;
@@ -410,9 +482,12 @@
 
   }
 
+  /**
+   * When an answer is skipped or answered, this shifts the user to the next question and appends
+   * one question to the back of the queue. Controls the question animations as well.
+   * Lastly if there is no more questions, then it wll trigger the endgame.
+   */
   function nextQuestion() {
-
-    //endgame might be better here. depends if you want to clear the input or not/
 
     if (id("current-question").nextElementSibling == null) {
       calculationsEndgame();
@@ -458,13 +533,19 @@
       displayEquations(convertTextToSymbol(calculationsOperationsType()), calculationsTermAmount(), 1, calculationsMaxNumber());
     }
 
-
   }
 
-  function calculationsMaxNumber () {
+  /**
+   * Helper that returns the value of the calculations max number.
+   * @returns {String} Calculations max number rule value.
+   */
+  function calculationsMaxNumber() {
     return id("max-number").value;
   }
 
+  /**
+   * Moves the currentQuestion class to the HTMLElement next after the current currentQuestion element.
+   */
   function moveCurrentQuestion() {
     let oldCurrentQuestion = id("current-question");
     let newCurrentQuestion = oldCurrentQuestion.nextElementSibling;
@@ -472,6 +553,9 @@
     newCurrentQuestion.id = "current-question";
   }
 
+  /**
+   * When an answer is right, adds check mark over the equation.
+   */
   function appendCheckmark() {
     let oldCurrentQuestion = id("current-question");
     let image = gen("img");
@@ -481,21 +565,38 @@
     oldCurrentQuestion.appendChild(image);
   }
 
+  /**
+   * When an answer is right, this sound plays.
+   */
   function playCorrectAnswerSound() {
     let sound = new Audio("sound/correct.mp3");
     sound.play();
   }
 
+  /**
+   * When an answer is skipped or incorrect, this sound plays.
+   */
   function playSkipSound() {
     let sound = new Audio("sound/incorrect.mp3");
     sound.play();
   }
 
+  /**
+   * When a game ends, this sound plays.
+   */
   function playWinSound() {
     let sound = new Audio("sound/win-sound.mp3");
     sound.play();
   }
 
+  /**
+   * Generates valid questions and generate its String to be used when displayed.
+   * @param {Number} totalQuestions - total amount of questions to be made.
+   * @param {String[]} operationsType - type of operations for the equations.
+   * @param {String} termAmount - max amount of operations terms for the equations.
+   * @param {String} maxNumber - max possible number each number in the equation can be.
+   * @returns {String[]} Generated questions.
+   */
   function generateQuestions(totalQuestions, operationsType, termAmount, maxNumber) {
 
     let equations = [];
@@ -539,6 +640,13 @@
     return equations;
   }
 
+  /**
+   * Displays the randomly generated equations.
+   * @param {String[]} operationsType - type of operations for the equations.
+   * @param {String} termAmount - max amount of operations terms for the equations.
+   * @param {String} questionAmount - amount of questions to be displayed
+   * @param {String} maxNumber - max possible number each number in the equation can be.
+   */
   function displayEquations(operationsType, termAmount, questionAmount, maxNumber) {
     if (totalQuestionsCounter === 0 && qs(".equation") == null) {
       totalQuestionsCounter = id("amount").value;
@@ -571,6 +679,9 @@
     totalQuestionsCounter = totalQuestionsCounter - displayedQuestions;
   }
 
+  /**
+   * When the game ends due to finishing it, this function calls to transition the user and reset the game state.
+   */
   function calculationsEndgame() {
     playWinSound();
     stop();
@@ -579,6 +690,9 @@
     transitionToResults();
   }
 
+  /**
+   * Updates the current question and shifts it upwards while also removing the top non-visible question.
+   */
   function moveQuestionScroll() {
     let questions = qsa("#questions div");
     let transitionElement = qs("#questions div");
@@ -592,6 +706,9 @@
     transitionElement.style.transition = "0.25s";
   }
 
+  /**
+   * Updates the calculation's results page with the stats from the calculations game.
+   */
   function updateStats() {
     let questionAmount = id("amount").value;
     let inputType = calculationsInputCheck();
@@ -621,17 +738,26 @@
     skipsElement.children[1].textContent = skips;
   }
 
+  /**
+   * Calculations game to Calculations results page transition.
+   */
   function transitionToResults() {
     id("calculations-game").classList.add("hidden");
     id("results").classList.remove("hidden");
   }
 
+  /**
+   * Calculations skips the current question when the skip button is pressed.
+   */
   function skipQuestion() {
     appendX();
     nextQuestion();
     playSkipSound();
   }
 
+  /**
+   * Adds the x symbol over the current question to show it is incorrect.
+   */
   function appendX() {
     let oldCurrentQuestion = id("current-question");
     let image = gen("img");
@@ -641,11 +767,17 @@
     oldCurrentQuestion.appendChild(image);
   }
 
+  /**
+   * Calculations results to Calculations main menu page transition.
+   */
   function calculationsResultsToMenu() {
     id("results").classList.add("hidden");
     id("main-menu").classList.remove("hidden");
   }
 
+  /**
+   * Sets calculations to its initial state before the game started.
+   */
   function clearCalculationState() {
     stop();
     reset();
@@ -670,6 +802,10 @@
 
   }
 
+  /**
+   * Gets the input type currently on the page.
+   * @returns {HTMLElement} input type.
+   */
   function getInputType() {
     let inputType;
 
@@ -679,29 +815,11 @@
     return inputType;
   }
 
-
-  function housingRulesSelector() {
-    let buttons;
-    if (this.parentNode.id ===  "housing-input-type") {
-      buttons = qsa("#housing-input-type p");
-    } else {
-      this.classList.toggle("selected");
-      return;
-    }
-
-    for (let i = 0; i < buttons.length; i++) {
-      if (buttons[i] !== this) {
-        buttons[i].classList.remove("selected");
-      } else {
-        this.classList.toggle("selected");
-      }
-    }
-  }
-
+  /**
+   * Checks for the counting's input rule and animations that only one of the options is selected
+   * and deselects the previous option
+   */
   function countingRulesSelector() {
-
-    // need to redo later, works but is sloppy. i.e need to make a universal function for all rule
-    // pages to work with one function but would require a full rewrite of the function (?).
 
     let buttons;
 
@@ -723,6 +841,10 @@
     }
   }
 
+  /**
+   * Checks the counting rules are filled out properly, if not throw error screen, else
+   * switch to the game and starts counting game.
+   */
   function countingRulesToGame() {
     let roundAmount = id("rounds").value;
     let inputType = countingInputType();
@@ -742,6 +864,13 @@
     }
   }
 
+  /**
+   * Sets the local storage of the counting rules as an object so it can be updated on refresh
+   * through previousCountingRulesSetup.
+   * @param {String} roundAmount - amount of game rounds.
+   * @param {String} inputType - Write or Type, user's input.
+   * @param {String} animationCheck - Enabled or Disabled, user's selected option.
+   */
   function setCountingRulesLocalStorage(roundAmount, inputType, animationCheck) {
     let rules = {
       "roundAmount": roundAmount,
@@ -752,6 +881,9 @@
     window.localStorage.setItem("countingRules", JSON.stringify(rules));
   }
 
+  /**
+   * Updates the counting rules to its previous state through local storage.
+   */
   function previousCountingRulesSetup() {
     let rules = JSON.parse(window.localStorage.getItem("countingRules"));
     id("rounds").value = rules["roundAmount"];
@@ -776,6 +908,14 @@
     }
   }
 
+
+  /**
+   * Transitions from rules to game and sets up the game by activating the timer, user input, and
+   * then display rounds.
+   * @param {String} roundAmount - amount of game rounds
+   * @param {String} inputType - Write or Type, user's input
+   * @param {String} animationCheck - Enabled or Disabled, user's selected option
+   */
   function startCounting(roundAmount, inputType, animationCheck) {
 
     start();
@@ -846,6 +986,11 @@
     }
   }
 
+  /**
+   * Displays the current random amount of divs for the round and question prompt.
+   * @param {String} roundAmount - current amount of rounds
+   * @param {Boolean} animations - if there is animations or not based on user's rule decision
+   */
   function displayRoundCounting(roundAmount, animations) {
 
     // if (Number(roundAmount) === 0) {
@@ -872,6 +1017,10 @@
     getAnswerToQuestionPrompt();
   }
 
+  /**
+   * Looks at all the displayed word divs and counts all the divs which matches the answer div and
+   * updates the answer variable.
+   */
   function getAnswerToQuestionPrompt() {
 
     countingAnswer = null;
@@ -913,6 +1062,13 @@
     countingAnswer = counter;
   }
 
+  /**
+   * Generates randomized divs of animations, color, and text, by generating basis divs then
+   * generating randomized amount of those div with random positions.
+   * @param {Number} divAmount - maximum amount of divs, randomly generated.
+   * @param {Boolean} animations - if there is animations or not based on user's rule decision.
+   * @returns {HTMLElement[]} - divs to display to the user.
+   */
   function generateCountingDivs(divAmount, animations) {
     let randomInt = getRandomIntBetween(3, divAmount);
     let basisDivs = [];
@@ -963,6 +1119,11 @@
     return countingDivs;
   }
 
+  /**
+   * Picks a random basis div and creates the question prompt for the user to answer.
+   * @param {HTMLElement[]} basisDivs - all the possible divs type in the round.
+   * @param {Boolean} animations - if there is animations or not based on user's rule decision.
+   */
   function generateQuestionPromptCounting(basisDivs, animations) {
     let randomDiv = basisDivs[getRandomIndex(basisDivs)].cloneNode(true).children[0];
     let spanPrompts = qsa("#question-prompt span");
@@ -988,6 +1149,13 @@
     matchingSpan.appendChild(randomDiv);
   }
 
+  /**
+   * Applies the movement of the moving class counting divs and updates its movement within the box
+   * of the question display area.
+   * @param {HTMLElement} element - div with the moving class.
+   * @param {Number} xPositionElement - element.style.left value.
+   * @param {Number} yPositionElement - element.style.top value.
+   */
   function movingDiv(element, xPositionElement, yPositionElement) {
     const FPS = 75;
     let area = id("questions-counting");
@@ -1014,11 +1182,22 @@
     setIntervalTimerIDs.push(timerID);
   }
 
+  /**
+   * Updates the element's left and top position.
+   * @param {HTMLElement} element - div with the moving class.
+   * @param {Number} xPositionElement - current x-position in question box
+   * @param {Number} yPositionElement - current y-position in question box
+   */
   function updatePosition(element, xPosition, yPosition) {
     element.style.left = xPosition + "px";
     element.style.top = yPosition + "px";
   }
 
+  /**
+   * When the user updates their counting user-input, this handles if the input is correct or not and updates accordingly.
+   * @param {String[]} data - User's input, String[] is used due to the handwriting making a prediction of what the input means.
+   * @param {Object} can - Canvas object where the user writes their input.
+   */
   function checkAnswerCounting(data, can) {
 
     if (data == null) { //undefined and null
@@ -1050,6 +1229,9 @@
     }
   }
 
+  /**
+   * Updates the state of the game to showcase the next round. If no more rounds, goes to the endgame.
+   */
   function nextRound() {
     totalRoundCounter = totalRoundCounter - 1;
 
@@ -1062,6 +1244,9 @@
     displayRoundCounting(totalRoundCounter, countingAnimationsValueCheck());
   }
 
+  /**
+   * Clears the current round's generated values, question prompt, divs.
+   */
   function clearCountingDivs() {
     clearAllSetIntervals();
     qs("#question-prompt span").textContent = "";
@@ -1070,6 +1255,9 @@
     for (let i = 0; i < countingDivs.length; i++) { countingDivs[i].remove(); }
   }
 
+  /**
+   * When the game ends due to finishing it, this function calls to transition the user and reset the game state.
+   */
   function countingEndgame() {
     countingUpdateStats();
     clearCountingState();
@@ -1078,6 +1266,9 @@
     id("counting-results").classList.remove("hidden");
   }
 
+  /**
+   * Sets counting to its initial state before the game started.
+   */
   function clearCountingState() {
     clearCountingDivs();
     stop();
@@ -1096,6 +1287,9 @@
     can = undefined;
   }
 
+  /**
+   * Updates the counting's results page with the stats from the counting game.
+   */
   function countingUpdateStats() {
 
     let roundAmount = id("rounds").value;
@@ -1124,6 +1318,9 @@
     skipsElement.children[1].textContent = skips;
   }
 
+  /**
+   * Clears the current question's user input and displayed answer.
+   */
   function clearCurrentQuestionCounting() {
     id("user-answer").textContent = "";
     if (can) can.erase();
@@ -1131,12 +1328,19 @@
 
   }
 
+  /**
+   * Skips the current question counting.
+   */
   function skipQuestionCounting() {
     playSkipSound();
     clearCurrentQuestionCounting();
     nextRound();
   }
 
+  /**
+   * Gets the counting's input type from the counting rules.
+   * @returns {String} Write or Type, user's input
+   */
   function countingInputType() {
     let inputType;
     let inputs = qsa("#counting-input-type p");
@@ -1150,6 +1354,10 @@
     return inputType;
   }
 
+  /**
+   * Gets the counting's animation rule from the counting rules.
+   * @returns {Boolean} true for animations on, false for animations off.
+   */
   function countingAnimationsValueCheck() {
     let animationCheck;
     let boolean = false;
@@ -1169,6 +1377,9 @@
     return boolean;
   }
 
+  /**
+   * Displays that a rule is missing error to the user.
+   */
   function countingDisplayBlankValuesError() {
     qs("#counting-buttons .start").removeEventListener("click", countingRulesToGame);
     id("counting-rules").classList.add("hidden");
@@ -1180,6 +1391,9 @@
     }, 1000);
   }
 
+  /**
+   * Displays that a round amount is missing or invalid to the user.
+   */
   function countingDisplayRoundError() {
     qs("#counting-buttons .start").removeEventListener("click", countingRulesToGame);
     id("counting-rules").classList.add("hidden");
@@ -1191,11 +1405,40 @@
     }, 1000);
   }
 
+  /**
+   * Counting Results page to main menu.
+   */
   function countingResultsToMenu() {
     id("counting-results").classList.add("hidden");
     id("main-menu").classList.remove("hidden");
   }
 
+  /**
+   * Checks for the housing's input rule that only one of the options is selected
+   * and deselects the previous option.
+   */
+  function housingRulesSelector() {
+    let buttons;
+    if (this.parentNode.id ===  "housing-input-type") {
+      buttons = qsa("#housing-input-type p");
+    } else {
+      this.classList.toggle("selected");
+      return;
+    }
+
+    for (let i = 0; i < buttons.length; i++) {
+      if (buttons[i] !== this) {
+        buttons[i].classList.remove("selected");
+      } else {
+        this.classList.toggle("selected");
+      }
+    }
+  }
+
+  /**
+   * Gets the input rule value for housing.
+   * @returns {String} housing current input type (Write or Type)
+   */
   function housingInputCheck() {
     let inputType;
     let inputs = qsa("#housing-input-type p");
@@ -1209,6 +1452,10 @@
     return inputType;
   }
 
+  /**
+   * Checks the housing rules are filled out properly, if not throw error screen, else
+   * switch to the game and starts housing game.
+   */
   function housingRulesToGame() {
     let roundAmount = id("rounds-housing").value;
     let inputType = housingInputCheck();
@@ -1228,6 +1475,9 @@
     }
   }
 
+  /**
+   * Displays that a rule is missing error to the user.
+   */
   function housingDisplayBlankValuesError() {
     qs("#housing-buttons .start").removeEventListener("click", housingRulesToGame);
     id("housing-rules").classList.add("hidden");
@@ -1239,6 +1489,9 @@
     }, 1000);
   }
 
+  /**
+   * Displays that a round amount is missing or invalid to the user.
+   */
   function housingDisplayRoundError() {
     qs("#housing-buttons .start").removeEventListener("click", housingRulesToGame);
     id("housing-rules").classList.add("hidden");
@@ -1250,6 +1503,12 @@
     }, 1000);
   }
 
+  /**
+   * Sets the local storage of the counting rules as an object so it can be updated on refresh
+   * through previousHousingRulesSetup.
+   * @param {String} roundAmount - amount of game rounds, user's input
+   * @param {String} inputType - Write or Type, user's input
+   */
   function setHousingRulesLocalStorage(roundAmount, inputType) {
     let rules = {
       "roundAmount": roundAmount,
@@ -1258,6 +1517,9 @@
     window.localStorage.setItem("housingRules", JSON.stringify(rules));
   }
 
+  /**
+   * Updates the housing rules to its previous state through local storage.
+   */
   function previousHousingRulesSetup() {
     let rules = JSON.parse(window.localStorage.getItem("housingRules"));
     id("rounds-housing").value = rules["roundAmount"];
@@ -1270,6 +1532,12 @@
     }
   }
 
+  /**
+   * Transitions from rules to game and sets up the game by activating the timer, user input, and
+   * then display rounds.
+   * @param {String} roundAmount - amount of game rounds
+   * @param {String} inputType - Write or Type, user's input
+   */
   function startHousing(roundAmount, inputType) {
 
     totalRoundCounterHousing = Number(roundAmount);
@@ -1355,13 +1623,20 @@
         checkAnswerHousing();
       });
     }
-
   }
 
+  /**
+   * Clears the current question's user input and displayed answer
+   */
   function clearCurrentQuestionHousing() {
     id("user-answer-housing").textContent = "";
   }
 
+  /**
+   * When the user updates their housing user-input, this handles and updates the data accordingly.
+   * @param {String[]} data - User's input, String[] is used due to the handwriting making a prediction of what the input means.
+   * @param {Object} can - Canvas object where the user writes their input.
+   */
   function updateUserInput(data, can) {
 
     if (data == null) { //undefined and null
@@ -1383,6 +1658,9 @@
 
   }
 
+  /**
+   * Generates and calculation a sequence of people entering and leaving the house then displays it.
+   */
   function startRound() {
     peopleInHouse = 0;
     let sequence = splitHouseToUpSequence(generateSequence());
@@ -1390,6 +1668,12 @@
     displayRoundAnimations(sequence);
   }
 
+  /**
+   * Calculates the sequence to see how many people are in the house,
+   * also checks if it is a valid sequence.
+   * @param {Object[]} sequence - peopleAnimation object,
+   * with two field "peopleAmount": Number, "animations": String;
+   */
   function calculateResult(sequence) {
     let total = 0;
     for (let i = 0; i < sequence.length; i++) {
@@ -1407,6 +1691,13 @@
     peopleInHouse = total;
   }
 
+  /**
+   * Splits the originalSequences when the peopleAnimation's animation is HouseToUp, from one index taking greater
+   * than 1 people leaving, to amount of people leaving indexes and one person leaving per thing. i.e [3] -> [1,1,1];
+   * @param {Object[]} originalSequence - peopleAnimation object array,
+   * with two field "peopleAmount": Number, "animations": String;
+   * @returns {Object[]} newSequence - original sequences with modifications for HouseToUp animation objects split.
+   */
   function splitHouseToUpSequence(originalSequence) {
 
     let newSequence = [];
@@ -1432,7 +1723,10 @@
     return newSequence;
   }
 
-
+  /**
+   * Gets the user's final answer and compares it to the actual answer, then showcases if it was
+   * right or wrong then goes to the next round.
+   */
   function checkAnswerHousing() {
 
     stop();
@@ -1460,7 +1754,10 @@
     });
   }
 
-
+  /**
+   * Clears the current round to their initial state, then starts the next round when the house is
+   * re-added.
+   */
   function nextRoundHousing() {
 
     qs(".house").remove();
@@ -1473,7 +1770,6 @@
       housingEndgame();
       return;
     }
-
 
     let house = gen("img");
     house.src = "img/house.png";
@@ -1491,9 +1787,10 @@
 
   }
 
+  /**
+   * When the game ends due to finishing it, this function calls to transition the user and reset the game state.
+   */
   function housingEndgame() {
-    console.log("endgame");
-    console.log("3123");
     housingUpdateStats();
     clearHousingState();
     playWinSound();
@@ -1524,9 +1821,11 @@
     skipsElement.children[1].textContent = skips;
   }
 
+  /**
+   * Sets housing to its initial state before the game started.
+   */
   function clearHousingState() {
     reset();
-
     getInputType().remove();
 
     let userButtons = qsa("#housing-user-section button");
@@ -1547,6 +1846,11 @@
     };
   */
 
+  /**
+   * Goes through the sequences and displays it to user one by one starting at index 0.
+   * @param {Object[]} sequence - peopleAnimation object array,
+   * with two field "peopleAmount": Number, "animations": String;
+   */
   function displayRoundAnimations(sequence) {
     let sequenceIndex = 0;
     let firstPeople = sequence[sequenceIndex];
@@ -1565,6 +1869,12 @@
 
   }
 
+  /**
+   * Recursive Helper function, goes through the and displays it to user one by one
+   * @param {*} sequence - peopleAnimation object array,
+   * with two field "peopleAmount": Number, "animations": String;
+   * @param {*} index - current index of the sequence array
+   */
   function displayRoundAnimationsHelper(sequence, index) {
 
     // base case
@@ -1589,10 +1899,18 @@
 
   }
 
+  /**
+   * Activates the housing confirm answer / submit button.
+   */
   function activateSubmitButton() {
     qsa("#user-section-housing button")[1].disabled = false;
   }
 
+  /**
+   * Generates the valid people joining and leaving sequence with amount and animation.
+   * @returns {Object[]} peopleAnimation object array,
+   * with two field "peopleAmount": Number, "animations": String;
+   */
   function generateSequence() {
     // a valid sequence is when there is never less than 0 people in the house at any state.
     // 0 total people [2 people enter, 1 person leaves, 1 person enters] total people 3, valid sequence.
@@ -1656,22 +1974,11 @@
     return finalSequence;
   }
 
-  function debugCheckSequence(sequence) {
-
-    let total = 0;
-
-    for (let i = 0; i < sequence.length; i++) {
-      total += sequence[i];
-      if (total < 0) {
-        console.log(sequence);
-        alert("sequence is negative" + sequence);
-        break;
-      }
-    }
-
-    console.log("valid");
-  }
-
+  /**
+   * Generates the people div to display.
+   * @param {Number} peopleAmount - amount of people in the group.
+   * @returns {HTMLElement} - people div, with the peopleAmount of persons.
+   */
   function generatePeople(peopleAmount) {
 
     let people = gen("div");
@@ -1684,7 +1991,11 @@
 
     return people;
   }
-
+1
+  /**
+   * Generates the person image for generate people.
+   * @returns {HTMLElement} - image of the stick-figure image.
+   */
   function generatePerson() {
     let img = gen("img");
     img.src = "img/person.png";
@@ -1693,32 +2004,15 @@
     return img;
   }
 
-  /**
-  * Make sure to always add a descriptive comment above
-  * every function detailing what it's purpose is
-  * Use JSDoc format with @param and @return.
-  */
-  function exampleFunction1() {
-    /* SOME CODE */
-  }
-
-  /**
-  * Make sure to always add a descriptive comment above
-  * every function detailing what it's purpose is
-  * @param {variabletype} someVariable This is a description of someVariable, including, perhaps, preconditions.
-  * @returns {returntype} A description of what this function is actually returning
-  */
-  function exampleFunction2(someVariable) {
-    /* SOME CODE */
-    return something;
-  }
-
   // written code snippet from https://stackoverflow.com/questions/26329900/how-do-i-display-millisecond-in-my-stopwatch
   let timeBegan = null
     , timeStopped = null
     , stoppedDuration = 0
     , started = null;
 
+  /**
+   * Starts the stopwatch timer.
+   */
   function start() {
       if (timeBegan === null) {
           timeBegan = new Date();
@@ -1731,11 +2025,17 @@
       started = setInterval(clockRunning, 10);
   }
 
+  /**
+   * Stops the stopwatch timer.
+   */
   function stop() {
       timeStopped = new Date();
       clearInterval(started);
   }
 
+  /**
+   * Resets the stopwatch timer.
+   */
   function reset() {
       clearInterval(started);
       stoppedDuration = 0;
@@ -1744,9 +2044,11 @@
       document.getElementById("display-area").innerHTML = "00:00:00.000";
       document.getElementById("counting-display-area").innerHTML = "00:00:00.000";
       document.getElementById("housing-display-area").innerHTML = "00:00:00.000";
-
   }
 
+  /**
+   * Updates the stopwatch timer.
+   */
   function clockRunning(){
       let currentTime = new Date()
           , timeElapsed = new Date(currentTime - timeBegan - stoppedDuration)
@@ -1763,7 +2065,6 @@
           (ms > 99 ? ms : ms > 9 ? "0" + ms : "00" + ms);
       }
 
-
       if (document.getElementById("counting-display-area")) {
         document.getElementById("counting-display-area").innerHTML =
           (hour > 9 ? hour : "0" + hour) + ":" +
@@ -1779,39 +2080,33 @@
           (sec > 9 ? sec : "0" + sec) + "." +
           (ms > 99 ? ms : ms > 9 ? "0" + ms : "00" + ms);
       }
-
   };
 
-
   /** ------------------------------ Helper Functions  ------------------------------ */
-  /**
-  * Note: You may use these in your code, but remember that your code should not have
-  * unused functions. Remove this comment in your own code.
-  */
 
   /**
-  * Returns the element that has the ID attribute with the specified value.
-  * @param {string} idName - element ID
-  * @returns {object} DOM object associated with id.
-  */
+   * Returns the element that has the ID attribute with the specified value.
+   * @param {string} idName - element ID
+   * @returns {object} DOM object associated with id.
+   */
   function id(idName) {
     return document.getElementById(idName);
   }
 
   /**
-  * Returns the first element that matches the given CSS selector.
-  * @param {string} selector - CSS query selector.
-  * @returns {object} The first DOM object matching the query.
-  */
+   * Returns the first element that matches the given CSS selector.
+   * @param {string} selector - CSS query selector.
+   * @returns {object} The first DOM object matching the query.
+   */
   function qs(selector) {
     return document.querySelector(selector);
   }
 
   /**
-  * Returns the array of elements that match the given CSS selector.
-  * @param {string} selector - CSS query selector
-  * @returns {object[]} array of DOM objects matching the query.
-  */
+   * Returns the array of elements that match the given CSS selector.
+   * @param {string} selector - CSS query selector
+   * @returns {object[]} array of DOM objects matching the query.
+   */
   function qsa(selector) {
     return document.querySelectorAll(selector);
   }
@@ -1825,34 +2120,53 @@
     return document.createElement(tagName);
   }
 
+  /**
+   * Clears all the event listeners for the element given.
+   * @param {HTMLElement} element - any HTMLElement
+   */
   function clearAllEventListeners(element) {
     let oldElement = element
     let newElement = oldElement.cloneNode(true);
     oldElement.parentNode.replaceChild(newElement, oldElement);
   }
 
+  /**
+   * Generates a random number from 0 to given max number.
+   * @param {Number} max - Maximum possible number - 1
+   * @returns {Number} - Random max number.
+   */
   function getRandomInt(max) {
     return Math.floor(Math.random() * (Number(max) + 1));
   }
 
+  /**
+   * Generates a random number from given min to max number.
+   * @param {Number} min - Minimum number
+   * @param {Number} max - Maximum number
+   * @returns random number in the range min to max - 1
+   */
   function getRandomIntBetween(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min) + min);
   }
 
+  /**
+   * Generates a random number from 0 to maximum available index of the array.
+   * @param {Object[]} array - any array.
+   * @returns {Number} Random index in the array.
+   */
   function getRandomIndex(array) {
     return Math.floor(Math.random()*array.length);
   }
 
+  /**
+   * Clears all set intervals timerIds.
+   */
   function clearAllSetIntervals () {
     for (let i = 0; i < setIntervalTimerIDs.length; i++) {
       let timerID = setIntervalTimerIDs[i];
       clearInterval(timerID);
     }
   }
-
 })();
-
-
-// need to fix: skipping last question
