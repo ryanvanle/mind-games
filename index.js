@@ -25,8 +25,6 @@
   */
   function init() {
 
-    // window.localStorage.clear();
-
     if (window.localStorage.getItem("calculationsRules") != null) previousCalculationsRulesSetup();
     if (window.localStorage.getItem("countingRules") != null) previousCountingRulesSetup();
     if (window.localStorage.getItem("housingRules") != null) previousHousingRulesSetup();
@@ -41,6 +39,7 @@
 
     qs("#results button").addEventListener("click", calculationsResultsToMenu);
     qs("#counting-results button").addEventListener("click", countingResultsToMenu);
+    qs("#housing-results button").addEventListener("click", housingResultsToMenu);
     let backButtons = qsa(".back-button");
     for (let i = 0; i < backButtons.length; i++) {
       backButtons[i].addEventListener("click", backToMenu);
@@ -61,7 +60,6 @@
       housingSelectors[i].addEventListener("click", housingRulesSelector);
     }
 
-    // setTimeout(() => {generatePeople()}, 5000);
   }
 
   function menuToCounting() {
@@ -77,6 +75,11 @@
   function menuToCalculation() {
     id("main-menu").classList.add("hidden");
     id("calculations-menu").classList.remove("hidden");
+  }
+
+  function housingResultsToMenu() {
+    id("housing-results").classList.add("hidden");
+    id("main-menu").classList.remove("hidden");
   }
 
   function backToMenu() {
@@ -1268,7 +1271,7 @@
 
   function startHousing(roundAmount, inputType) {
 
-    totalRoundCounter = Number(roundAmount);
+    totalRoundCounterHousing = Number(roundAmount);
 
     let parentElement = id("user-section-housing");
 
@@ -1451,6 +1454,7 @@
         playSkipSound();
       }
 
+      totalRoundCounterHousing -= 1;
       nextRoundHousing();
     });
   }
@@ -1458,17 +1462,17 @@
 
   function nextRoundHousing() {
 
-    if (totalRoundCounterHousing - 1 === 0) {
-      housingEndgame();
-    }
-
     qs(".house").remove();
     qs(".results-house").remove();
 
     qsa("#user-section-housing button")[1].disabled = true;
     clearCurrentQuestionHousing();
 
-    totalRoundCounterHousing -= 1;
+    if (totalRoundCounterHousing === 0) {
+      housingEndgame();
+      return;
+    }
+
 
     let house = gen("img");
     house.src = "img/house.png";
@@ -1485,6 +1489,56 @@
     id("questions-housing").appendChild(house);
 
   }
+
+  function housingEndgame() {
+    console.log("endgame");
+    console.log("3123");
+    housingUpdateStats();
+    clearHousingState();
+    playWinSound();
+    id("housing-game").classList.add("hidden");
+    id("housing-results").classList.remove("hidden");
+  }
+
+  function housingUpdateStats() {
+
+    let roundAmount = id("rounds-housing").value;
+    let inputType = housingInputCheck();
+
+    let endingTime = id("housing-display-area").textContent;
+    let score = id("housing-score").textContent;
+    let skips = Number(roundAmount) - Number(score);
+    let rulesElements = qsa("#housing-results div div span");
+
+    rulesElements[0].textContent = roundAmount;
+    rulesElements[1].textContent = inputType;
+
+    let statsElements = qsa("#housing-stats div");
+    let scoreElement = statsElements[0];
+    let timeElement = statsElements[1];
+    let skipsElement = statsElements[2];
+
+    scoreElement.children[1].textContent = score;
+    timeElement.children[1].textContent = endingTime;
+    skipsElement.children[1].textContent = skips;
+  }
+
+  function clearHousingState() {
+    reset();
+
+    getInputType().remove();
+
+    let userButtons = qsa("#housing-user-section button");
+    for (let i = 0; i < userButtons.length; i++) {
+      clearAllEventListeners(userButtons[i]);
+    }
+
+    id("housing-score").textContent = "0";
+    qsa("#user-section-housing button")[1].disabled = true;
+
+    can = undefined;
+  }
+
     /*
     peopleAnimation = {
       "peopleAmount": people,
@@ -1615,10 +1669,6 @@
     }
 
     console.log("valid");
-  }
-
-  function housingEndgame() {
-
   }
 
   function generatePeople(peopleAmount) {
