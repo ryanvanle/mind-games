@@ -503,6 +503,7 @@ p {
 }
 
 #question-prompt-housing {
+  padding: 10px;
   z-index: 1;
 }
 
