@@ -40,6 +40,7 @@
     qs("#results button").addEventListener("click", calculationsResultsToMenu);
     qs("#counting-results button").addEventListener("click", countingResultsToMenu);
     qs("#housing-results button").addEventListener("click", housingResultsToMenu);
+
     let backButtons = qsa(".back-button");
     for (let i = 0; i < backButtons.length; i++) {
       backButtons[i].addEventListener("click", backToMenu);
@@ -387,13 +388,7 @@
       currentQuestion.textContent = currentQuestionText + "=" + parsedData[0];
 
       //endgame, checks if the last question
-      if (id("current-question").nextElementSibling == null) {
-        id("score").textContent = Number(id("score").textContent) + 1;
-        appendCheckmark();
-        playCorrectAnswerSound();
-        calculationsEndgame();
-        return;
-      }
+
 
       if (can != null) {
         can.erase();
@@ -418,6 +413,12 @@
   function nextQuestion() {
 
     //endgame might be better here. depends if you want to clear the input or not/
+
+    if (id("current-question").nextElementSibling == null) {
+      calculationsEndgame();
+      return;
+    }
+
     let startSpace = qs("#questions div");
     if (startSpace.id === "start-space-0") {
       qs("#questions div").id = "start-space-1";
