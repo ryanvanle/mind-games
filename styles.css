@@ -705,13 +705,15 @@ p {
 .tutorial div {
   justify-content: center;
   margin: 0;
-  font-size: 14pt;
+  font-size: 13pt;
   width: 700px;
   height: 525px;
   background-color: white;
   border-style: solid;
   border-color: #000000;
-  position: relative;
+  font-family: 'Inter';
+  font-style: normal;
+
 }
 
 .tutorial h2 {
@@ -742,4 +744,3 @@ p {
   right: 0;
   bottom: 0;
 }
-
