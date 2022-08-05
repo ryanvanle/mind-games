@@ -120,8 +120,8 @@ button:active {
 #calculations-title, #counting-title, #housing-title {
   border: 1px solid #000000;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  width: 1000px;
-  height: 300px;
+  width: 900px;
+  height: 200px;
   margin: auto;
   display: flex;
   justify-content: center;
@@ -179,6 +179,11 @@ button:active {
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
+}
+
+#calculations-buttons button, #counting-buttons button, #housing-buttons button {
+  margin-top: 1%;
+  margin-bottom: 0;
 }
 
 #calculations-rules, #amount-error, #missing-error, #results, #max-number-error,
@@ -694,27 +699,31 @@ p {
   align-items: center;
   justify-content: center;
   margin-top: 1%;
-  margin-bottom: 1%;
+  margin-bottom: 0;
 }
 
 .tutorial div {
-
+  justify-content: center;
   margin: 0;
-  font-size: 16pt;
-  width: 900px;
-  height: 750px;
+  font-size: 14pt;
+  width: 700px;
+  height: 525px;
   background-color: white;
   border-style: solid;
   border-color: #000000;
+  position: relative;
 }
 
 .tutorial h2 {
   margin-left: 5%;
+  margin-top: 1%;
+  margin-bottom: 1%;
 }
 
 .tutorial p {
   margin-left: 10%;
-  font-size: 16pt;
+  margin-top: 2.5%;
+  margin-bottom: 2.5%;
 }
 
 .tutorial-image {
