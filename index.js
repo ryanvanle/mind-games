@@ -23,6 +23,8 @@
   */
   function init() {
 
+    // window.localStorage.clear();
+
     if (window.localStorage.getItem("calculationsRules") != null) previousCalculationsRulesSetup();
     if (window.localStorage.getItem("countingRules") != null) previousCountingRulesSetup();
     if (window.localStorage.getItem("housingRules") != null) previousHousingRulesSetup();
@@ -58,6 +60,48 @@
     for (let i = 0; i < housingSelectors.length; i++) {
       housingSelectors[i].addEventListener("click", housingRulesSelector);
     }
+
+    let calculationButtons = qsa("#calculations-buttons button");
+    for (let i = 0; i < calculationButtons.length-1; i++) {
+      calculationButtons[i].addEventListener("click", rulesToTutorial);
+    }
+
+    let countingButtons = qsa("#counting-buttons button");
+    for (let i = 0; i < calculationButtons.length-1; i++) {
+      countingButtons[i].addEventListener("click", rulesToTutorial);
+    }
+
+    let housingButtons = qsa("#housing-buttons button");
+    for (let i = 0; i < calculationButtons.length-1; i++) {
+      housingButtons[i].addEventListener("click", rulesToTutorial);
+    }
+
+  }
+
+  /**
+   * Transitions any game from game's tutorial screen to rules and vice versa.
+   */
+  function rulesToTutorial() {
+
+    let parentElementID = this.parentElement.id;
+    let grandparentElement = this.parentElement.parentElement.id;
+
+    let gameName;
+
+    // you could do regex to figure it out in smaller lines but thats an scaling fix which is not necessary
+    if (grandparentElement === "counting-menu") gameName = "counting";
+    if (grandparentElement === "housing-menu") gameName = "housing";
+    if (grandparentElement === "calculations-menu") gameName = "calculations";
+
+    let buttons = qsa(`#${parentElementID} button`);
+    let tutorialButton = buttons[0];
+    let rulesButton = buttons[1];
+
+    id(`${gameName}-rules`).classList.toggle("hidden");
+    tutorialButton.classList.toggle("hidden");
+
+    id(`${gameName}-tutorial`).classList.toggle("hidden");
+    rulesButton.classList.toggle("hidden");
 
   }
 
@@ -147,10 +191,10 @@
    */
   function calculationsDisplayBlankValuesError() {
     qs("#calculations-buttons .start").removeEventListener("click", calculationRulesToGame);
-    id("calculations-rules").classList.add("hidden");
+    id("calculations-rules").parentNode.classList.add("hidden");
     id("missing-error").classList.remove("hidden");
     setTimeout(() => {
-      id("calculations-rules").classList.remove("hidden");
+      id("calculations-rules").parentNode.classList.remove("hidden");
       id("missing-error").classList.add("hidden");
       qs("#calculations-buttons .start").addEventListener("click", calculationRulesToGame);
     }, 1000);
@@ -161,10 +205,10 @@
    */
   function calculationsDisplayQuestionAmountError() {
     qs("#calculations-buttons .start").removeEventListener("click", calculationRulesToGame);
-    id("calculations-rules").classList.add("hidden");
+    id("calculations-rules").parentNode.classList.add("hidden");
     id("amount-error").classList.remove("hidden");
     setTimeout(() => {
-      id("calculations-rules").classList.remove("hidden");
+      id("calculations-rules").parentNode.classList.remove("hidden");
       id("amount-error").classList.add("hidden");
       qs("#calculations-buttons .start").addEventListener("click", calculationRulesToGame);
     }, 1000);
@@ -175,10 +219,10 @@
    */
   function calculationsMaxNumberError() {
     qs("#calculations-buttons .start").removeEventListener("click", calculationRulesToGame);
-    id("calculations-rules").classList.add("hidden");
+    id("calculations-rules").parentNode.classList.add("hidden");
     id("max-number-error").classList.remove("hidden");
     setTimeout(() => {
-      id("calculations-rules").classList.remove("hidden");
+      id("calculations-rules").parentNode.classList.remove("hidden");
       id("max-number-error").classList.add("hidden");
       qs("#calculations-buttons .start").addEventListener("click", calculationRulesToGame);
     }, 1000);
@@ -1382,10 +1426,10 @@
    */
   function countingDisplayBlankValuesError() {
     qs("#counting-buttons .start").removeEventListener("click", countingRulesToGame);
-    id("counting-rules").classList.add("hidden");
+    id("counting-rules").parentNode.classList.add("hidden");
     id("counting-missing-error").classList.remove("hidden");
     setTimeout(() => {
-      id("counting-rules").classList.remove("hidden");
+      id("counting-rules").parentNode.classList.remove("hidden");
       id("counting-missing-error").classList.add("hidden");
       qs("#counting-buttons .start").addEventListener("click", countingRulesToGame);
     }, 1000);
@@ -1396,10 +1440,10 @@
    */
   function countingDisplayRoundError() {
     qs("#counting-buttons .start").removeEventListener("click", countingRulesToGame);
-    id("counting-rules").classList.add("hidden");
+    id("counting-rules").parentNode.classList.add("hidden");
     id("round-number-error").classList.remove("hidden");
     setTimeout(() => {
-      id("counting-rules").classList.remove("hidden");
+      id("counting-rules").parentNode.classList.remove("hidden");
       id("round-number-error").classList.add("hidden");
       qs("#counting-buttons .start").addEventListener("click", countingRulesToGame);
     }, 1000);
@@ -1480,10 +1524,10 @@
    */
   function housingDisplayBlankValuesError() {
     qs("#housing-buttons .start").removeEventListener("click", housingRulesToGame);
-    id("housing-rules").classList.add("hidden");
+    id("housing-rules").parentNode.classList.add("hidden");
     id("housing-missing-error").classList.remove("hidden");
     setTimeout(() => {
-      id("housing-rules").classList.remove("hidden");
+      id("housing-rules").parentNode.classList.remove("hidden");
       id("housing-missing-error").classList.add("hidden");
       qs("#housing-buttons .start").addEventListener("click", housingRulesToGame);
     }, 1000);
@@ -1494,10 +1538,10 @@
    */
   function housingDisplayRoundError() {
     qs("#housing-buttons .start").removeEventListener("click", housingRulesToGame);
-    id("housing-rules").classList.add("hidden");
+    id("housing-rules").parentNode.classList.add("hidden");
     id("housing-round-number-error").classList.remove("hidden");
     setTimeout(() => {
-      id("housing-rules").classList.remove("hidden");
+      id("housing-rules").parentNode.classList.remove("hidden");
       id("housing-round-number-error").classList.add("hidden");
       qs("#housing-buttons .start").addEventListener("click", housingRulesToGame);
     }, 1000);

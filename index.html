@@ -28,40 +28,60 @@
       <h2>Write/type out the arithmetics!</h2>
     </div>
 
-    <div id="calculations-rules">
-      <h2>Rules Setup</h2>
-      <div>
-        <label for="amount">Amount:</label>
-        <input type="number" id="amount" name="amount"><br><br>
+    <div>
+      <div id="calculations-tutorial" class="tutorial flex">
+        <div>
+          <h2>Objective:</h2>
+          <p>Answer the equation correctly!</p>
+
+          <h2>Rules Description:</h2>
+          <p>"Amount" - Number of questions to answer.</p><br>
+          <p>"Maximum Number" - The biggest number an equation term can be.</p><br>
+          <p>"Input" - Draw or Type out the answer.</p><br>
+          <p>"Operations" - The type of operations the equations can have.</p><br>
+          <p>"Term Amount" - The maximum amount of terms an equation can have.</p><br>
+        </div>
+        <div class="tutorial-image">
+          <img src="img/calculations.gif" alt="calculations game playing">
+        </div>
       </div>
-      <div>
-        <label for="max-number">Maximum Number:</label>
-        <input type="number" id="max-number" name="max-number"><br><br>
-      </div>
-      <div id="input-type">
-        <h3>Input:</h3>
-        <p>Write</p>
-        <p>Type</p>
-      </div>
-      <div id="operations-type">
-        <h3>Operations:</h3>
-        <p>Addition</p>
-        <p>Subtraction</p>
-        <p>Multiplication</p>
-        <p>Division</p>
-      </div>
-      <div id="operations-amount">
-        <h3>Term Amount:</h3>
-        <p>2</p>
-        <p>3</p>
-        <p>4</p>
+
+      <div id="calculations-rules" class="hidden">
+        <h2>Rules Setup</h2>
+        <div>
+          <label for="amount">Amount:</label>
+          <input type="number" id="amount" name="amount"><br><br>
+        </div>
+        <div>
+          <label for="max-number">Maximum Number:</label>
+          <input type="number" id="max-number" name="max-number"><br><br>
+        </div>
+        <div id="input-type">
+          <h3>Input:</h3>
+          <p>Write</p>
+          <p>Type</p>
+        </div>
+        <div id="operations-type">
+          <h3>Operations:</h3>
+          <p>Addition</p>
+          <p>Subtraction</p>
+          <p>Multiplication</p>
+          <p>Division</p>
+        </div>
+        <div id="operations-amount">
+          <h3>Term Amount:</h3>
+          <p>2</p>
+          <p>3</p>
+          <p>4</p>
+        </div>
       </div>
     </div>
+
     <div id="amount-error" class="hidden"><h3>Question Amount must be from 0 to 100!</h3></div>
     <div id="missing-error" class="hidden"><h3>One or more rules are missing!</h3></div>
     <div id="max-number-error" class="hidden"><h3>Maximum Number must be from 0 to 1000!</h3></div>
     <div id="calculations-buttons">
-      <button><h2>TUTORIAL</h2></button>
+      <button class="hidden"><h2>TUTORIAL</h2></button>
       <button><h2>RULES</h2></button>
       <button class="start"><h2>START</h2></button>
     </div>
@@ -105,27 +125,44 @@
       <h2>Count out the amount matching the prompt!</h2>
     </div>
 
-    <div id="counting-rules">
-      <h2>Rules Setup</h2>
-      <div>
-        <label for="rounds">Round Amount:</label>
-        <input type="number" id="rounds" name="rounds"><br><br>
+    <div>
+      <div id="counting-tutorial" class="tutorial flex">
+        <div>
+          <h2>Objective:</h2>
+          <p>Answer the question prompt by counting the words that matches!</p>
+
+          <h2>Rules Description:</h2>
+          <p>"Round Amount" - Number of rounds to answer the questions.</p><br>
+          <p>"Input" - Draw or Type out the answer.</p><br>
+          <p>"Animations" - Pick if you want animations for the words or not.</p><br>
+        </div>
+        <div class="tutorial-image">
+          <img src="img/counting.gif" alt="counting game playing">
+        </div>
       </div>
-      <div id="counting-input-type">
-        <h3>Input:</h3>
-        <p>Write</p>
-        <p>Type</p>
-      </div>
-      <div id="counting-animations-check">
-        <h3>Animations:</h3>
-        <p>Enabled</p>
-        <p>Disabled</p>
+
+      <div id="counting-rules" class="hidden">
+        <h2>Rules Setup</h2>
+        <div>
+          <label for="rounds">Round Amount:</label>
+          <input type="number" id="rounds" name="rounds"><br><br>
+        </div>
+        <div id="counting-input-type">
+          <h3>Input:</h3>
+          <p>Write</p>
+          <p>Type</p>
+        </div>
+        <div id="counting-animations-check">
+          <h3>Animations:</h3>
+          <p>Enabled</p>
+          <p>Disabled</p>
+        </div>
       </div>
     </div>
     <div id="counting-missing-error" class="hidden"><h3>One or more rules are missing!</h3></div>
     <div id="round-number-error" class="hidden"><h3>Rounds must be one or greater!</h3></div>
     <div id="counting-buttons">
-      <button><h2>TUTORIAL</h2></button>
+      <button class="hidden"><h2>TUTORIAL</h2></button>
       <button><h2>RULES</h2></button>
       <button class="start"><h2>START</h2></button>
     </div>
@@ -168,22 +205,38 @@
       <h2>Count the amount of people in the house!</h2>
     </div>
 
-    <div id="housing-rules">
-      <h2>Rules Setup</h2>
-      <div>
-        <label for="rounds-housing">Round Amount:</label>
-        <input type="number" id="rounds-housing" name="rounds-housing"><br><br>
+    <div>
+      <div id="housing-tutorial" class="tutorial flex">
+        <div>
+          <h2>Objective:</h2>
+          <p>Count how many people are in the house at the end of the round!</p>
+
+          <h2>Rules Description:</h2>
+          <p>"Round Amount" - Number of rounds to answer the questions.</p><br>
+          <p>"Input" - Draw or Type out the answer.</p><br>
+        </div>
+        <div class="tutorial-image">
+          <img src="img/housing.gif" alt="housings game playing">
+        </div>
       </div>
-      <div id="housing-input-type">
-        <h3>Input:</h3>
-        <p>Write</p>
-        <p>Type</p>
+
+      <div id="housing-rules" class="hidden">
+        <h2>Rules Setup</h2>
+        <div>
+          <label for="rounds-housing">Round Amount:</label>
+          <input type="number" id="rounds-housing" name="rounds-housing"><br><br>
+        </div>
+        <div id="housing-input-type">
+          <h3>Input:</h3>
+          <p>Write</p>
+          <p>Type</p>
+        </div>
       </div>
     </div>
     <div id="housing-missing-error" class="hidden"><h3>One or more rules are missing!</h3></div>
     <div id="housing-round-number-error" class="hidden"><h3>Rounds must be one or greater!</h3></div>
     <div id="housing-buttons">
-      <button><h2>TUTORIAL</h2></button>
+      <button class="hidden"><h2>TUTORIAL</h2></button>
       <button><h2>RULES</h2></button>
       <button class="start"><h2>START</h2></button>
     </div>
@@ -222,6 +275,5 @@
     <button>MENU</button>
   </section>
 
-  <!-- </section> -->
 </body>
 </html>

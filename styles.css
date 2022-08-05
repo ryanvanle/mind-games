@@ -689,3 +689,48 @@ p {
   z-index: 1;
   opacity: 10%;
 } */
+
+.tutorial {
+  align-items: center;
+  justify-content: center;
+  margin-top: 1%;
+  margin-bottom: 1%;
+}
+
+.tutorial div {
+
+  margin: 0;
+  font-size: 16pt;
+  width: 900px;
+  height: 750px;
+  background-color: white;
+  border-style: solid;
+  border-color: #000000;
+}
+
+.tutorial h2 {
+  margin-left: 5%;
+}
+
+.tutorial p {
+  margin-left: 10%;
+  font-size: 16pt;
+}
+
+.tutorial-image {
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  /* height: 50%s; */
+}
+
+.tutorial-image img {
+  position: absolute;
+  margin: auto;
+  width: 90%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
